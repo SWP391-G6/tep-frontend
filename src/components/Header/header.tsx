@@ -4,24 +4,13 @@ import {
   Box,
   Button,
   Container,
-  CssBaseline,
-  Divider,
-  Drawer,
-  Grid,
   IconButton,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
   Menu,
   MenuItem,
   Toolbar,
   Tooltip,
   Typography,
 } from "@mui/material";
-
-import MenuIcon from "@mui/icons-material/Menu";
-import AdbIcon from "@mui/icons-material/Adb";
 import { useState } from "react";
 
 interface Props {
@@ -32,8 +21,6 @@ interface Props {
   window?: () => Window;
 }
 
-const drawerWidth = 240;
-const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const Header = (props: Props) => {
@@ -67,69 +54,65 @@ const Header = (props: Props) => {
         <Container maxWidth={false}>
           <Toolbar disableGutters>
             <img
-              src={require("../../assets/Logo-removebg.png")}
+              src={require("../../assets/logo.png")}
               width="50px"
               height="50px"
               alt=""
             />
             <img
-              src={require("../../assets/Logo-name-removebg.png")}
-              width="200px"
+              src={require("../../assets/logo-name.png")}
+              width="220px"
               height="50px"
               style={{ marginLeft: "5px" }}
               alt=""
             />
 
-            <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleOpenNavMenu}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorElNav}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
-                open={Boolean(anchorElNav)}
-                onClose={handleCloseNavMenu}
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: { xs: "none", md: "flex", marginLeft: "10px" },
+              }}
+            >
+              <Button
                 sx={{
-                  display: { xs: "block", md: "none" },
+                  my: 2,
+                  color: "#00acb3",
+                  display: "block",
+                  marginLeft: "10px",
                 }}
               >
-                {pages.map((page) => (
-                  <MenuItem key={page} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex", marginLeft: "10px" } }}>
-              {pages.map((page) => (
-                <Button
-                  key={page}
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: "#00acb3", display: "block", marginLeft: "10px"}}
-                >
-                  {page}
-                </Button>
-              ))}
+                Book a trip
+              </Button>
+              <Button
+                sx={{
+                  my: 2,
+                  color: "#00acb3",
+                  display: "block",
+                  marginLeft: "10px",
+                }}
+              >
+                Post Your timeshare
+              </Button>
+              <Button
+                sx={{
+                  my: 2,
+                  color: "#00acb3",
+                  display: "block",
+                  marginLeft: "10px",
+                }}
+              >
+                About
+              </Button>
             </Box>
 
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: { xs: "none", md: "flex", marginLeft: "10px" },
+                justifyContent: "right",
+              }}
+            >
+              {/* <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
                 </IconButton>
@@ -155,7 +138,37 @@ const Header = (props: Props) => {
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}
-              </Menu>
+              </Menu> */}
+              <Button
+                sx={{
+                  my: 2,
+                  color: "#ffffff",
+                  backgroundColor: "#00acb3",
+                  display: "block",
+                  marginLeft: "10px",
+                  "&:hover": {
+                    backgroundColor: "#08b7bd",
+                  },
+                }}
+                variant="contained"
+              >
+                Sign In
+              </Button>
+              <Button
+                sx={{
+                  my: 2,
+                  color: "#00acb3",
+                  display: "block",
+                  marginLeft: "10px",
+                  "&:hover": {
+                    borderColor: "#08b7bd",
+                  },
+                }}
+                variant="outlined"
+                
+              >
+                Sign Up
+              </Button>
             </Box>
           </Toolbar>
         </Container>
