@@ -3,8 +3,8 @@ import "./App.css";
 import { ErrorBoundary } from "./components/Error/errorBoundary";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
-import Home from "./pages/home";
 import GlobalStyles from "./GlobalStyles";
+import HomePage from "./pages/Home/HomePage";
 
 const NotFoundPage = React.lazy(() => import("./pages/Error/notFoundPage"));
 
@@ -16,7 +16,7 @@ function App() {
           <CssBaseline />
           <GlobalStyles />
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<HomePage />} />
           </Routes>
         </BrowserRouter>
       </Suspense>

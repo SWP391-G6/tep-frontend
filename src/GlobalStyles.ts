@@ -4,7 +4,7 @@ const GlobalStyles = createGlobalStyle`
 body {
     font-size: 16px;
     font-family: 'Roboto', sans-serif;
-    color: red;
+    font-weight: 300;
 }
 `;
 export default GlobalStyles;
