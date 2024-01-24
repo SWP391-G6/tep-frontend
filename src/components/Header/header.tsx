@@ -1,46 +1,12 @@
 import {
   AppBar,
-  Avatar,
   Box,
   Button,
   Container,
-  IconButton,
-  Menu,
-  MenuItem,
   Toolbar,
-  Tooltip,
-  Typography,
 } from "@mui/material";
-import { useState } from "react";
 
-interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window?: () => Window;
-}
-
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
-
-const Header = (props: Props) => {
-  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+const Header = () => {
   return (
     <Box
       sx={{
@@ -165,7 +131,6 @@ const Header = (props: Props) => {
                   },
                 }}
                 variant="outlined"
-                
               >
                 Sign Up
               </Button>

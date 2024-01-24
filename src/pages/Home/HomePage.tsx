@@ -1,13 +1,15 @@
-import { Box, Toolbar, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import Header from "../../components/Header/header";
+import Footer from "../../components/Footer/footer";
 
 const HomePage = () => {
   return (
     <Box>
       <Header />
-      <Box component="main">
-          Hello
+      <Box component="main" sx={{ marginTop: "70px" }}>
+        lorem2000
       </Box>
+      <Footer />
     </Box>
   );
 };
