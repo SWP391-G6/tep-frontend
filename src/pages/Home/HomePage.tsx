@@ -1,8 +1,14 @@
-import { Box, Container, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Header from "../../components/Header/header";
 import Footer from "../../components/Footer/footer";
-import IconButton from '@mui/material/IconButton';
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search";
 
 const HomePage = () => {
   return (
@@ -10,18 +16,44 @@ const HomePage = () => {
       <Header />
       <Box component="main" sx={{ marginTop: "70px", height: "500px" }}>
         <Container disableGutters>
-          <TextField
-            label="Search"
-            variant="outlined"
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <IconButton type="submit" aria-label="search">
-                  <SearchIcon />
-                </IconButton>
-              ),
+          <Box
+            mt={15}
+            sx={{
+              textAlign: "center",
             }}
-          />
+          >
+            <Typography variant="h3" fontWeight={900}>
+              Where do you want to go?
+            </Typography>
+            <TextField
+              placeholder="Search by location or timeshare"
+              variant="outlined"
+              fullWidth
+              InputProps={{
+                endAdornment: (
+                  <>
+                    <Divider orientation="vertical" flexItem variant="middle" />
+                    <Box ml={1}>
+                      <Button
+                        type="submit"
+                        aria-label="search"
+                        sx={{ color: "#00acb3" }}
+                      >
+                        <SearchIcon />
+                      </Button>
+                    </Box>
+                  </>
+                ),
+              }}
+              sx={{ marginTop: "20px" }}
+            />
+          </Box>
+
+          <Box mt={4}>
+            <Typography variant="h5" fontWeight={700}>
+              Vietnamese's Favorite Destinations
+            </Typography>
+          </Box>
         </Container>
       </Box>
       <Footer />
