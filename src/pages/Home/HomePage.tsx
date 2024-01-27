@@ -15,9 +15,10 @@ const HomePage = () => {
   return (
     <Box>
       <Header />
-      <Box component="main" sx={{ marginTop: "70px", height: "500px" }}>
+      <Box component="main" sx={{ marginTop: "70px"}}>
+      <Carousel />
         <Container disableGutters>
-          <Carousel />
+          
           <Box
             mt={15}
             sx={{
