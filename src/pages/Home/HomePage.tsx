@@ -3,6 +3,8 @@ import {
   Button,
   Container,
   Divider,
+  Grid,
+  Paper,
   TextField,
   Typography,
 } from "@mui/material";
@@ -10,16 +12,18 @@ import Header from "../../components/Header/header";
 import Footer from "../../components/Footer/footer";
 import SearchIcon from "@mui/icons-material/Search";
 import Carousel from "../../components/Carousel/carousel";
+import TopDestinationCarousel from "../../components/Carousel/topDestinationCarousel";
+import ShowTimeshareGrid from "../../components/Grids/showTimeshareGrid";
 
 const HomePage = () => {
   return (
     <Box>
       <Header />
-      <Box component="main" sx={{ marginTop: "70px", height: "500px" }}>
+      <Box component="main" sx={{ marginTop: "70px", height: "100%" }}>
+        <Carousel />
         <Container disableGutters>
-          <Carousel />
           <Box
-            mt={15}
+            mt={4}
             sx={{
               textAlign: "center",
             }}
@@ -51,10 +55,22 @@ const HomePage = () => {
             />
           </Box>
 
-          <Box mt={4}>
+          <Box mt={4} sx={{ position: "relative", height: "100%" }}>
             <Typography variant="h5" fontWeight={700}>
               Vietnamese's Favorite Destinations
             </Typography>
+            <TopDestinationCarousel />
+          </Box>
+          <Box mt={4} mb={3}>
+            <Typography variant="h5" fontWeight={700}>
+              Recommended Timeshare
+            </Typography>
+            <Paper
+              sx={{ height: "100%", padding: "10px 20px", marginTop: "10px" }}
+              elevation={3}
+            >
+              <ShowTimeshareGrid />
+            </Paper>
           </Box>
         </Container>
       </Box>

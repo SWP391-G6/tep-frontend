@@ -17,7 +17,7 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        backgroundColor: "#00adb37e",
+        backgroundColor: "#0264677c",
         width: "100%",
         bottom: 0,
         padding: "20px 0",
@@ -182,7 +182,7 @@ const Footer = () => {
               TEP, Inc. is a Registered Seller of Travel in the following city:
             </Typography>
             <Typography fontSize={10}>
-              Ho Chi Minh City:  Postal code 700000
+              Ho Chi Minh City: Postal code 700000
             </Typography>
           </Grid>
           <Grid xs={4}>
