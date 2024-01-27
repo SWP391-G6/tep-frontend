@@ -9,6 +9,7 @@ import {
 import Header from "../../components/Header/header";
 import Footer from "../../components/Footer/footer";
 import SearchIcon from "@mui/icons-material/Search";
+import Carousel from "../../components/Carousel/carousel";
 
 const HomePage = () => {
   return (
@@ -16,6 +17,7 @@ const HomePage = () => {
       <Header />
       <Box component="main" sx={{ marginTop: "70px", height: "500px" }}>
         <Container disableGutters>
+          <Carousel />
           <Box
             mt={15}
             sx={{

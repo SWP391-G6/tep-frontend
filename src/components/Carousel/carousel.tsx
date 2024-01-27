@@ -2,10 +2,10 @@ import React from 'react'
 
 type Props = {}
 
-const carousel = (props: Props) => {
+const Carousel = (props: Props) => {
   return (
-    <div>carousel</div>
+    <div>Carousel</div>
   )
 }
 
-export default carousel
+export default Carousel
