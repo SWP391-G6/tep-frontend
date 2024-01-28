@@ -17,7 +17,7 @@ import ShowTimeshareGrid from "../../components/Grids/showTimeshareGrid";
 
 const HomePage = () => {
   return (
-    <Box>
+    <Box sx={{ backgroundColor: "#d6dbdb51" }}>
       <Header />
       <Box component="main" sx={{ marginTop: "70px", height: "100%" }}>
         <Carousel />
@@ -59,7 +59,12 @@ const HomePage = () => {
             <Typography variant="h5" fontWeight={700}>
               Vietnamese's Favorite Destinations
             </Typography>
-            <TopDestinationCarousel />
+            <Paper
+              sx={{ height: "100%", padding: "20px", marginTop: "10px" }}
+              elevation={3}
+            >
+              <TopDestinationCarousel />
+            </Paper>
           </Box>
           <Box mt={4} mb={3}>
             <Typography variant="h5" fontWeight={700}>

@@ -2,14 +2,11 @@ import React from 'react'
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
-import './styles.css';
 import { Autoplay, Navigation } from 'swiper/modules';
 import { Box } from '@mui/system';
 
-type Props = {}
 
-const Carousel = (props: Props) => {
-
+const Carousel = () => {
   return (
     <Box >
       <Swiper
