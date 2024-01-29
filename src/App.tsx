@@ -5,7 +5,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
 import GlobalStyles from "./GlobalStyles";
 import HomePage from "./pages/Home/HomePage";
-import TimeshareDetailPage from "./pages/TimeshareDetail/TimeshareDetailPage";
+import { ROUTE_PATH } from "./configs";
+import TimeshareDetailPage from "./pages/Timeshare/TimeshareDetailPage";
 
 const NotFoundPage = React.lazy(() => import("./pages/Error/notFoundPage"));
 
@@ -18,11 +19,13 @@ function App() {
           <GlobalStyles />
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route
+              path="/view_timeshare_detail/:timeshareID"
+              element={<TimeshareDetailPage />}
+            />
+            <Route path={ROUTE_PATH.NOT_FOUND} element={<NotFoundPage />} />
+            <Route path={ROUTE_PATH.ERROR} element={<NotFoundPage />} />
           </Routes>
-
-          <Routes>
-            <Route path="/posting/R111111" element={<TimeshareDetailPage />} />
-          </Routes> 
         </BrowserRouter>
       </Suspense>
     </ErrorBoundary>

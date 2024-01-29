@@ -28,7 +28,7 @@ const HomePage = () => {
               textAlign: "center",
             }}
           >
-            <Typography variant="h3" fontWeight={900}>
+            <Typography variant="h2" fontWeight={900}>
               Where do you want to go?
             </Typography>
             <TextField

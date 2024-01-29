@@ -1,11 +1,12 @@
-import React from 'react'
+import { Container } from "@mui/material";
+import NotFoundComponent from "../../components/Error/notFoundComponent";
 
-type Props = {}
-
-const NotFoundPage = (props: Props) => {
+const NotFoundPage = () => {
   return (
-    <div>NotFoundPage</div>
-  )
-}
+    <Container maxWidth={false} style={{ flex: 1, backgroundColor: "#f6f8fa" }}>
+      <NotFoundComponent />
+    </Container>
+  );
+};
 
-export default NotFoundPage
+export default NotFoundPage;

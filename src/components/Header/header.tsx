@@ -1,10 +1,4 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Container,
-  Toolbar,
-} from "@mui/material";
+import { AppBar, Box, Button, Container, Toolbar } from "@mui/material";
 
 const Header = () => {
   return (
@@ -14,7 +8,7 @@ const Header = () => {
         width: "100%",
         position: "fixed",
         top: 0,
-        zIndex: 1000
+        zIndex: 1000,
       }}
     >
       <AppBar position="static" sx={{ backgroundColor: "#ffffff" }}>
