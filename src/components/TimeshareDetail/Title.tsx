@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Paper, Typography } from "@mui/material"
+import { Box, Grid, Typography } from "@mui/material"
 import LocalHotelIcon from '@mui/icons-material/LocalHotel';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import BathtubIcon from '@mui/icons-material/Bathtub';
@@ -21,7 +21,7 @@ const Title = (props: Props) => {
                 }}>
                 <img
                     src="https://onetouchmedia.vn/wp-content/uploads/2019/10/N.NT-31.jpg"
-                    alt="Image"
+                    alt="title"
                     style={{
                         width: '250px',
                         height: '210px',
