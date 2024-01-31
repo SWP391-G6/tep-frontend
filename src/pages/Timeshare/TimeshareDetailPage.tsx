@@ -1,48 +1,46 @@
-import {
-  Box,
-  Container,
-  Grid,
-} from "@mui/material";
+import { Box, Container, Grid } from "@mui/material";
 import Header from "../../components/Header/header";
 import Footer from "../../components/Footer/footer";
-import Title from "../../components/Timeshare/Title";
-import PostingDetail from "../../components/Timeshare/PostingDetails";
-import PostingMainPrice from "../../components/Timeshare/PostingMainPrice";
+import BackButton from "../../components/Button/backButton";
+import TimeshareTitle from "../../components/Timeshare/timeshareTitle";
+import TimesharePriceInformation from "../../components/Timeshare/timesharePriceInformation";
+import TimeshareDetail from "../../components/Timeshare/timeshareDetail";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 const TimeshareDetailPage = () => {
   return (
-    <Box>
+    <Box  sx={{ backgroundColor: "#f6f8fa" }}>
       <Header />
-      <Box component="main" sx={{ marginTop: "120px", marginBottom: "60px" }}>
-        <Container disableGutters maxWidth="xl">
-          <Grid container spacing={3}>
-            <Grid item xs={8}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <Title />
-                </Grid>
-                <Grid item xs={12} style={{ marginTop: "50px" }}>
-                  <PostingDetail />
-                </Grid>
-              </Grid>
-            </Grid>
-
-            <Grid item xs={4}>
-              <Box
-                sx={{
-                  height: "510px",
-                  width: "427px",
-                  position: "sticky",
-                  top: "70px",
-                  zIndex: 2,
-                }}
-              >
-                <PostingMainPrice />
-              </Box>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
+      <Container disableGutters maxWidth="xl" sx={{ height: "100%" , zIndex: 1}}>
+        <Grid2 container gap={2} padding="10px 50px">
+          <Grid2 xs={12}>
+            <BackButton />
+          </Grid2>
+          <Grid2
+            xs={7}
+            sx={{
+              padding: "30px",
+              boxShadow: "1px 1px 2px 2px rgba(0, 0, 0, 0.2)",
+            }}
+          >
+            <TimeshareTitle />
+          </Grid2>
+          <Grid2
+            xs={3}
+            sx={{
+              height: "500px",
+              backgroundColor: "yellow",
+              position: "sticky",
+              top: "10px",
+              zIndex: 2,
+            }}
+          ></Grid2>
+          <Grid2
+            xs={7}
+            sx={{ height: "500px", backgroundColor: "blue" }}
+          ></Grid2>
+        </Grid2>
+      </Container>
       <Footer />
     </Box>
   );

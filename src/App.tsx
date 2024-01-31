@@ -10,6 +10,7 @@ import TimeshareDetailPage from "./pages/Timeshare/TimeshareDetailPage";
 import MemberPage from "./pages/UserProfile/MemberPage";
 import UserPostingPage from "./pages/UserPosting/UserPostingPage";
 import UserRequestPage from "./pages/UserRequest/UserRequestPage";
+import ScrollToTop from "./utils/ScrollToTop";
 
 const NotFoundPage = React.lazy(() => import("./pages/Error/notFoundPage"));
 
@@ -18,6 +19,7 @@ function App() {
     <ErrorBoundary>
       <Suspense fallback={<h1>Đang load nè!!!!</h1>}>
         <BrowserRouter>
+          <ScrollToTop />
           <CssBaseline />
           <GlobalStyles />
           <Routes>
@@ -26,18 +28,9 @@ function App() {
               path="/view_timeshare_detail/:timeshareID"
               element={<TimeshareDetailPage />}
             />
-            <Route
-              path="/account/profile"
-              element={< MemberPage />}
-            />
-            <Route
-              path="/account/posting"
-              element={< UserPostingPage />}
-            />
-            <Route
-              path="/account/request"
-              element={< UserRequestPage />}
-            />
+            <Route path="/account/profile" element={<MemberPage />} />
+            <Route path="/account/posting" element={<UserPostingPage />} />
+            <Route path="/account/request" element={<UserRequestPage />} />
             <Route path={ROUTE_PATH.NOT_FOUND} element={<NotFoundPage />} />
             <Route path={ROUTE_PATH.ERROR} element={<NotFoundPage />} />
           </Routes>

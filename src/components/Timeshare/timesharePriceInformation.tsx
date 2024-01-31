@@ -6,7 +6,7 @@ import { redirect } from 'react-router-dom';
 
 type Props = {};
 
-const PostingMainPrice = (props: Props) => {
+const TimesharePriceInformation = (props: Props) => {
   const navigate = useNavigate();
   return (
     <Box
@@ -92,4 +92,4 @@ const PostingMainPrice = (props: Props) => {
   );
 };
 
-export default PostingMainPrice;
+export default TimesharePriceInformation;

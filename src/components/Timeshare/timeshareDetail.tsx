@@ -3,7 +3,7 @@ import { TabContext, TabList, TabPanel } from "@mui/lab";
 import React from "react";
 import CircleIcon from "@mui/icons-material/Circle";
 
-const PostingDetail = () => {
+const TimeshareDetail = () => {
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -303,4 +303,4 @@ const PostingDetail = () => {
   );
 };
 
-export default PostingDetail;
+export default TimeshareDetail;
