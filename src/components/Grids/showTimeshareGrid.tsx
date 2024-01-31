@@ -20,8 +20,12 @@ import { makeStyles } from "@mui/styles";
 import { useEffect, useState } from "react";
 import { TimeshareResponse } from "../../interfaces/timeshare/timeshareResponse";
 import timeshareAPI from "../../services/timeshare/timeshareAPI";
-import { time } from "console";
 import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
+require("dayjs/locale/vi");
+var customParseFormat = require("dayjs/plugin/customParseFormat");
+dayjs.extend(customParseFormat);
+dayjs.locale("vi");
 
 const useStyles: any = makeStyles({
   hoverContainer: {
@@ -56,6 +60,7 @@ const ShowTimeshareGrid = () => {
     const getTimeshareList = async () => {
       const data: any = await timeshareAPI.getAllTimeshare();
       if (data && data.length > 0) {
+        console.log("")
         setTimeShareList(data);
       }
     };

@@ -17,7 +17,7 @@ import ShowTimeshareGrid from "../../components/Grids/showTimeshareGrid";
 
 const HomePage = () => {
   return (
-    <Box sx={{ backgroundColor: "#d6dbdb51" }}>
+    <Box>
       <Header />
       <Box component="main" sx={{ marginTop: "70px", height: "100%" }}>
         <Carousel />
