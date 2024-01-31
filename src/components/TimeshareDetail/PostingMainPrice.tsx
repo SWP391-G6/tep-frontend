@@ -1,4 +1,4 @@
-import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
 import { redirect } from 'react-router-dom';
@@ -20,6 +20,7 @@ const PostingMainPrice = (props: Props) => {
         <Typography variant="h4" sx={{ paddingTop: "40px" }}>
           <img
             src="https://cdn6.redweek.com/img/icons/icon.rental-self.svg?VFH2mcZBc6obiDgIQBmSaw"
+            alt="mainprice"
             height={"39px"}
           />
 
@@ -62,6 +63,7 @@ const PostingMainPrice = (props: Props) => {
         <Box marginTop={"9px"}>
           <img
             src="https://fininme.vn/wp-content/uploads/2022/11/logo-vi-vnpay.png"
+            alt="postedby"
             height={"50"}
             width={"80"}
             style={{ borderRadius: "10px" }}
