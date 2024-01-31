@@ -1,12 +1,7 @@
 import {
   Box,
-  Button,
   Container,
-  Divider,
   Grid,
-  Paper,
-  TextField,
-  Typography,
 } from "@mui/material";
 import Header from "../../components/Header/header";
 import Footer from "../../components/Footer/footer";
