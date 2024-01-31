@@ -37,7 +37,7 @@ const Footer = () => {
             alignItems="center"
           >
             <img
-              src={require("../../assets/Logo.png")}
+              src={require("../../assets/logo.png")}
               width="50px"
               height="50px"
               alt=""

@@ -5,9 +5,9 @@ import {
 } from "@mui/material";
 import Header from "../../components/Header/header";
 import Footer from "../../components/Footer/footer";
-import Title from "../../components/TimeshareDetail/Title";
-import PostingDetail from "../../components/TimeshareDetail/PostingDetails";
-import PostingMainPrice from "../../components/TimeshareDetail/PostingMainPrice";
+import Title from "../../components/Timeshare/Title";
+import PostingDetail from "../../components/Timeshare/PostingDetails";
+import PostingMainPrice from "../../components/Timeshare/PostingMainPrice";
 
 const TimeshareDetailPage = () => {
   return (

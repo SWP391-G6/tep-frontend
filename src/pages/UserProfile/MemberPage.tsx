@@ -2,9 +2,9 @@ import { Box, Container, Grid } from "@mui/material"
 
 import Header from "../../components/Header/header";
 import Footer from "../../components/Footer/footer";
-import UserActivityTab from "../../components/UserDetails/UserActivityTab";
-import UserCard from "../../components/UserDetails/UserCard";
-import UserProfile from "../../components/UserDetails/UserProfile";
+import UserActivityTab from "../../components/User/UserActivityTab";
+import UserCard from "../../components/User/UserCard";
+import UserProfile from "../../components/User/UserProfile";
 
 type Props = {}
 

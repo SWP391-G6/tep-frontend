@@ -15,7 +15,7 @@ const Header = () => {
         <Container maxWidth={false}>
           <Toolbar disableGutters>
             <img
-              src={require("../../assets/Logo.png")}
+              src={require("../../assets/logo.png")}
               width="50px"
               height="50px"
               alt=""
