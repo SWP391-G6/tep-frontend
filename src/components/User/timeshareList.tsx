@@ -115,27 +115,50 @@ const rows = [
   },
 ];
 
-export default function UserPosting() {
+// export default function UserPosting() {
+//   return (
+//     <Box sx={{ height: 500, width: '100%',backgroundColor:'white' ,padding:'25px'}}>
+//       <Box>
+//       <Typography sx={{fontSize:'50px'}}>My Posting</Typography>
+//       <DataGrid
+//         rows={rows}
+//         columns={columns}
+//         initialState={{
+//           pagination: {
+//             paginationModel: {
+//               pageSize: 5,
+//             },
+//           },
+//         }}
+//         pageSizeOptions={[5]}
+//       />
+//       </Box>
+//     </Box>
+//   );
+// }
+
+
+
+const TimeshareList = () => {
   return (
     <Box sx={{ height: 500, width: '100%',backgroundColor:'white' ,padding:'25px'}}>
-      <Box>
-      <Typography sx={{fontSize:'50px'}}>My Posting</Typography>
-      <DataGrid
-      
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
-            },
+    <Box>
+    <Typography sx={{fontSize:'50px'}}>My Posting</Typography>
+    <DataGrid
+      rows={rows}
+      columns={columns}
+      initialState={{
+        pagination: {
+          paginationModel: {
+            pageSize: 5,
           },
-        }}
-        pageSizeOptions={[5]}
-        checkboxSelection
-        disableRowSelectionOnClick
-      />
-      </Box>
+        },
+      }}
+      pageSizeOptions={[5]}
+    />
     </Box>
-  );
+  </Box>
+  )
 }
+
+export default TimeshareList;

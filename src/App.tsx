@@ -8,9 +8,9 @@ import HomePage from "./pages/Home/HomePage";
 import { ROUTE_PATH } from "./configs";
 import TimeshareDetailPage from "./pages/Timeshare/TimeshareDetailPage";
 import MemberPage from "./pages/UserProfile/MemberPage";
-import UserPostingPage from "./pages/UserPosting/UserPostingPage";
 import UserRequestPage from "./pages/UserRequest/UserRequestPage";
 import ScrollToTop from "./utils/ScrollToTop";
+import UserPostingPage from "./pages/User/UserProfilePage";
 
 const NotFoundPage = React.lazy(() => import("./pages/Error/notFoundPage"));
 
@@ -28,9 +28,9 @@ function App() {
               path="/view_timeshare_detail/:timeshareID"
               element={<TimeshareDetailPage />}
             />
-            <Route path="/account/profile" element={<MemberPage />} />
-            <Route path="/account/posting" element={<UserPostingPage />} />
-            <Route path="/account/request" element={<UserRequestPage />} />
+            <Route path="/user/profile" element={<MemberPage />} />
+            <Route path="/user/posting" element={<UserPostingPage />} />
+            <Route path="/user/exchange_request" element={<UserRequestPage />} />
             <Route path={ROUTE_PATH.NOT_FOUND} element={<NotFoundPage />} />
             <Route path={ROUTE_PATH.ERROR} element={<NotFoundPage />} />
           </Routes>

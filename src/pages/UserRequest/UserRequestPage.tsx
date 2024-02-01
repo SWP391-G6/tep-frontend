@@ -4,8 +4,8 @@ import Header from "../../components/Header/header";
 import Footer from "../../components/Footer/footer";
 import UserActivityTab from "../../components/User/UserActivityTab";
 import UserCard from "../../components/User/UserCard";
-import UserProfile from "../../components/User/UserProfile";
-import UserRequestActivity from "../../components/User/UserRequestActivity";
+    import UserProfile from "../../components/User/UserProfile";
+import UserRequestActivity from "../../components/User/requestExchangeList";
 
 type Props = {}
 
