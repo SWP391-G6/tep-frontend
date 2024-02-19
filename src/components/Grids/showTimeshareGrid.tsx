@@ -39,7 +39,7 @@ const useStyles: any = makeStyles({
       bottom: 0,
       left: "-100%",
       width: "100%",
-      height: "10px",
+      height: "5px",
       backgroundColor: "#00acb3",
       transition: "transform 0.5s ease-in-out",
       zIndex: 1,
@@ -59,6 +59,7 @@ const ShowTimeshareGrid = () => {
   useEffect(() => {
     const getTimeshareList = async () => {
       const data: any = await timeshareAPI.getAllTimeshare();
+      console.log("Timeshare List", data);
       if (data && data.length > 0) {
         setTimeShareList(data);
       }
@@ -72,7 +73,7 @@ const ShowTimeshareGrid = () => {
 
   return (
     <Grid2 container direction="row" justifyContent="space-between" rowGap={2}>
-      {/* {timeshareList.map((timeshare) => {
+      {timeshareList.map((timeshare) => {
         return (
           <Grid2
             onClick={() => {
@@ -85,7 +86,7 @@ const ShowTimeshareGrid = () => {
             <Card className={classes.hoverContainer} elevation={3}>
               <CardMedia
                 component="img"
-                image={timeshare.description}
+                image="https://i.ibb.co/w6ZqkqT/Topas-Ecolodgebanner.jpg"
                 width="320px"
                 height="200px"
                 alt="Sapa Jade Hill Resort"
@@ -105,7 +106,7 @@ const ShowTimeshareGrid = () => {
                 >
                   <LocationOnIcon sx={{ color: "#00acb3" }} />
                   <Typography fontSize="16px" fontWeight={500}>
-                    {timeshare.address}
+                    {timeshare.name}
                   </Typography>
                 </Stack>
                 <List>
@@ -124,8 +125,12 @@ const ShowTimeshareGrid = () => {
                       }
                       secondary={
                         <Box>
-                          <Typography color="#83b3b5" fontWeight={500}>
+                          {/* <Typography color="#83b3b5" fontWeight={500}>
                             {timeshare.date_start} - {timeshare.date_end}
+                          </Typography> */}
+                          <Typography color="#83b3b5" fontWeight={500}>
+                            {timeshare.date_start.toString()} -{" "}
+                            {timeshare.date_end.toString()}
                           </Typography>
                         </Box>
                       }
@@ -136,7 +141,7 @@ const ShowTimeshareGrid = () => {
             </Card>
           </Grid2>
         );
-      })} */}
+      })}
       <Grid2
         onClick={() => {
           navigate(`/view_timeshare_detail/1`);

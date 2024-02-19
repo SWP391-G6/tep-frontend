@@ -1,8 +1,42 @@
 import { Box, Button, Divider, Grid, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { green } from "@mui/material/colors";
+import { useEffect } from "react";
+import vnpayAPI from "../../services/payment/vnpayAPI";
+import { useNavigate } from "react-router";
 
 const PaymentSumaryComponent = () => {
+  const navigate = useNavigate();
+  var d = new Date(2024, 2, 19);
+
+  const handleCheckOut = async () => {
+    try {
+      const data: any = await vnpayAPI.checkout({
+        adults: "1",
+        children: "1",
+        city: "1",
+        country: "1",
+        create_date: d,
+        payment_status: 1,
+        postal_code: "1",
+        state: "1",
+        status: 1,
+        street: "1",
+        telephone: "0979121340",
+        total: 700000,
+        fullname: "DoPhu",
+        payment_method: "1",
+        user_id: 1,
+        timeshare_id: 1,
+      });
+      navigate(
+        "https://sandbox.vnpayment.vn/paymentv2/Transaction/PaymentMethod.html?token=f1c0bac1e56e4c56a5a77145c1872a02"
+      );
+    } catch (error) {
+      console.log("Error at Handle Checkout");
+    }
+  };
+
   return (
     <Box>
       <Grid2 container>
@@ -50,6 +84,7 @@ const PaymentSumaryComponent = () => {
             <Button
               variant="contained"
               sx={{ marginTop: "10px", width: "150px" }}
+              onClick={handleCheckOut}
             >
               Check Out
             </Button>
