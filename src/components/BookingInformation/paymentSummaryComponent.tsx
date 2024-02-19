@@ -1,11 +1,11 @@
 import { Box, Button, Divider, Grid, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import { green } from "@mui/material/colors";
+import { green, red } from "@mui/material/colors";
 import { useEffect } from "react";
 import vnpayAPI from "../../services/payment/vnpayAPI";
 import { useNavigate } from "react-router";
 
-const PaymentSumaryComponent = () => {
+const PaymentSummaryComponent = () => {
   const navigate = useNavigate();
   var d = new Date(2024, 2, 19);
 
@@ -65,7 +65,7 @@ const PaymentSumaryComponent = () => {
           <Grid2 xs={6} textAlign="right">
             <Typography fontWeight={300}>700.000 ₫</Typography>
             <Typography fontWeight={300}>20.000 ₫</Typography>
-            <Typography fontWeight={300} color={green[500]}>
+            <Typography fontWeight={300} color={red[500]}>
               -20.000 ₫
             </Typography>
           </Grid2>
@@ -99,4 +99,4 @@ const PaymentSumaryComponent = () => {
   );
 };
 
-export default PaymentSumaryComponent;
+export default PaymentSummaryComponent;

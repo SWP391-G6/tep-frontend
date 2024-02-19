@@ -27,7 +27,7 @@ const PersonalInformationComponent = () => {
   };
 
   const handleSelectTitle = (event: SelectChangeEvent) => {
-    setChildren(event.target.value as string);
+    setTitle(event.target.value as string);
   };
 
   return (
@@ -92,7 +92,7 @@ const PersonalInformationComponent = () => {
             Primary Guest
           </Typography>
           <Grid2 mt={1}>
-            <FormControl sx={{ width: "150px" }}>
+            <FormControl sx={{ width: "200px" }}>
               <InputLabel id="select-title-label">Title</InputLabel>
               <Select
                 labelId="select-title-label"
@@ -112,7 +112,7 @@ const PersonalInformationComponent = () => {
             <TextField
               label="Full Name"
               variant="outlined"
-              sx={{ width: "607px", marginLeft: "20px" }}
+              sx={{ width: "677px", marginLeft: "20px" }}
             />
             <Typography
               sx={{ marginTop: "10px" }}
@@ -126,7 +126,7 @@ const PersonalInformationComponent = () => {
           <Grid2 xs={12} mt={3}>
             <TextField
               variant="outlined"
-              sx={{ width: "290px" }}
+              sx={{ width: "300px" }}
               label="Phone"
               InputProps={{
                 startAdornment: (
@@ -157,7 +157,7 @@ const PersonalInformationComponent = () => {
             <TextField
               variant="outlined"
               label="Email"
-              sx={{ marginLeft: "20px", width: "467px" }}
+              sx={{ marginLeft: "20px", width: "577px" }}
             />
           </Grid2>
           <Grid2 xs={12} mt={3}>
@@ -165,7 +165,7 @@ const PersonalInformationComponent = () => {
               variant="outlined"
               label="Country"
               value="Viet Nam"
-              sx={{ width: "290px" }}
+              sx={{ width: "300px" }}
             />
           </Grid2>
           <Grid2 xs={12} mt={3}>
@@ -176,13 +176,13 @@ const PersonalInformationComponent = () => {
             />
           </Grid2>
           <Grid2 container xs={12} gap={2}>
-            <Grid2 xs={5} mt={3} width={290}>
+            <Grid2 xs={5} mt={3} width={288}>
               <TextField variant="outlined" label="City" fullWidth />
             </Grid2>
-            <Grid2 xs={3} mt={3} width={245}>
+            <Grid2 xs={3} mt={3} width={288}>
               <TextField variant="outlined" label="State/Province" fullWidth />
             </Grid2>
-            <Grid2 xs={3} mt={3}>
+            <Grid2 xs={3} mt={3} width={289}>
               <TextField variant="outlined" label="Zip/Postal code" fullWidth />
             </Grid2>
           </Grid2>

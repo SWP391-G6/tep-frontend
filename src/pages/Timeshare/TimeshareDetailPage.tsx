@@ -16,12 +16,12 @@ const TimeshareDetailPage = () => {
         maxWidth="xl"
         sx={{ height: "100%", zIndex: 1 }}
       >
-        <Grid2 container gap={2} padding="10px 50px">
+        <Grid2 container gap={2} padding="10px 50px 20px 50px">
           <Grid2 xs={12}>
             <BackButton />
           </Grid2>
           <Grid2
-            xs={7}
+            xs={8}
             sx={{
               padding: "30px",
               boxShadow: "1px 1px 2px 2px rgba(0, 0, 0, 0.2)",
@@ -31,7 +31,7 @@ const TimeshareDetailPage = () => {
             <TimeshareTitle />
           </Grid2>
           <Grid2
-            xs={4}
+            xs={3.5}
             sx={{
               height: "500px",
               position: "sticky",
@@ -45,7 +45,7 @@ const TimeshareDetailPage = () => {
             <TimesharePriceInformation />
           </Grid2>
           <Grid2
-            xs={7}
+            xs={8}
             sx={{
               boxShadow: "1px 1px 2px 2px rgba(0, 0, 0, 0.2)",
               backgroundColor: "#ffffff",
