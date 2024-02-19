@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Button,
   Container,
@@ -40,11 +39,11 @@ const TimesharePriceInformation = () => {
           </Typography>
           <Typography variant="h6">
             Check-in:
-            <strong> Thu, Jan 1, 2024</strong>
+            <strong> Tue, Feb 20, 2024</strong>
           </Typography>
           <Typography variant="h6">
             Check-out:
-            <strong> Mon, Jan 15, 2024</strong>
+            <strong> Mon, Feb 26, 2024</strong>
           </Typography>
 
           <Typography variant="h6">
@@ -83,6 +82,9 @@ const TimesharePriceInformation = () => {
           <Grid item xs={12}>
             <Button
               variant="contained"
+              onClick={() => {
+                navigate("/booking_information");
+              }}
               sx={{
                 width: "100%",
                 height: "50px",
