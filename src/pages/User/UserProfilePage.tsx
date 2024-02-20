@@ -12,21 +12,21 @@ const UserProfilePage = () => {
     <Box sx={{ backgroundColor: "#d6dbdb51" }}>
       <Header />
       <Box component="main" sx={{ paddingTop: "10px", marginBottom: "50px" }}>
-        <BackButton />
-        <Container disableGutters maxWidth="xl">
-          <Grid container spacing={3}>
-            <Grid item xs={3.3}>
+        <Container disableGutters maxWidth="lg" sx={{marginTop:'45px'}}>
+        <BackButton/>
+          <Grid container spacing={2}>
+            <Grid item xs={3}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <UserCard />
                 </Grid>
-                <Grid item xs={12} style={{ marginTop: "15px" }}>
+                <Grid item xs={12} >
                   <UserActivityTab />
                 </Grid>
               </Grid>
             </Grid>
 
-            <Grid item xs={8.7}>
+            <Grid item xs={9}>
               <Box>
                 <TimeshareList />
               </Box>

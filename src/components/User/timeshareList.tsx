@@ -141,9 +141,17 @@ const rows = [
 
 const TimeshareList = () => {
   return (
-    <Box sx={{ height: 500, width: '100%',backgroundColor:'white' ,padding:'25px'}}>
+    <Box 
+    sx={{ 
+      height: 500, 
+      width: '100%',
+      backgroundColor:'white' ,
+      padding:'30px',
+      border: 'solid 1px ',
+      borderColor: 'rgba(0, 0, 0, 0.2)',
+      }}>
     <Box>
-    <Typography sx={{fontSize:'50px'}}>My Posting</Typography>
+    <Typography variant='h4'>MY POSTING</Typography>
     <DataGrid
       rows={rows}
       columns={columns}

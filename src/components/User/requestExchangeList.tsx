@@ -209,10 +209,12 @@ const RequestExchangeList = () => {
         width: "100%",
         backgroundColor: "white",
         padding: "25px",
+        border: 'solid 1px ',
+        borderColor: 'rgba(0, 0, 0, 0.2)',
       }}
     >
       <Box>
-        <Typography sx={{ fontSize: "50px" }}>My Exchange Request</Typography>
+        <Typography variant="h4">MY EXCHANGE REQUEST</Typography>
         <DataGrid
           rows={rows}
           columns={columns}

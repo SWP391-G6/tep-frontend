@@ -12,9 +12,12 @@ import ContactsIcon from "@mui/icons-material/Contacts";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 
 const UserActivityTab = () => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = React.useState(1);
 
-  const handleListItemClick = (index: React.SetStateAction<number>) => {
+  const handleListItemClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    index: number,
+  ) => {
     setSelectedIndex(index);
   };
 
@@ -25,7 +28,8 @@ const UserActivityTab = () => {
       sx={{
         width: "100%",
         backgroundColor: "white",
-        boxShadow: "1px 1px 2px 2px rgba(0, 0, 0, 0.2)",
+        border: 'solid 1px ',
+        borderColor: 'rgba(0, 0, 0, 0.2)',
       }}
     >
       {/* USER POSTING */}
@@ -36,17 +40,19 @@ const UserActivityTab = () => {
         <ListItemButton
           sx={{ width: "100%" }}
           selected={selectedIndex === 0}
-          onClick={() => handleListItemClick(0)}
+          onClick={(event) => handleListItemClick(event, 0)}
         >
           <ListItemIcon sx={{ fontSize: 24 }}>
-            <ContactsIcon fontSize="large" sx={{ color: "black" }} />
+            <ContactsIcon fontSize="small" sx={{ color: "black" }} />
           </ListItemIcon>
           <ListItemText
-            primaryTypographyProps={{ variant: "h5" }}
+            primaryTypographyProps={{ variant: "subtitle1" }}
             primary="My Posting"
           />
         </ListItemButton>
       </Link>
+
+
       {/* USER PROFILE */}
       <Divider />
       <Link
@@ -55,17 +61,20 @@ const UserActivityTab = () => {
       >
         <ListItemButton
           selected={selectedIndex === 1}
-          onClick={() => handleListItemClick(1)}
+          onClick={(event) => handleListItemClick(event, 1)}
         >
           <ListItemIcon sx={{ fontSize: 24 }}>
-            <ApartmentIcon fontSize="large" sx={{ color: "black" }} />
+            <ApartmentIcon fontSize="small" sx={{ color: "black" }} />
           </ListItemIcon>
           <ListItemText
-            primaryTypographyProps={{ variant: "h5" }}
+            primaryTypographyProps={{ variant: "subtitle1" }}
             primary="My Profile"
           />
         </ListItemButton>
       </Link>
+
+
+
       {/* USER REQUEST */}
       <Divider />
       <Link
@@ -74,13 +83,13 @@ const UserActivityTab = () => {
       >
         <ListItemButton
           selected={selectedIndex === 2}
-          onClick={() => handleListItemClick(2)}
+          onClick={(event) => handleListItemClick(event, 2)}
         >
           <ListItemIcon sx={{ fontSize: 24 }}>
-            <DisplaySettingsIcon fontSize="large" sx={{ color: "black" }} />
+            <DisplaySettingsIcon fontSize="small" sx={{ color: "black" }} />
           </ListItemIcon>
           <ListItemText
-            primaryTypographyProps={{ variant: "h5" }}
+            primaryTypographyProps={{ variant: "subtitle1" }}
             primary="My Exchange Request"
           />
         </ListItemButton>
