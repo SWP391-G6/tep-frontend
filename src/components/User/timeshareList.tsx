@@ -85,16 +85,21 @@ const TimeshareList = () => {
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 90 },
     {
-      field: 'date',
-      headerName: 'Date',
+      field: "name",
+      headerName: "name",
       width: 150,
+      flex: 1,
+    },
+    {
+      field: 'start_date',
+      headerName: 'Start Date',
+      width: 160,
       editable: true,
     },
     {
-      field: 'nights',
-      headerName: 'Nights',
-      type: 'number',
-      width: 150,
+      field: 'end_date',
+      headerName: 'End Date',
+      width: 160,
       editable: true,
     },
     {
@@ -105,23 +110,16 @@ const TimeshareList = () => {
       editable: true,
     },
     {
-      field: 'sleep',
-      headerName: 'sleeps',
-      type: 'number',
-      width: 150,
-      editable: false,
-    },
-    {
       field: 'view',
       headerName: 'View',
       type: 'number',
-      width: 150,
+      width: 130,
       editable: true,
     },
     {
       field: "Action",
       headerName: "Action",
-      width: 200,
+      width: 125,
       type: "number",
       renderCell: (params) => {
         const handleButtonClick = () => {
@@ -152,7 +150,9 @@ const TimeshareList = () => {
   const rows = [
     {
       id: 1,
-      date: "02/09/24-02/16/24",
+      name: "Sapa Jade Hill",
+      start_date: "02/09/24",
+      end_date:"02/16/24",
       price: "2000$",
       nights: "7",
       sleep: "5",
@@ -162,7 +162,8 @@ const TimeshareList = () => {
       id: 2,
       price: "2000$",
       name: "Sapa Jade Hill",
-      date: "02/09/24-02/16/24",
+      start_date: "02/09/24",
+      end_date:"02/16/24",
       nights: "7",
       sleep: "5",
       view:"high"
@@ -171,7 +172,8 @@ const TimeshareList = () => {
       id: 3,
       price: "2000$",
       name: "Sapa Jade Hill",
-      date: "02/09/24-02/16/24",
+      start_date: "02/09/24",
+      end_date:"02/16/24",
       nights: "7",
       sleep: "5",
       view:"high"
@@ -180,7 +182,8 @@ const TimeshareList = () => {
       id: 4,
       price: "2000$",
       name: "Sapa Jade Hill",
-      date: "02/09/24-02/16/24",
+      start_date: "02/09/24",
+      end_date:"02/16/24",
       nights: "7",
       sleep: "5",
       view:"high"
@@ -189,7 +192,8 @@ const TimeshareList = () => {
       id: 5,
       price: "2000$",
       name: "Sapa Jade Hill",
-      date: "02/09/24-02/16/24",
+      start_date: "02/09/24",
+      end_date:"02/16/24",
       nights: "7",
       sleep: "5",
       view:"high"
@@ -198,7 +202,8 @@ const TimeshareList = () => {
       id: 6,
       price: "2000$",
       name: "Sapa Jade Hill",
-      date: "02/09/24-02/16/24",
+      start_date: "02/09/24",
+      end_date:"02/16/24",
       nights: "7",
       sleep: "5",
       view:"high"
@@ -207,7 +212,8 @@ const TimeshareList = () => {
       id: 7,
       price: "2000$",
       name: "Sapa Jade Hill",
-      date: "02/09/24-02/16/24",
+      start_date: "02/09/24",
+      end_date:"02/16/24",
       nights: "7",
       sleep: "5",
       view:"high"
