@@ -48,7 +48,7 @@ const UserActivityTab = () => {
           <ListItemIcon sx={{ fontSize: 24 }}>
             <ContactsIcon fontSize="small" sx={{ color: "black" }} />
           </ListItemIcon>
-          <ListItemText primaryTypographyProps={{ variant: "subtitle1" }} primary="My Posting" />
+          <ListItemText primaryTypographyProps={{ variant: "subtitle1" }} primary="My Timeshare" />
         </ListItemButton>
       </Link>
 

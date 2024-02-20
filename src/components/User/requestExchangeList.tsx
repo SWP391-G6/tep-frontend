@@ -205,7 +205,6 @@ const RequestExchangeList = () => {
   return (
     <Box
       sx={{
-        height: 550,
         width: "100%",
         backgroundColor: "white",
         padding: "60px",
@@ -221,12 +220,12 @@ const RequestExchangeList = () => {
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 5,
+                pageSize: 10,
               },
             },
           }}
           slots={{ toolbar: GridToolbar }}
-          pageSizeOptions={[5]}
+          pageSizeOptions={[10, 20, 50, 100]}
           disableRowSelectionOnClick
         />
       </Box>
