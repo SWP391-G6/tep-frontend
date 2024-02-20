@@ -68,7 +68,7 @@ const rows = [
     room_view: 'High',
     date_start: '02/09/24-02/16/24',
     nights: '7',
-    sleep:'5'
+    sleep: '5'
   },
   {
     id: 2,
@@ -76,42 +76,42 @@ const rows = [
     room_view: 'High',
     date_start: '02/09/24-02/16/24',
     nights: '7',
-    sleep:'5'
-  },{
+    sleep: '5'
+  }, {
     id: 3,
     price: '2000$',
     room_view: 'High',
     date_start: '02/09/24-02/16/24',
     nights: '7',
-    sleep:'5'
-  },{
+    sleep: '5'
+  }, {
     id: 4,
     price: '2000$',
     room_view: 'High',
     date_start: '02/09/24-02/16/24',
     nights: '7',
-    sleep:'5'
-  },{
+    sleep: '5'
+  }, {
     id: 5,
     price: '2000$',
     room_view: 'High',
     date_start: '02/09/24-02/16/24',
     nights: '7',
-    sleep:'5'
-  },{
+    sleep: '5'
+  }, {
     id: 6,
     price: '2000$',
     room_view: 'High',
     date_start: '02/09/24-02/16/24',
     nights: '7',
-    sleep:'5'
-  },{
+    sleep: '5'
+  }, {
     id: 1,
     price: '2000$',
     room_view: 'High',
     date_start: '02/09/24-02/16/24',
     nights: '7',
-    sleep:'5'
+    sleep: '5'
   },
 ];
 
@@ -141,31 +141,31 @@ const rows = [
 
 const TimeshareList = () => {
   return (
-    <Box 
-    sx={{ 
-      height: 500, 
-      width: '100%',
-      backgroundColor:'white' ,
-      padding:'30px',
-      border: 'solid 1px ',
-      borderColor: 'rgba(0, 0, 0, 0.2)',
+    <Box
+      sx={{
+        height: 525,
+        width: '100%',
+        backgroundColor: 'white',
+        padding: '60px',
+        border: 'solid 1px ',
+        borderColor: 'rgba(0, 0, 0, 0.2)',
       }}>
-    <Box>
-    <Typography variant='h4'>MY POSTING</Typography>
-    <DataGrid
-      rows={rows}
-      columns={columns}
-      initialState={{
-        pagination: {
-          paginationModel: {
-            pageSize: 5,
-          },
-        },
-      }}
-      pageSizeOptions={[5]}
-    />
+      <Box>
+        <Typography variant='h4'>MY POSTING</Typography>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
+          }}
+          pageSizeOptions={[5]}
+        />
+      </Box>
     </Box>
-  </Box>
   )
 }
 

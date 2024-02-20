@@ -205,10 +205,10 @@ const RequestExchangeList = () => {
   return (
     <Box
       sx={{
-        height: 500,
+        height: 550,
         width: "100%",
         backgroundColor: "white",
-        padding: "25px",
+        padding: "60px",
         border: 'solid 1px ',
         borderColor: 'rgba(0, 0, 0, 0.2)',
       }}

@@ -7,23 +7,22 @@ import ApartmentIcon from "@mui/icons-material/Apartment";
 
 const UserActivityTab = () => {
   const location = useLocation();
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedTab, setSelectedTab] = useState("posting");
 
   React.useEffect(() => {
-    // Xác định chỉ số được chọn dựa trên đường dẫn hiện tại
     const pathname = location.pathname;
     switch (pathname) {
       case "/user/posting":
-        setSelectedIndex(0);
+        setSelectedTab("posting");
         break;
       case "/user/profile":
-        setSelectedIndex(1);
+        setSelectedTab("profile");
         break;
       case "/user/exchange_request":
-        setSelectedIndex(2);
+        setSelectedTab("exchange_request");
         break;
       default:
-        setSelectedIndex(0);
+        setSelectedTab("posting");
         break;
     }
   }, [location]);
@@ -43,8 +42,8 @@ const UserActivityTab = () => {
       <Link to="/user/posting" style={{ textDecoration: "none", color: "black" }}>
         <ListItemButton
           sx={{ width: "100%" }}
-          selected={selectedIndex === 0}
-          onClick={() => setSelectedIndex(0)}
+          selected={selectedTab === "posting"}
+          onClick={() => setSelectedTab("posting")}
         >
           <ListItemIcon sx={{ fontSize: 24 }}>
             <ContactsIcon fontSize="small" sx={{ color: "black" }} />
@@ -57,8 +56,8 @@ const UserActivityTab = () => {
       <Divider />
       <Link to="/user/profile" style={{ textDecoration: "none", color: "black" }}>
         <ListItemButton
-          selected={selectedIndex === 1}
-          onClick={() => setSelectedIndex(1)}
+          selected={selectedTab === "profile"}
+          onClick={() => setSelectedTab("profile")}
         >
           <ListItemIcon sx={{ fontSize: 24 }}>
             <ApartmentIcon fontSize="small" sx={{ color: "black" }} />
@@ -74,8 +73,8 @@ const UserActivityTab = () => {
         style={{ textDecoration: "none", color: "black" }}
       >
         <ListItemButton
-          selected={selectedIndex === 2}
-          onClick={() => setSelectedIndex(2)}
+          selected={selectedTab === "exchange_request"}
+          onClick={() => setSelectedTab("exchange_request")}
         >
           <ListItemIcon sx={{ fontSize: 24 }}>
             <DisplaySettingsIcon fontSize="small" sx={{ color: "black" }} />

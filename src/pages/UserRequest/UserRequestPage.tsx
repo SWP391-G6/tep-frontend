@@ -15,7 +15,7 @@ const UserRequestPage = (props: Props) => {
         <Box sx={{ backgroundColor: "#d6dbdb51" }}>
             <Header />
             <Box component="main" sx={{ paddingTop:'10px',marginBottom: "50px" , }}>
-                <Container disableGutters maxWidth="lg" sx={{marginTop:'45px'}}>
+                <Container disableGutters maxWidth="xl" sx={{marginTop:'10px'}}>
                     <BackButton/>
                     <Grid container spacing={2}>
 

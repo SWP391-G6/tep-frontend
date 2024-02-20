@@ -27,7 +27,7 @@ const UserProfile = () => {
         backgroundColor: "white",
         border: 'solid 1px ',
         borderColor: 'rgba(0, 0, 0, 0.2)',
-        padding: "30px"
+        padding: "60px"
       }}
     >
 
@@ -76,7 +76,7 @@ const UserProfile = () => {
             }}>
 
               {/* AVATAR */}
-              <CardContent
+              {/* <CardContent
                 sx={{
                   border: 'solid 1px',
                   borderColor: 'lightgray'
@@ -99,7 +99,7 @@ const UserProfile = () => {
                     }}
                   />
                 </CardContent>
-              </CardContent>
+              </CardContent> */}
 
               {/* PASSWORD */}
             </Grid>
