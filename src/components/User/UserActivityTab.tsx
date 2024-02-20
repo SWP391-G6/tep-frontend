@@ -1,25 +1,32 @@
 import React, { useState } from "react";
-import {
-  Divider,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-} from "@mui/material";
-import { Link } from "react-router-dom";
+import { Divider, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Link, useLocation } from "react-router-dom";
 import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings";
 import ContactsIcon from "@mui/icons-material/Contacts";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 
 const UserActivityTab = () => {
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const location = useLocation();
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const handleListItemClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    index: number,
-  ) => {
-    setSelectedIndex(index);
-  };
+  React.useEffect(() => {
+    // Xác định chỉ số được chọn dựa trên đường dẫn hiện tại
+    const pathname = location.pathname;
+    switch (pathname) {
+      case "/user/posting":
+        setSelectedIndex(0);
+        break;
+      case "/user/profile":
+        setSelectedIndex(1);
+        break;
+      case "/user/exchange_request":
+        setSelectedIndex(2);
+        break;
+      default:
+        setSelectedIndex(0);
+        break;
+    }
+  }, [location]);
 
   return (
     <List
@@ -33,47 +40,32 @@ const UserActivityTab = () => {
       }}
     >
       {/* USER POSTING */}
-      <Link
-        to="/user/posting"
-        style={{ textDecoration: "none", color: "black" }}
-      >
+      <Link to="/user/posting" style={{ textDecoration: "none", color: "black" }}>
         <ListItemButton
           sx={{ width: "100%" }}
           selected={selectedIndex === 0}
-          onClick={(event) => handleListItemClick(event, 0)}
+          onClick={() => setSelectedIndex(0)}
         >
           <ListItemIcon sx={{ fontSize: 24 }}>
             <ContactsIcon fontSize="small" sx={{ color: "black" }} />
           </ListItemIcon>
-          <ListItemText
-            primaryTypographyProps={{ variant: "subtitle1" }}
-            primary="My Posting"
-          />
+          <ListItemText primaryTypographyProps={{ variant: "subtitle1" }} primary="My Posting" />
         </ListItemButton>
       </Link>
 
-
       {/* USER PROFILE */}
       <Divider />
-      <Link
-        to="/user/profile"
-        style={{ textDecoration: "none", color: "black" }}
-      >
+      <Link to="/user/profile" style={{ textDecoration: "none", color: "black" }}>
         <ListItemButton
           selected={selectedIndex === 1}
-          onClick={(event) => handleListItemClick(event, 1)}
+          onClick={() => setSelectedIndex(1)}
         >
           <ListItemIcon sx={{ fontSize: 24 }}>
             <ApartmentIcon fontSize="small" sx={{ color: "black" }} />
           </ListItemIcon>
-          <ListItemText
-            primaryTypographyProps={{ variant: "subtitle1" }}
-            primary="My Profile"
-          />
+          <ListItemText primaryTypographyProps={{ variant: "subtitle1" }} primary="My Profile" />
         </ListItemButton>
       </Link>
-
-
 
       {/* USER REQUEST */}
       <Divider />
@@ -83,7 +75,7 @@ const UserActivityTab = () => {
       >
         <ListItemButton
           selected={selectedIndex === 2}
-          onClick={(event) => handleListItemClick(event, 2)}
+          onClick={() => setSelectedIndex(2)}
         >
           <ListItemIcon sx={{ fontSize: 24 }}>
             <DisplaySettingsIcon fontSize="small" sx={{ color: "black" }} />
