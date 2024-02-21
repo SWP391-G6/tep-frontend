@@ -12,6 +12,8 @@ import UserRequestPage from "./pages/UserRequest/UserRequestPage";
 import ScrollToTop from "./utils/ScrollToTop";
 import UserPostingPage from "./pages/User/UserProfilePage";
 import BookingInformationPage from "./pages/Payment/BookingInformationPage";
+import LoginPage from "./pages/Login/LoginPage";
+import RegisterPage from "./pages/Register/RegisterPage";
 
 const NotFoundPage = React.lazy(() => import("./pages/Error/notFoundPage"));
 
@@ -37,6 +39,8 @@ function App() {
             />
             <Route path="/user/profile" element={<MemberPage />} />
             <Route path="/user/posting" element={<UserPostingPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
             <Route
               path="/user/exchange_request"
               element={<UserRequestPage />}
