@@ -38,6 +38,23 @@ const UserActivityTab = () => {
         borderColor: 'rgba(0, 0, 0, 0.2)',
       }}
     >
+
+
+      {/* USER PROFILE */}
+
+      <Link to="/user/profile" style={{ textDecoration: "none", color: "black" }}>
+        <ListItemButton
+          selected={selectedTab === "profile"}
+          onClick={() => setSelectedTab("profile")}
+        >
+          <ListItemIcon sx={{ fontSize: 24 }}>
+
+            <ContactsIcon fontSize="small" sx={{ color: "black" }} />
+          </ListItemIcon>
+          <ListItemText primaryTypographyProps={{ variant: "subtitle1" }} primary="My Profile" />
+        </ListItemButton>
+      </Link>
+      <Divider />
       {/* USER POSTING */}
       <Link to="/user/posting" style={{ textDecoration: "none", color: "black" }}>
         <ListItemButton
@@ -46,23 +63,9 @@ const UserActivityTab = () => {
           onClick={() => setSelectedTab("posting")}
         >
           <ListItemIcon sx={{ fontSize: 24 }}>
-            <ContactsIcon fontSize="small" sx={{ color: "black" }} />
-          </ListItemIcon>
-          <ListItemText primaryTypographyProps={{ variant: "subtitle1" }} primary="My Timeshare" />
-        </ListItemButton>
-      </Link>
-
-      {/* USER PROFILE */}
-      <Divider />
-      <Link to="/user/profile" style={{ textDecoration: "none", color: "black" }}>
-        <ListItemButton
-          selected={selectedTab === "profile"}
-          onClick={() => setSelectedTab("profile")}
-        >
-          <ListItemIcon sx={{ fontSize: 24 }}>
             <ApartmentIcon fontSize="small" sx={{ color: "black" }} />
           </ListItemIcon>
-          <ListItemText primaryTypographyProps={{ variant: "subtitle1" }} primary="My Profile" />
+          <ListItemText primaryTypographyProps={{ variant: "subtitle1" }} primary="My Timeshare" />
         </ListItemButton>
       </Link>
 
