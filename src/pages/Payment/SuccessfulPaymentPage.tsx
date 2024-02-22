@@ -1,11 +1,12 @@
-import React from 'react'
+import { Container } from "@mui/material";
+import SuccessfulPaymentComponent from "../../components/Payment/SuccessfulPaymentComponent";
 
-type Props = {}
-
-const SuccessfulPaymentPage = (props: Props) => {
+const SuccessfulPaymentPage = () => {
   return (
-    <div>SuccessfulPaymentPage</div>
-  )
-}
+    <Container maxWidth={false} style={{ flex: 1, backgroundColor: "#f6f8fa" }}>
+      <SuccessfulPaymentComponent />
+    </Container>
+  );
+};
 
-export default SuccessfulPaymentPage
+export default SuccessfulPaymentPage;

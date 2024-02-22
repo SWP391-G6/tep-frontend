@@ -12,6 +12,7 @@ import UserRequestPage from "./pages/UserRequest/UserRequestPage";
 import ScrollToTop from "./utils/ScrollToTop";
 import UserPostingPage from "./pages/User/UserProfilePage";
 import BookingInformationPage from "./pages/Payment/BookingInformationPage";
+import SuccessfulPaymentPage from "./pages/Payment/SuccessfulPaymentPage";
 
 const NotFoundPage = React.lazy(() => import("./pages/Error/notFoundPage"));
 
@@ -41,6 +42,7 @@ function App() {
               path="/user/exchange_request"
               element={<UserRequestPage />}
             />
+            <Route path={ROUTE_PATH.PAYMENT_SUCCESSFUL} element={<SuccessfulPaymentPage />}/>
             <Route path={ROUTE_PATH.NOT_FOUND} element={<NotFoundPage />} />
             <Route path={ROUTE_PATH.ERROR} element={<NotFoundPage />} />
           </Routes>
