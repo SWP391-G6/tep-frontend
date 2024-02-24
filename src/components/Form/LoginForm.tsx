@@ -1,7 +1,10 @@
 import { Box, Button, FormControl, Snackbar, TextField, Typography } from '@mui/material';
-import * as yup from 'yup';
 import { useFormik } from 'formik';
+import * as yup from 'yup';
 import loginAPI from '../../services/login/loginAPI';
+import { Alert } from '@mui/material';
+import { useState } from 'react';
+
 
 const validationSchema = yup.object({
   email: yup.string().email('Invalid email').required('Email is required'),
@@ -10,8 +13,7 @@ const validationSchema = yup.object({
 
 const LoginForm = () => {
 
-
-
+  const [error, setError] = useState(false);
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -30,21 +32,25 @@ const LoginForm = () => {
         console.log(response, 'login success!');
         window.location.href = '/';
       } catch (error) {
+        setTimeout(() => {
+          setError(false)
+        }, 2000);
+        setError(true)
         console.error(error);
       }
     },
   });
 
   return (
-    <Box alignItems={'center'} padding={'30px'} textAlign={'center'} width={"600px"}>
-      <Box textAlign={'center'} marginBottom={'30px'} display="flex" alignItems="center" justifyContent="center">
-        <Typography fontSize={'45px'} fontWeight={'bold'} style={{ color: '#00acb3' }}>
+    <Box alignItems="center" padding="30px" textAlign="center" width="600px">
+      <Box textAlign="center" marginBottom="30px" display="flex" alignItems="center" justifyContent="center">
+        <Typography fontSize="45px" fontWeight="bold" style={{ color: '#00acb3' }}>
           Sign in
         </Typography>
       </Box>
 
-      <Box display={'grid'}>
-        <FormControl sx={{ display: 'flex', gap: '25px' }}>
+      <Box>
+        <FormControl component="form" sx={{ display: 'grid', gap: '25px' }} onSubmit={formik.handleSubmit}>
           <TextField
             id="email"
             name="email"
@@ -56,7 +62,6 @@ const LoginForm = () => {
             error={formik.touched.email && formik.errors.email ? true : false}
             helperText={formik.touched.email && formik.errors.email ? formik.errors.email : ''}
           />
-
 
           <TextField
             id="password"
@@ -74,20 +79,38 @@ const LoginForm = () => {
           />
 
           <Button
-            variant='contained'
+            variant="contained"
             sx={{ backgroundColor: '#00acb3', width: '60%', alignItems: 'center', margin: 'auto' }}
-            size='large'
-            onClick={() => formik.handleSubmit()}
+            size="large"
+            type="submit"
           >
             Sign In
           </Button>
+
           <Box>
-            <Typography variant='subtitle1'> Don't have an account ? <a href='/register' style={{ color: 'blue' }}>Sign Up Now</a></Typography>
-            <Typography variant='subtitle1'> Wanna back to homepage <a href='/' style={{ color: 'blue' }}>Let's Go!</a></Typography>
+            <Typography variant="subtitle1">
+              Don't have an account? <a href="/register" style={{ color: '#00acb3',textDecoration:'none',fontWeight:'bold' }}>Sign Up Now!</a>
+            </Typography>
+            <Typography variant="subtitle1">
+              Wanna go back to the homepage? <a href="/" style={{ color: '#00acb3',textDecoration:'none',fontWeight:'bold' }}>Let's Go!</a>
+            </Typography>
           </Box>
         </FormControl>
       </Box>
 
+      {error && (
+        <Alert
+          variant="filled" severity="error"
+          sx={{
+            position: 'absolute',
+            bottom: '20px',
+            width: '100%',
+            maxWidth: '390px',
+          }}
+        >
+          Login Fail !!
+        </Alert>
+      )}
     </Box>
   );
 };
