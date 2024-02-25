@@ -34,7 +34,7 @@ const TimeshareTitle = () => {
             <img
               src="https://i.ibb.co/VpBzSSn/jadehillsapa.jpg"
               alt="Jade Hill Resort"
-              width={220}
+              width="100%"
               height={150}
             />
           </Paper>

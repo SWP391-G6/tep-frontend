@@ -72,10 +72,10 @@ const TimesharePriceInformation = () => {
       >
         <Grid container alignItems={"center"}>
           <Grid item xs={3} textAlign={"center"}>
-            <AccountCircleIcon style={{ fontSize: "40px", color: "#00acb3" }} />
+            <AccountCircleIcon style={{ fontSize: "35px", color: "#00acb3" }} />
           </Grid>
           <Grid item xs={9}>
-            <Typography variant="h6" color="#00acb3">
+            <Typography variant="poster" color="#00acb3" fontSize={18} fontWeight={900}>
               Posted by Lorraine B.
             </Typography>
           </Grid>
