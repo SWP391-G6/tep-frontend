@@ -16,11 +16,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import Carousel from "../../components/Carousel/carousel";
 import TopDestinationCarousel from "../../components/Carousel/topDestinationCarousel";
 import ShowTimeshareGrid from "../../components/Grids/showTimeshareGrid";
+import "react-toastify/dist/ReactToastify.css";
+import {  toast } from 'react-toastify';
+
 
 const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showWelcomeAlert, setShowWelcomeAlert] = useState(false);
-  const [userName, setUserName] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -28,15 +30,20 @@ const HomePage = () => {
       setIsLoggedIn(true);
       const showWelcomeAlertValue = localStorage.getItem("showWelcomeAlert");
       if (showWelcomeAlertValue !== "false") {
-        setShowWelcomeAlert(true);
         localStorage.setItem("showWelcomeAlert", "false");
         setTimeout(() => {
-          setShowWelcomeAlert(false);
-        }, 3000); 
+          toast.success("Welcome to our website !", {
+            position: "top-center",
+            autoClose: 3000,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          });
+        }, 0);
       }
     }
-    
   }, []);
+  
   const handleAlertClose = () => {
     setShowWelcomeAlert(false);
     localStorage.setItem("showWelcomeAlert", "false");

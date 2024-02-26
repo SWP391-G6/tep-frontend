@@ -10,6 +10,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import ErrorIcon from '@mui/icons-material/Error';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const validationSchema = yup.object({
     user_name: yup.string().required('Username is required').matches(/^[a-zA-Z0-9\s]+$/, 'Not contain special characters'),
@@ -53,6 +55,15 @@ const RegisterForm = () => {
                     throw new Error('registrationResponse.data is undefined');
                 }
 
+                toast.success('Registration successful!', {
+                    position: 'top-center',
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                  });
+            
+
                 const credentials = {
                     email: values.email,
                     password: values.password,
@@ -66,7 +77,9 @@ const RegisterForm = () => {
                 console.log(response.data.role, 'login success!');
                 const userRole = response.data.role;
                 if (userRole === 'user') {
-                    window.location.href = '/';
+                    setTimeout(() => {
+                        window.location.href = '/';
+                      }, 3000);
                 } else if (userRole === 'admin') {
                     window.location.href = '/admin/account';
                 } else {
