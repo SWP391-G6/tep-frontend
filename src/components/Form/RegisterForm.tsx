@@ -9,14 +9,23 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
+import ErrorIcon from '@mui/icons-material/Error';
 
 const validationSchema = yup.object({
     user_name: yup.string().required('Username is required').matches(/^[a-zA-Z0-9\s]+$/, 'Not contain special characters'),
     fullname: yup.string().required('Fullname is required').matches(/^[a-zA-Z0-9\s]+$/, 'Not contain special characters'),
-    password: yup.string().required('Password is required'),
-    email: yup.string().email('Invalid email address').required('Email is required'),
+    password: yup.string().trim().required('Password is required'),
+    confirmPassword: yup.string().trim().required('Confirm Password is required').oneOf([yup.ref('password')], 'Passwords must match'),
+    email: yup
+        .string()
+        .trim()
+        .matches(
+            /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
+            'Invalid email'
+        )
+        .required('Email is required'),
     phone: yup.string().required('Phone number is required').matches(/^(?!.*([0-9])\1{9})[0-9]{10}$/, 'Invalid phone number'),
-    dob: yup.string().required('Date of Birth is required').matches(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (yyyy-mm-dd)'),
+    dob: yup.date().required('Date of Birth is required'),
 });
 
 const RegisterForm = () => {
@@ -29,6 +38,7 @@ const RegisterForm = () => {
             user_name: '',
             fullname: '',
             password: '',
+            confirmPassword: '',
             email: '',
             phone: '',
             dob: '',
@@ -41,28 +51,33 @@ const RegisterForm = () => {
                 console.log(registrationResponse.status);
                 if (registrationResponse.status === 500) {
                     throw new Error('registrationResponse.data is undefined');
-                  }
-                
-                
-                    const credentials = {
-                        email: values.email,
-                        password: values.password,
-                    };
+                }
 
-                    const loginResponse = await loginAPI.login(credentials);
-                    const token = loginResponse.data;
-                    localStorage.setItem('token', token);
+                const credentials = {
+                    email: values.email,
+                    password: values.password,
+                };
 
-                    setTimeout(() => {
-                         window.location.href = '/';
-                    }, 2000);
-              
+                const response = await loginAPI.login(credentials);
+                const tokenObject = {
+                    token: response.data,
+                };
+                localStorage.setItem('token', JSON.stringify(tokenObject));
+                console.log(response.data.role, 'login success!');
+                const userRole = response.data.role;
+                if (userRole === 'user') {
+                    window.location.href = '/';
+                } else if (userRole === 'admin') {
+                    window.location.href = '/admin/account';
+                } else {
+                    window.location.href = '/unauthorize';
+                }
             } catch (error) {
-                
+
                 setTimeout(() => {
                     setError(false)
-                  }, 2000);
-                  setError(true)
+                }, 2000);
+                setError(true)
                 console.error(error);
                 console.log('login failed!');
             }
@@ -71,6 +86,26 @@ const RegisterForm = () => {
 
     return (
         <Box alignItems="center" padding="50px" textAlign="center" width="600px">
+            {error && (
+                <div >
+                    <Alert
+                        variant="filled" severity="error"
+                        icon={<ErrorIcon sx={{ fontSize: 25 }} />}
+                        sx={{
+                            position: 'absolute',
+                            bottom: '20px',
+                            width: '100%',
+                            height: '50px',
+                            fontSize: '18px',
+                            maxWidth: '390px',
+                            top: '-10%',
+                            left: '30%'
+                        }}
+                    >
+                        Sign Up Fail
+                    </Alert>
+                </div>
+            )}
             <Box textAlign="center" marginBottom="20px">
                 <Typography fontSize="45px" fontWeight="bold" style={{ color: '#00acb3' }}>
                     Sign Up
@@ -137,6 +172,18 @@ const RegisterForm = () => {
                         error={formik.touched.password && formik.errors.password ? true : false}
                         helperText={formik.touched.password && formik.errors.password}
                     />
+                    <TextField
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        label="Confirm Password"
+                        type="password"
+                        variant="outlined"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.confirmPassword}
+                        error={formik.touched.confirmPassword && formik.errors.confirmPassword ? true : false}
+                        helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                    />
                     <Box sx={{
                         display: 'grid',
                         gap: '20px',
@@ -155,50 +202,45 @@ const RegisterForm = () => {
                         />
 
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
-                                label="Basic date picker"
-                                value={formik.values.dob}
-                                onChange={(date) => {
-                                    const formattedDate = dayjs(date).format('YYYY-MM-DD');
-                                    formik.setFieldValue('dob', formattedDate);
-                                    console.log('Selected date:', formattedDate); // In giá trị ngày đã chọn trong console
-                                }}
-                            />
+                                <DatePicker
+                                    label="Date of Birth"
+                                    value={formik.values.dob}
+                                    onChange={(date) => {
+                                        const formattedDate = dayjs(date).format('YYYY-MM-DD');
+                                        formik.setFieldValue('dob', formattedDate);
+                                        console.log('Selected date:', formattedDate);
+                                    }}
+                                />
                         </LocalizationProvider>
                     </Box>
 
                     <Button
                         type="submit"
                         variant="contained"
-                        sx={{ backgroundColor: '#00acb3', width: '60%', alignItems: 'center', margin: 'auto' }}
+                        sx={{
+                            backgroundColor: '#00acb3',
+                            width: '60%',
+                            alignItems: 'center',
+                            margin: 'auto',
+                            '&:hover': {
+                                backgroundColor: '#08b7bd',
+                            },
+                        }}
                         size="large"
                     >
                         Sign Up
                     </Button>
                     <Box>
                         <Typography variant="subtitle1">
-                            Already have an account? <a href="/login" style={{ color: '#00acb3',textDecoration:'none',fontWeight:'bold' }}>Login Now!</a>
+                            Already have an account? <a href="/login" style={{ color: '#00acb3', textDecoration: 'none', fontWeight: 'bold' }}>Login Now!</a>
                         </Typography>
                         <Typography variant="subtitle1">
-                            Wanna go back to the homepage? <a href="/" style={{ color: '#00acb3',textDecoration:'none',fontWeight:'bold' }}>Let's Go!</a>
+                            Wanna go back to the homepage? <a href="/" style={{ color: '#00acb3', textDecoration: 'none', fontWeight: 'bold' }}>Let's Go!</a>
                         </Typography>
                     </Box>
                 </FormControl>
             </Box>
 
-            {error && (
-                <Alert
-                    variant="filled" severity="error"
-                    sx={{
-                        position: 'absolute',
-                        bottom: '20px',
-                        width: '100%',
-                        maxWidth: '390px',
-                    }}
-                >
-                    Register Fail !!
-                </Alert>
-            )}
         </Box>
     );
 };

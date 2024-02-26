@@ -39,9 +39,20 @@ const UserCard = () => {
         </Box>
       </CardContent>
       <CardActions >
-        <Button sx={{  width: '100%', height:'55px',backgroundColor:'#00acb3' }} color="primary" variant="contained">
+        <Button
+          sx={{
+            width: '100%',
+            height: '55px',
+            backgroundColor: '#00acb3',
+            '&:hover': {
+              backgroundColor: '#08b7bd',
+            },
+          }}
+          color="primary"
+          variant="contained"
+        >
           <Typography variant="subtitle1">
-          BECOME A MEMBER
+            BECOME A MEMBER
           </Typography>
         </Button>
       </CardActions>

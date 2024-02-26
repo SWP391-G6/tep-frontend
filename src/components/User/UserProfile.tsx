@@ -60,7 +60,16 @@ const UserProfile = () => {
             </RadioGroup>
           </Box>
 
-          <Button variant="contained" sx={{ backgroundColor: '#00acb3', width: '40%', height: '55px', marginTop: '40px' }}>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: '#00acb3',
+              width: '40%',
+              height: '55px',
+              marginTop: '40px',
+              "&:hover": {
+                backgroundColor: "#08b7bd",}
+            }}>
             <Typography variant="subtitle1">
               SAVE CHANGES
             </Typography>
@@ -117,7 +126,9 @@ const UserProfile = () => {
                   }}>
                   <Typography variant="subtitle1" fontWeight={'bold'}>*******</Typography>
                 </CardContent>
-                <Button variant="contained" sx={{ backgroundColor: '#00acb3' }} >
+                <Button variant="contained" sx={{ backgroundColor: '#00acb3' ,"&:hover": {
+                        backgroundColor: "#08b7bd",
+                      },}} >
                   <Typography variant="caption">
                     Change
                   </Typography>
@@ -139,7 +150,9 @@ const UserProfile = () => {
                   }}>
                   <Typography variant="subtitle1" >minhduy@gmail.com</Typography>
                 </CardContent>
-                <Button variant="contained" sx={{ backgroundColor: '#00acb3' }}>
+                <Button variant="contained" sx={{ backgroundColor: '#00acb3', "&:hover": {
+                        backgroundColor: "#08b7bd",
+                      }, }}>
                   <Typography variant="caption">
                     Change
                   </Typography>

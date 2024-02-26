@@ -4,13 +4,19 @@ import * as yup from 'yup';
 import loginAPI from '../../services/login/loginAPI';
 import { Alert } from '@mui/material';
 import { useState } from 'react';
-
+import ErrorIcon from '@mui/icons-material/Error';
 
 const validationSchema = yup.object({
-  email: yup.string().email('Invalid email').required('Email is required'),
-  password: yup.string().required('Password is required')
+  email: yup
+  .string()
+  .trim()
+  .matches(
+    /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/,
+    'Invalid email'
+  )
+  .required('Email is required'),
+  password: yup.string().trim('Password cannot be blank').required('Password is required')
 });
-
 const LoginForm = () => {
 
   const [error, setError] = useState(false);
@@ -28,9 +34,20 @@ const LoginForm = () => {
         };
 
         const response = await loginAPI.login(credentials);
-        localStorage.setItem('token', response.data.token);
-        console.log(response, 'login success!');
-        window.location.href = '/';
+        const tokenObject = {
+          token: response.data,
+        };
+        localStorage.setItem('token', JSON.stringify(tokenObject));
+        console.log(response.data.role, 'login success!');
+        const userRole = response.data.role;
+        if (userRole === 'user') {
+          window.location.href = '/';
+        } else if (userRole === 'admin') {
+          window.location.href = '/admin/account';
+        } else {
+          window.location.href = '/';
+        }
+
       } catch (error) {
         setTimeout(() => {
           setError(false)
@@ -43,6 +60,26 @@ const LoginForm = () => {
 
   return (
     <Box alignItems="center" padding="30px" textAlign="center" width="600px">
+      {error && (
+        <div >
+          <Alert
+            variant="filled" severity="error"
+            icon={<ErrorIcon sx={{ fontSize: 25 }} />}
+            sx={{
+              position: 'absolute',
+              bottom: '20px',
+              width: '100%',
+              height: '50px',
+              fontSize: '18px',
+              maxWidth: '390px',
+              top: '-15%',
+              left: '28%'
+            }}
+          >
+            Signin Fail
+          </Alert>
+        </div>
+      )}
       <Box textAlign="center" marginBottom="30px" display="flex" alignItems="center" justifyContent="center">
         <Typography fontSize="45px" fontWeight="bold" style={{ color: '#00acb3' }}>
           Sign in
@@ -79,38 +116,33 @@ const LoginForm = () => {
           />
 
           <Button
-            variant="contained"
-            sx={{ backgroundColor: '#00acb3', width: '60%', alignItems: 'center', margin: 'auto' }}
-            size="large"
             type="submit"
+            variant="contained"
+            sx={{
+              backgroundColor: '#00acb3',
+              width: '60%',
+              alignItems: 'center',
+              margin: 'auto',
+              '&:hover': {
+                backgroundColor: '#08b7bd',
+              },
+            }}
+            size="large"
           >
-            Sign In
+            Sign Up
           </Button>
 
           <Box>
             <Typography variant="subtitle1">
-              Don't have an account? <a href="/register" style={{ color: '#00acb3',textDecoration:'none',fontWeight:'bold' }}>Sign Up Now!</a>
+              Don't have an account? <a href="/register" style={{ color: '#00acb3', textDecoration: 'none', fontWeight: 'bold' }}>Sign Up Now!</a>
             </Typography>
             <Typography variant="subtitle1">
-              Wanna go back to the homepage? <a href="/" style={{ color: '#00acb3',textDecoration:'none',fontWeight:'bold' }}>Let's Go!</a>
+              Wanna go back to the homepage? <a href="/" style={{ color: '#00acb3', textDecoration: 'none', fontWeight: 'bold' }}>Let's Go!</a>
             </Typography>
           </Box>
         </FormControl>
       </Box>
 
-      {error && (
-        <Alert
-          variant="filled" severity="error"
-          sx={{
-            position: 'absolute',
-            bottom: '20px',
-            width: '100%',
-            maxWidth: '390px',
-          }}
-        >
-          Login Fail !!
-        </Alert>
-      )}
     </Box>
   );
 };

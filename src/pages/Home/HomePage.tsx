@@ -7,7 +7,9 @@ import {
   Paper,
   TextField,
   Typography,
+  Alert,
 } from "@mui/material";
+import { useEffect, useState } from "react";
 import Header from "../../components/Header/header";
 import Footer from "../../components/Footer/footer";
 import SearchIcon from "@mui/icons-material/Search";
@@ -16,6 +18,32 @@ import TopDestinationCarousel from "../../components/Carousel/topDestinationCaro
 import ShowTimeshareGrid from "../../components/Grids/showTimeshareGrid";
 
 const HomePage = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showWelcomeAlert, setShowWelcomeAlert] = useState(false);
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+      const showWelcomeAlertValue = localStorage.getItem("showWelcomeAlert");
+      if (showWelcomeAlertValue !== "false") {
+        setShowWelcomeAlert(true);
+        localStorage.setItem("showWelcomeAlert", "false");
+        setTimeout(() => {
+          setShowWelcomeAlert(false);
+        }, 3000); 
+      }
+    }
+    
+  }, []);
+  const handleAlertClose = () => {
+    setShowWelcomeAlert(false);
+    localStorage.setItem("showWelcomeAlert", "false");
+  };
+
+  
+
   return (
     <Box sx={{ backgroundColor: "#f6f8fa" }}>
       <Header />
@@ -80,6 +108,24 @@ const HomePage = () => {
         </Container>
       </Box>
       <Footer />
+
+      {showWelcomeAlert && (
+        <Alert
+          variant="filled"
+          
+          onClose={handleAlertClose}
+          sx={{
+            position: "fixed",
+            zIndex: 3,
+            top:"20%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            maxWidth: "400px",
+          }}
+        >
+          Welcome to our website !
+        </Alert>
+      )}
     </Box>
   );
 };

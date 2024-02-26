@@ -24,7 +24,7 @@ function RegisterPage() {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: '1000px',
+          width: '1050px',
           backgroundColor: 'rgba(255, 255, 255, 1)',
           borderRadius: '10px',
           boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)'
