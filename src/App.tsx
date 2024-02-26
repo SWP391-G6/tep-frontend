@@ -13,6 +13,7 @@ import ScrollToTop from "./utils/ScrollToTop";
 import UserPostingPage from "./pages/User/UserProfilePage";
 import BookingInformationPage from "./pages/Payment/BookingInformationPage";
 import SuccessfulPaymentPage from "./pages/Payment/SuccessfulPaymentPage";
+import "react-toastify/dist/ReactToastify.css";
 
 const NotFoundPage = React.lazy(() => import("./pages/Error/notFoundPage"));
 
