@@ -1,5 +1,5 @@
 import axiosClient from "../axiosClient";
-import { RegisterRequest } from "../../interfaces/register/userRegister";
+import { RegisterRequest } from "../../interfaces/register/registerRequest";
 
 const registerAPI = {
   register: (userData: RegisterRequest) => {

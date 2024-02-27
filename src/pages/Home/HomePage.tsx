@@ -18,7 +18,7 @@ import TopDestinationCarousel from "../../components/Carousel/topDestinationCaro
 import ShowTimeshareGrid from "../../components/Grids/showTimeshareGrid";
 import "react-toastify/dist/ReactToastify.css";
 import {  toast } from 'react-toastify';
-
+import "../Home/HomePage.css";
 
 const HomePage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -38,6 +38,8 @@ const HomePage = () => {
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
+          className: 'custom-toast',
+
           });
         }, 0);
       }
@@ -115,24 +117,6 @@ const HomePage = () => {
         </Container>
       </Box>
       <Footer />
-
-      {showWelcomeAlert && (
-        <Alert
-          variant="filled"
-          
-          onClose={handleAlertClose}
-          sx={{
-            position: "fixed",
-            zIndex: 3,
-            top:"20%",
-            left: "50%",
-            transform: "translateX(-50%)",
-            maxWidth: "400px",
-          }}
-        >
-          Welcome to our website !
-        </Alert>
-      )}
     </Box>
   );
 };

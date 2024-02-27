@@ -61,8 +61,8 @@ const RegisterForm = () => {
                     closeOnClick: true,
                     pauseOnHover: true,
                     draggable: true,
-                  });
-            
+                });
+
 
                 const credentials = {
                     email: values.email,
@@ -79,7 +79,7 @@ const RegisterForm = () => {
                 if (userRole === 'user') {
                     setTimeout(() => {
                         window.location.href = '/';
-                      }, 3000);
+                    }, 3000);
                 } else if (userRole === 'admin') {
                     window.location.href = '/admin/account';
                 } else {
@@ -87,10 +87,13 @@ const RegisterForm = () => {
                 }
             } catch (error) {
 
-                setTimeout(() => {
-                    setError(false)
-                }, 2000);
-                setError(true)
+                toast.error('Register fail !', {
+                    position: 'top-center',
+                    autoClose: 3000,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
                 console.error(error);
                 console.log('login failed!');
             }
@@ -214,16 +217,18 @@ const RegisterForm = () => {
                             helperText={formik.touched.phone && formik.errors.phone}
                         />
 
+
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DatePicker
-                                    label="Date of Birth"
-                                    value={formik.values.dob}
-                                    onChange={(date) => {
-                                        const formattedDate = dayjs(date).format('YYYY-MM-DD');
-                                        formik.setFieldValue('dob', formattedDate);
-                                        console.log('Selected date:', formattedDate);
-                                    }}
-                                />
+                            <DatePicker
+                                label="Date of Birth"
+                                value={formik.values.dob}
+                                onChange={(date) => {
+                                    const formattedDate = dayjs(date).format('YYYY-MM-DD');
+                                    formik.setFieldValue('dob', formattedDate);
+                                    console.log('Selected date:', formattedDate);
+                                }}
+                                disableFuture
+                            />
                         </LocalizationProvider>
                     </Box>
 

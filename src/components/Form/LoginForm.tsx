@@ -5,6 +5,8 @@ import loginAPI from '../../services/login/loginAPI';
 import { Alert } from '@mui/material';
 import { useState } from 'react';
 import ErrorIcon from '@mui/icons-material/Error';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const validationSchema = yup.object({
   email: yup
@@ -49,10 +51,15 @@ const LoginForm = () => {
         }
 
       } catch (error) {
-        setTimeout(() => {
-          setError(false)
-        }, 2000);
-        setError(true)
+        toast.error('Login fail !', {
+          position: 'top-center',
+          autoClose: 3000,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+
+        
         console.error(error);
       }
     },
@@ -60,26 +67,7 @@ const LoginForm = () => {
 
   return (
     <Box alignItems="center" padding="30px" textAlign="center" width="600px">
-      {error && (
-        <div >
-          <Alert
-            variant="filled" severity="error"
-            icon={<ErrorIcon sx={{ fontSize: 25 }} />}
-            sx={{
-              position: 'absolute',
-              bottom: '20px',
-              width: '100%',
-              height: '50px',
-              fontSize: '18px',
-              maxWidth: '390px',
-              top: '-15%',
-              left: '28%'
-            }}
-          >
-            Signin Fail
-          </Alert>
-        </div>
-      )}
+      
       <Box textAlign="center" marginBottom="30px" display="flex" alignItems="center" justifyContent="center">
         <Typography fontSize="45px" fontWeight="bold" style={{ color: '#00acb3' }}>
           Sign in
