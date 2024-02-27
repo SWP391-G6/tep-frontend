@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import { red } from "@mui/material/colors";
+import { green } from "@mui/material/colors";
 
 const BootstrapButton = styled(Button)({
   boxShadow: "none",
@@ -11,10 +11,10 @@ const BootstrapButton = styled(Button)({
   padding: "6px 12px",
   border: "1px solid",
   lineHeight: 1.5,
-  backgroundColor: "#00acb3",
-  borderColor: "#00acb3",
   width: "200px",
   height: "40px",
+  backgroundColor: "#00acb3",
+  borderColor: "#00acb3",
   fontFamily: [
     "-apple-system",
     "BlinkMacSystemFont",
@@ -41,11 +41,9 @@ const BootstrapButton = styled(Button)({
     boxShadow: "0 0 0 0.2rem rgba(0,123,255,.5)",
   },
 });
-
-const NotFoundComponent = () => {
+const SuccessfulPaymentComponent = () => {
   const navigate = useNavigate();
   const handleClick = () => {
-    localStorage.removeItem("persist:root");
     navigate("/");
   };
   return (
@@ -58,13 +56,15 @@ const NotFoundComponent = () => {
         height: "100vh",
       }}
     >
-      <Typography variant="h2" fontWeight={900} color={red[700]}>404 Not Found!</Typography>
+      <Typography variant="h2" fontWeight={900} color={green[700]}>
+        Payment Success!
+      </Typography>
       <BootstrapButton
         onClick={handleClick}
         size="large"
         variant="contained"
         disableRipple
-        sx={{marginTop: "10px"}}
+        sx={{ marginTop: "10px" }}
       >
         Back to home
       </BootstrapButton>
@@ -72,4 +72,4 @@ const NotFoundComponent = () => {
   );
 };
 
-export default NotFoundComponent;
+export default SuccessfulPaymentComponent;

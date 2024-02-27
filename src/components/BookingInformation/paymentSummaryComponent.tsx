@@ -4,6 +4,7 @@ import { green, red } from "@mui/material/colors";
 import { useEffect } from "react";
 import vnpayAPI from "../../services/payment/vnpayAPI";
 import { useNavigate } from "react-router";
+import { redirect } from "react-router-dom";
 
 const PaymentSummaryComponent = () => {
   const navigate = useNavigate();
@@ -11,27 +12,29 @@ const PaymentSummaryComponent = () => {
 
   const handleCheckOut = async () => {
     try {
+      let link = "";
       const data: any = await vnpayAPI.checkout({
         adults: "1",
         children: "1",
-        city: "1",
-        country: "1",
+        city: "Ho Chi Minh",
+        country: "Viet Nam",
         create_date: d,
         payment_status: 1,
-        postal_code: "1",
-        state: "1",
+        postal_code: "70000",
+        state: "Thu Duc",
         status: 1,
-        street: "1",
+        street: "Duong D2",
         telephone: "0979121340",
         total: 700000,
-        fullname: "DoPhu",
+        fullname: "Minh Duy",
         payment_method: "1",
         user_id: 1,
-        timeshare_id: 1,
+        timeshare_id: 2,
       });
-      navigate(
-        "https://sandbox.vnpayment.vn/paymentv2/Transaction/PaymentMethod.html?token=f1c0bac1e56e4c56a5a77145c1872a02"
-      );
+      if (data && data.data) {
+        link = window.location.href = `${data.data}`;
+        navigate(link);
+      }
     } catch (error) {
       console.log("Error at Handle Checkout");
     }

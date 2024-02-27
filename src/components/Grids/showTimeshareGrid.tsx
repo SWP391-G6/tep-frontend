@@ -86,7 +86,7 @@ const ShowTimeshareGrid = () => {
             <Card className={classes.hoverContainer} elevation={3}>
               <CardMedia
                 component="img"
-                image="https://i.ibb.co/w6ZqkqT/Topas-Ecolodgebanner.jpg"
+                image={`${timeshare.image_url}`}
                 width="320px"
                 height="200px"
                 alt="Sapa Jade Hill Resort"

@@ -15,7 +15,9 @@ import BookingInformationPage from "./pages/Payment/BookingInformationPage";
 import LoginPage from "./pages/Login/LoginPage";
 import RegisterPage from "./pages/Register/RegisterPage";
 import AccountManagePage from "./pages/Account/AccountManagePage";
-import 'react-toastify/dist/ReactToastify.css';
+import SuccessfulPaymentPage from "./pages/Payment/SuccessfulPaymentPage";
+import "react-toastify/dist/ReactToastify.css";
+
 const NotFoundPage = React.lazy(() => import("./pages/Error/notFoundPage"));
 
 function isAuthenticated() {
@@ -80,6 +82,7 @@ function App() {
               path="/user/exchange_request"
               element={<UserRequestPage />}
             />
+            <Route path={ROUTE_PATH.PAYMENT_SUCCESSFUL} element={<SuccessfulPaymentPage />}/>
             <Route path={ROUTE_PATH.NOT_FOUND} element={<NotFoundPage />} />
             <Route path={ROUTE_PATH.ERROR} element={<NotFoundPage />} />
           </Routes>
