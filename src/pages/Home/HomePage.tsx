@@ -7,15 +7,52 @@ import {
   Paper,
   TextField,
   Typography,
+  Alert,
 } from "@mui/material";
+import { useEffect, useState } from "react";
 import Header from "../../components/Header/header";
 import Footer from "../../components/Footer/footer";
 import SearchIcon from "@mui/icons-material/Search";
 import Carousel from "../../components/Carousel/carousel";
 import TopDestinationCarousel from "../../components/Carousel/topDestinationCarousel";
 import ShowTimeshareGrid from "../../components/Grids/showTimeshareGrid";
+import "react-toastify/dist/ReactToastify.css";
+import {  ToastContainer, toast } from 'react-toastify';
+import "../Home/HomePage.css";
 
 const HomePage = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showWelcomeAlert, setShowWelcomeAlert] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+      const showWelcomeAlertValue = localStorage.getItem("showWelcomeAlert");
+      if (showWelcomeAlertValue !== "false") {
+        localStorage.setItem("showWelcomeAlert", "false");
+        setTimeout(() => {
+          toast.success("Welcome to our website !", {
+            position: "top-center",
+            autoClose: 3000,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+          className: 'custom-toast',
+
+          });
+        }, 0);
+      }
+    }
+  }, []);
+  
+  const handleAlertClose = () => {
+    setShowWelcomeAlert(false);
+    localStorage.setItem("showWelcomeAlert", "false");
+  };
+
+  
+
   return (
     <Box sx={{ backgroundColor: "#f6f8fa" }}>
       <Header />
@@ -79,6 +116,7 @@ const HomePage = () => {
           </Box>
         </Container>
       </Box>
+      <ToastContainer />
       <Footer />
     </Box>
   );

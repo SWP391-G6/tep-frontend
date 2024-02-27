@@ -205,26 +205,27 @@ const RequestExchangeList = () => {
   return (
     <Box
       sx={{
-        height: 500,
         width: "100%",
         backgroundColor: "white",
-        padding: "25px",
+        padding: "60px",
+        border: 'solid 1px ',
+        borderColor: 'rgba(0, 0, 0, 0.2)',
       }}
     >
       <Box>
-        <Typography sx={{ fontSize: "50px" }}>My Exchange Request</Typography>
+        <Typography variant="h4">MY EXCHANGE REQUEST</Typography>
         <DataGrid
           rows={rows}
           columns={columns}
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 5,
+                pageSize: 10,
               },
             },
           }}
           slots={{ toolbar: GridToolbar }}
-          pageSizeOptions={[5]}
+          pageSizeOptions={[10, 20, 50, 100]}
           disableRowSelectionOnClick
         />
       </Box>
