@@ -1,5 +1,6 @@
 import { Box, Grid, Typography } from '@mui/material';
 import LoginForm from '../../components/Form/LoginForm';
+import { ToastContainer } from 'react-toastify';
 
 type Props = {}
 
@@ -70,9 +71,8 @@ const LoginPage = (props: Props) =>{
           </Grid>
         </Box>
       </Box>
+      <ToastContainer/>
     </Box>
-
-
   );
 }
 

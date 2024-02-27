@@ -1,5 +1,6 @@
 import { Box, Grid, Typography, } from '@mui/material';
 import RegisterForm from '../../components/Form/RegisterForm';
+import { ToastContainer } from 'react-toastify';
 
 function RegisterPage() {
   return (
@@ -67,6 +68,7 @@ function RegisterPage() {
           </Grid>
         </Box>
       </Box>
+      <ToastContainer/>
     </Box>
 
   );

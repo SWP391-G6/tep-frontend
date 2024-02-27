@@ -17,7 +17,7 @@ import Carousel from "../../components/Carousel/carousel";
 import TopDestinationCarousel from "../../components/Carousel/topDestinationCarousel";
 import ShowTimeshareGrid from "../../components/Grids/showTimeshareGrid";
 import "react-toastify/dist/ReactToastify.css";
-import {  toast } from 'react-toastify';
+import {  ToastContainer, toast } from 'react-toastify';
 import "../Home/HomePage.css";
 
 const HomePage = () => {
@@ -116,6 +116,7 @@ const HomePage = () => {
           </Box>
         </Container>
       </Box>
+      <ToastContainer />
       <Footer />
     </Box>
   );

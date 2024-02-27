@@ -102,26 +102,7 @@ const RegisterForm = () => {
 
     return (
         <Box alignItems="center" padding="50px" textAlign="center" width="600px">
-            {error && (
-                <div >
-                    <Alert
-                        variant="filled" severity="error"
-                        icon={<ErrorIcon sx={{ fontSize: 25 }} />}
-                        sx={{
-                            position: 'absolute',
-                            bottom: '20px',
-                            width: '100%',
-                            height: '50px',
-                            fontSize: '18px',
-                            maxWidth: '390px',
-                            top: '-10%',
-                            left: '30%'
-                        }}
-                    >
-                        Sign Up Fail
-                    </Alert>
-                </div>
-            )}
+           
             <Box textAlign="center" marginBottom="20px">
                 <Typography fontSize="45px" fontWeight="bold" style={{ color: '#00acb3' }}>
                     Sign Up

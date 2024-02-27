@@ -16,7 +16,6 @@ import LoginPage from "./pages/Login/LoginPage";
 import RegisterPage from "./pages/Register/RegisterPage";
 import AccountManagePage from "./pages/Account/AccountManagePage";
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
 const NotFoundPage = React.lazy(() => import("./pages/Error/notFoundPage"));
 
 function isAuthenticated() {
@@ -84,7 +83,7 @@ function App() {
             <Route path={ROUTE_PATH.NOT_FOUND} element={<NotFoundPage />} />
             <Route path={ROUTE_PATH.ERROR} element={<NotFoundPage />} />
           </Routes>
-          <ToastContainer />
+          
         </BrowserRouter>
       </Suspense>
     </ErrorBoundary>
