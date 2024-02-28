@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
 
@@ -33,24 +27,35 @@ const TimesharePriceInformation = () => {
             700,000 VNĐ (100,000 VNĐ/night)
           </Typography>
         </Box>
-        <div>
-          <Typography variant="h6" sx={{ marginTop: "10px" }} fontWeight={700}>
+        <Grid
+          container
+          flexDirection="row"
+          justifyContent="center"
+          alignItems="left"
+        >
+          <Typography
+            variant="caption"
+            width="100%"
+            fontSize={18}
+            fontWeight={700}
+            color="#00acb3"
+          >
             7-night stay
           </Typography>
-          <Typography variant="h6">
+          <Typography variant="caption" fontSize={18}>
             Check-in:
-            <strong> Tue, Feb 20, 2024</strong>
+            <strong style={{ color: "#00acb3" }}> Tue, Feb 20, 2024</strong>
           </Typography>
-          <Typography variant="h6">
+          <Typography variant="caption" fontSize={18}>
             Check-out:
-            <strong> Mon, Feb 26, 2024</strong>
+            <strong style={{ color: "#00acb3" }}> Mon, Feb 26, 2024</strong>
           </Typography>
 
-          <Typography variant="h6">
+          <Typography variant="caption" fontSize={18}>
             Cancellation policy:
-            <strong> Strict</strong>
+            <strong style={{ color: "#00acb3" }}> Strict</strong>
           </Typography>
-        </div>
+        </Grid>
         <Box marginTop={"9px"}>
           <img
             src="https://fininme.vn/wp-content/uploads/2022/11/logo-vi-vnpay.png"
@@ -75,7 +80,12 @@ const TimesharePriceInformation = () => {
             <AccountCircleIcon style={{ fontSize: "35px", color: "#00acb3" }} />
           </Grid>
           <Grid item xs={9}>
-            <Typography variant="poster" color="#00acb3" fontSize={18} fontWeight={900}>
+            <Typography
+              variant="poster"
+              color="#00acb3"
+              fontSize={18}
+              fontWeight={900}
+            >
               Posted by Lorraine B.
             </Typography>
           </Grid>

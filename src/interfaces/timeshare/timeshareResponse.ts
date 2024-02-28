@@ -10,4 +10,5 @@ export interface TimeshareResponse {
     destination_id: string;
     description:    string;
     image_url:      string;
+    city:           string;
 }

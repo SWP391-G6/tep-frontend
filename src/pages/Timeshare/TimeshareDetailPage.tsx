@@ -6,8 +6,26 @@ import TimeshareTitle from "../../components/Timeshare/timeshareTitle";
 import TimesharePriceInformation from "../../components/Timeshare/timesharePriceInformation";
 import TimeshareDetail from "../../components/Timeshare/timeshareDetail";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import { useParams } from "react-router";
+import { useEffect } from "react";
+import timeshareAPI from "../../services/timeshare/timeshareAPI";
 
 const TimeshareDetailPage = () => {
+  let { timeshareID } = useParams();
+
+  useEffect(() => {
+    const getBillByID = async () => {
+      if (timeshareID) {
+        const data: any = await timeshareAPI.getTimeshareByID(timeshareID);
+        console.log(data);
+      }
+    };
+    const initUseEffect = async () => {
+      await getBillByID();
+    };
+    initUseEffect();
+  }, [timeshareID]);
+
   return (
     <Box bgcolor="#f6f8fa">
       <Header />

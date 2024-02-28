@@ -59,7 +59,6 @@ const ShowTimeshareGrid = () => {
   useEffect(() => {
     const getTimeshareList = async () => {
       const data: any = await timeshareAPI.getAllTimeshare();
-      console.log("Timeshare List", data);
       if (data && data.length > 0) {
         setTimeShareList(data);
       }
@@ -106,7 +105,7 @@ const ShowTimeshareGrid = () => {
                 >
                   <LocationOnIcon sx={{ color: "#00acb3" }} />
                   <Typography fontSize="16px" fontWeight={500}>
-                    {timeshare.name}
+                    {timeshare.name}, {timeshare.city}
                   </Typography>
                 </Stack>
                 <List>
@@ -172,7 +171,7 @@ const ShowTimeshareGrid = () => {
             >
               <LocationOnIcon sx={{ color: "#00acb3" }} />
               <Typography fontSize="16px" fontWeight={500}>
-                Lao Cai - Sapa
+                Lao Cai, Sapa
               </Typography>
             </Stack>
             <List>
