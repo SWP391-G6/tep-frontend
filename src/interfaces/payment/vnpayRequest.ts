@@ -13,6 +13,6 @@ export interface VNPayRequest {
     total:          number;
     fullname:       string;
     payment_method: string;
-    user_id:        number;
-    timeshare_id:   number;
+    user_id:        string;
+    timeshare_id:   string;
 }

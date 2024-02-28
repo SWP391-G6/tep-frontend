@@ -1,9 +1,73 @@
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardMedia,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import { makeStyles } from "@mui/styles";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import VpnKeyIcon from "@mui/icons-material/VpnKey";
 
+const useStyles: any = makeStyles({
+  hoverContainer: {
+    cursor: "pointer",
+    overflow: "hidden",
+    position: "relative",
+
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      bottom: 0,
+      left: "-100%",
+      width: "100%",
+      height: "5px",
+      backgroundColor: "#00acb3",
+      transition: "transform 0.5s ease-in-out",
+      zIndex: 1,
+      // borderRadius: "8px",
+    },
+    "&:hover::before": {
+      transform: "translateX(100%)",
+    },
+  },
+});
 const TimesharePriceInformation = () => {
   const navigate = useNavigate();
+  const classes = useStyles();
+
+  const [openSelectTimeshareDialog, setOpenSelectTimeshareDialog] =
+    useState(false);
+
+  const handleClickOpenSelectTimeshareDialog = () => {
+    setOpenSelectTimeshareDialog(true);
+  };
+
+  const handleCloseSelectTimeshareDialog = () => {
+    setOpenSelectTimeshareDialog(false);
+  };
+
   return (
     <Box>
       <Container disableGutters sx={{ textAlign: "center" }}>
@@ -98,7 +162,6 @@ const TimesharePriceInformation = () => {
               sx={{
                 width: "100%",
                 height: "50px",
-                fontSize: "16px",
                 marginTop: "20px",
                 background: "#00acb3",
                 "&:hover": {
@@ -106,7 +169,7 @@ const TimesharePriceInformation = () => {
                 },
               }}
             >
-              REQUEST TO BOOK
+              Request to book
             </Button>
           </Grid>
           <Grid item xs={12}>
@@ -115,21 +178,134 @@ const TimesharePriceInformation = () => {
               sx={{
                 width: "100%",
                 height: "50px",
-                fontSize: "16px",
                 marginTop: "20px",
                 color: "#00acb3",
                 "&:hover": {
                   borderColor: "#08b7bd",
                 },
               }}
-              onClick={() => {
-                // navigate("/user/exchange_request");
-              }}
+              onClick={handleClickOpenSelectTimeshareDialog}
             >
               Request to exchange
             </Button>
           </Grid>
         </Grid>
+
+        <Dialog
+          open={openSelectTimeshareDialog}
+          onClose={handleCloseSelectTimeshareDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+          maxWidth="md"
+          fullWidth
+        >
+          <DialogTitle
+            sx={{ m: 0, p: 2, color: "#00acb3", fontWeight: 900 }}
+            id="customized-dialog-title"
+          >
+            Request to exchange
+          </DialogTitle>
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseSelectTimeshareDialog}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+          <DialogContent dividers>
+            <Typography
+              variant="caption"
+              fontSize={18}
+              fontWeight={500}
+              gutterBottom
+            >
+              Select your timeshare to exchange
+            </Typography>
+
+            <Paper
+              sx={{ width: "100%", padding: "10px 20px", marginTop: "10px" }}
+              elevation={3}
+            >
+              <Grid2
+                container
+                direction="row"
+                justifyContent="space-between"
+                rowGap={2}
+              >
+                <Grid2
+                  onClick={() => {
+                    navigate(`/view_timeshare_detail/1`);
+                  }}
+                  xs={3.75}
+                  height={350}
+                >
+                  <Card className={classes.hoverContainer} elevation={3}>
+                    <CardMedia
+                      component="img"
+                      image={"https://i.ibb.co/VpBzSSn/jadehillsapa.jpg"}
+                      width="320px"
+                      height="100%"
+                      alt="Sapa Jade Hill Resort"
+                    />
+                    <CardContent>
+                      <Typography
+                        gutterBottom
+                        variant="h5"
+                        noWrap
+                        component="div"
+                      ></Typography>
+                      <Stack
+                        direction="row"
+                        justifyContent="flex-start"
+                        alignItems="center"
+                        spacing={1}
+                      >
+                        <LocationOnIcon sx={{ color: "#00acb3" }} />
+                        <Typography fontSize="16px" fontWeight={500}>
+                          Lao Cai, Sapa
+                        </Typography>
+                      </Stack>
+                      <List>
+                        <ListItem disablePadding>
+                          <ListItemAvatar>
+                            <Avatar sx={{ backgroundColor: "#00acb3" }}>
+                              <VpnKeyIcon />
+                            </Avatar>
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={
+                              <Typography fontWeight={700}>
+                                700.000₫ (100.000₫/night)
+                              </Typography>
+                            }
+                            secondary={
+                              <Box>
+                                <Typography color="#83b3b5" fontWeight={500}>
+                                  20/02/2024 - 26/02/2024
+                                </Typography>
+                              </Box>
+                            }
+                          />
+                        </ListItem>
+                      </List>
+                    </CardContent>
+                  </Card>
+                </Grid2>
+              </Grid2>
+            </Paper>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseSelectTimeshareDialog}>Disagree</Button>
+            <Button onClick={handleCloseSelectTimeshareDialog} autoFocus>
+              Agree
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </Box>
   );
