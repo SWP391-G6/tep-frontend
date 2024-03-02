@@ -10,6 +10,7 @@ export interface TimeshareByOwnerResponse {
     dateStart:        Date;
     dateEnd:          Date;
     exchange:         boolean;
+    isSelected:       boolean;
 }
 
 export interface DestinationModel {

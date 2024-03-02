@@ -94,29 +94,23 @@ const ShowTimeshareGrid = () => {
                   alt="Sapa Jade Hill Resort"
                 />
                 <CardContent>
-                  <Typography
-                    gutterBottom
-                    variant="h5"
-                    noWrap
-                    component="div"
-                  ></Typography>
                   <Stack
                     direction="row"
                     justifyContent="flex-start"
                     alignItems="center"
                     spacing={1}
-                    height={75}
+                    height="40px"
                   >
                     <LocationOnIcon sx={{ color: "#00acb3" }} />
-                    <Typography fontSize="16px" fontWeight={300}>
-                    <strong>{timeshare.name},</strong> {timeshare.city}
+                    <Typography fontSize="16px" fontWeight={900}>
+                      {timeshare.name}, <span style={{fontWeight: 500, color: "#00acb3"}}>{timeshare.city}</span>
                     </Typography>
                   </Stack>
                   <List>
                     <ListItem disablePadding>
                       <ListItemAvatar>
-                        <Avatar sx={{ backgroundColor: "#00acb3" }}>
-                          <VpnKeyIcon />
+                        <Avatar  sx={{ backgroundColor: "#00acb3" }}>
+                          <VpnKeyIcon sx={{fontSize: "15px"}} />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
@@ -132,8 +126,7 @@ const ShowTimeshareGrid = () => {
                             {timeshare.date_start} - {timeshare.date_end}
                           </Typography> */}
                             <Typography color="#83b3b5" fontWeight={500}>
-                              {timeshare.date_start.toString()} -{" "}
-                              {timeshare.date_end.toString()}
+                            {dayjs(timeshare.date_start).format("DD-MM-YYYY").toString()} - {dayjs(timeshare.date_end).format("DD-MM-YYYY").toString()}
                             </Typography>
                           </Box>
                         }
