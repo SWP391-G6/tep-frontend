@@ -17,7 +17,6 @@ const TimeshareDetailPage = () => {
     const getBillByID = async () => {
       if (timeshareID) {
         const data: any = await timeshareAPI.getTimeshareByID(timeshareID);
-        console.log(data);
       }
     };
     const initUseEffect = async () => {
@@ -60,7 +59,7 @@ const TimeshareDetailPage = () => {
               backgroundColor: "#ffffff",
             }}
           >
-            <TimesharePriceInformation />
+            <TimesharePriceInformation timeshareID={timeshareID} />
           </Grid2>
           <Grid2
             xs={8}

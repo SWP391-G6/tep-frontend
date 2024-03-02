@@ -23,12 +23,18 @@ import {
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { makeStyles } from "@mui/styles";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import timeshareAPI from "../../services/timeshare/timeshareAPI";
+import { TimeshareByOwnerResponse } from "../../interfaces/timeshare/timeshareByOwnerResponse";
+
+type Props = { timeshareID: any };
 
 const useStyles: any = makeStyles({
   hoverContainer: {
@@ -53,10 +59,12 @@ const useStyles: any = makeStyles({
     },
   },
 });
-const TimesharePriceInformation = () => {
+const TimesharePriceInformation = (props: Props) => {
   const navigate = useNavigate();
+  const [timeshareList, setTimeshareList] = useState<
+    TimeshareByOwnerResponse[]
+  >([]);
   const classes = useStyles();
-
   const [openSelectTimeshareDialog, setOpenSelectTimeshareDialog] =
     useState(false);
 
@@ -67,6 +75,21 @@ const TimesharePriceInformation = () => {
   const handleCloseSelectTimeshareDialog = () => {
     setOpenSelectTimeshareDialog(false);
   };
+
+  useEffect(() => {
+    const getTimeshareByOwner = async () => {
+      const data: any = await timeshareAPI.getTimeshareByUserID(
+        "6d21c5dc-56a5-4da0-98d5-4b09c31911a7"
+      );
+      if (data.length > 0) {
+        setTimeshareList(data);
+      }
+    };
+    const initUseEffect = async () => {
+      await getTimeshareByOwner();
+    };
+    initUseEffect();
+  }, []);
 
   return (
     <Box>
@@ -237,65 +260,73 @@ const TimesharePriceInformation = () => {
                 justifyContent="space-between"
                 rowGap={2}
               >
-                <Grid2
-                  onClick={() => {
-                    navigate(`/view_timeshare_detail/1`);
-                  }}
-                  xs={3.75}
-                  height={350}
-                >
-                  <Card className={classes.hoverContainer} elevation={3}>
-                    <CardMedia
-                      component="img"
-                      image={"https://i.ibb.co/VpBzSSn/jadehillsapa.jpg"}
-                      width="320px"
-                      height="100%"
-                      alt="Sapa Jade Hill Resort"
-                    />
-                    <CardContent>
-                      <Typography
-                        gutterBottom
-                        variant="h5"
-                        noWrap
-                        component="div"
-                      ></Typography>
-                      <Stack
-                        direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                        spacing={1}
-                      >
-                        <LocationOnIcon sx={{ color: "#00acb3" }} />
-                        <Typography fontSize="16px" fontWeight={500}>
-                          Lao Cai, Sapa
-                        </Typography>
-                      </Stack>
-                      <List>
-                        <ListItem disablePadding>
-                          <ListItemAvatar>
-                            <Avatar sx={{ backgroundColor: "#00acb3" }}>
-                              <VpnKeyIcon />
-                            </Avatar>
-                          </ListItemAvatar>
-                          <ListItemText
-                            primary={
-                              <Typography fontWeight={700}>
-                                700.000₫ (100.000₫/night)
-                              </Typography>
-                            }
-                            secondary={
-                              <Box>
-                                <Typography color="#83b3b5" fontWeight={500}>
-                                  20/02/2024 - 26/02/2024
-                                </Typography>
-                              </Box>
-                            }
-                          />
-                        </ListItem>
-                      </List>
-                    </CardContent>
-                  </Card>
-                </Grid2>
+                {timeshareList.map((timeshare) => {
+                  return (
+                    <Grid2
+                      onClick={() => {
+                        navigate(`/view_timeshare_detail/1`);
+                      }}
+                      xs={3.75}
+                      height={350}
+                      key={timeshare.timeshareId}
+                    >
+                      <Card className={classes.hoverContainer} elevation={3}>
+                        <CardMedia
+                          component="img"
+                          image={"https://i.ibb.co/VpBzSSn/jadehillsapa.jpg"}
+                          width="320px"
+                          height="100%"
+                          alt={`${timeshare.timeshareName}`}
+                        />
+                        <CardContent>
+                          <Stack
+                            direction="row"
+                            justifyContent="flex-start"
+                            alignItems="center"
+                            spacing={1}
+                          >
+                            <LocationOnIcon
+                              sx={{ color: "#00acb3", fontSize: "15px" }}
+                            />
+                            <Typography
+                              fontSize="16px"
+                              fontWeight={900}
+                              color="#00acb3"
+                            >
+                              {timeshare.timeshareName}
+                            </Typography>
+                          </Stack>
+                          <Stack
+                            direction="row"
+                            justifyContent="flex-start"
+                            alignItems="center"
+                            spacing={1}
+                          >
+                            <AttachMoneyIcon
+                              sx={{ color: "#00acb3", fontSize: "15px" }}
+                            />
+                            <Typography fontSize="16px" fontWeight={300}>
+                              700.000₫ - (7 nights)
+                            </Typography>
+                          </Stack>
+                          <Stack
+                            direction="row"
+                            justifyContent="flex-start"
+                            alignItems="center"
+                            spacing={1}
+                          >
+                            <AccessTimeIcon
+                              sx={{ color: "#00acb3", fontSize: "15px" }}
+                            />
+                            <Typography fontSize="16px" fontWeight={300}>
+                              20/02/2024 - 26/02/2024
+                            </Typography>
+                          </Stack>
+                        </CardContent>
+                      </Card>
+                    </Grid2>
+                  );
+                })}
               </Grid2>
             </Paper>
           </DialogContent>

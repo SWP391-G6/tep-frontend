@@ -9,6 +9,12 @@ const timeshareAPI = {
   getTimeshareByID: (timeshareID: string) => {
     return axiosClient.get(`timeshare/details/${timeshareID}`);
   },
+
+  getTimeshareByUserID: (owner: string) => {
+    return axiosClient.get("timeshare/getTimeshareByOwner", {
+      params: { owner: owner },
+    });
+  },
 };
 
 export default timeshareAPI;

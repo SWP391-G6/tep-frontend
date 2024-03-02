@@ -28,6 +28,7 @@ const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <Box
       sx={{
@@ -99,7 +100,7 @@ const Header = () => {
                 justifyContent: "right",
               }}
             >
-              <Tooltip title="Account Profile">
+              {/* <Tooltip title="Account Profile">
                 <IconButton
                   onClick={handleClick}
                   size="small"
@@ -161,9 +162,9 @@ const Header = () => {
                   </ListItemIcon>
                   Logout
                 </MenuItem>
-              </Menu>
+              </Menu> */}
 
-              {/* <Button
+              <Button
                 sx={{
                   my: 2,
                   color: "#ffffff",
@@ -175,6 +176,9 @@ const Header = () => {
                   },
                 }}
                 variant="contained"
+                onClick={() => {
+                  navigate("/login");
+                }}
               >
                 Sign In
               </Button>
@@ -191,7 +195,7 @@ const Header = () => {
                 variant="outlined"
               >
                 Sign Up
-              </Button> */}
+              </Button>
             </Box>
           </Toolbar>
         </Container>

@@ -79,7 +79,7 @@ const ShowTimeshareGrid = () => {
               }}
               key={timeshare.timeshare_id}
               xs={3.75}
-              height={350}
+              height="100%"
             >
               <Card
                 className={classes.hoverContainer}
@@ -105,10 +105,11 @@ const ShowTimeshareGrid = () => {
                     justifyContent="flex-start"
                     alignItems="center"
                     spacing={1}
+                    height={75}
                   >
                     <LocationOnIcon sx={{ color: "#00acb3" }} />
-                    <Typography fontSize="16px" fontWeight={500}>
-                      {timeshare.name}, {timeshare.city}
+                    <Typography fontSize="16px" fontWeight={300}>
+                    <strong>{timeshare.name},</strong> {timeshare.city}
                     </Typography>
                   </Stack>
                   <List>
