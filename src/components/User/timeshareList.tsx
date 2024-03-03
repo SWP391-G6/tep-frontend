@@ -6,6 +6,8 @@ import { styled } from "@mui/material/styles";
 import { useNavigate } from 'react-router';
 import ViewIcon from "@mui/icons-material/Visibility";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+import { TimeshareByOwnerResponse } from '../../interfaces/timeshare/timeshareByOwnerResponse';
+import timeshareAPI from '../../services/timeshare/timeshareAPI';
 
 
 const StyledGridOverlay = styled("div")(({ theme }) => ({
@@ -85,19 +87,20 @@ const TimeshareList = () => {
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 90 },
     {
-      field: "name",
+      field: "timeshareName",
       headerName: "name",
       width: 150,
       flex: 1,
     },
     {
-      field: 'start_date',
+      field: 'dateStart',
       headerName: 'Start Date',
       width: 160,
+      //valueGetter: (params) => params.row.timeshareId.dateStart,
       editable: true,
     },
     {
-      field: 'end_date',
+      field: 'dateEnd',
       headerName: 'End Date',
       width: 160,
       editable: true,
@@ -110,8 +113,8 @@ const TimeshareList = () => {
       editable: true,
     },
     {
-      field: 'view',
-      headerName: 'View',
+      field: 'nights',
+      headerName: 'Night',
       type: 'number',
       width: 130,
       editable: true,
@@ -128,15 +131,10 @@ const TimeshareList = () => {
 
         return (
           <Stack direction="row" spacing={1}>
-            {/* <Tooltip title="Accept Request">
-              <IconButton aria-label="Accept Request">
-                <PublishedWithChangesIcon sx={{ color: "#00acb3" }} />
-              </IconButton>
-            </Tooltip> */}
             <Tooltip title="View detail timeshare">
               <IconButton
                 aria-label="view detail"
-                onClick={() => navigate(`/view_timeshare_detail/1`)}
+                onClick={() => navigate(`/view_timeshare_detail/${params.id}`)}
               >
                 <ViewIcon sx={{ color: "#00acb3" }} />
               </IconButton>
@@ -147,78 +145,33 @@ const TimeshareList = () => {
     },
   ];
 
-  const rows = [
-    {
-      id: 1,
-      name: "Sapa Jade Hill",
-      start_date: "02/09/24",
-      end_date:"02/16/24",
-      price: "2000$",
-      nights: "7",
-      sleep: "5",
-      view:"high"
-    },
-    {
-      id: 2,
-      price: "2000$",
-      name: "Sapa Jade Hill",
-      start_date: "02/09/24",
-      end_date:"02/16/24",
-      nights: "7",
-      sleep: "5",
-      view:"high"
-    },
-    {
-      id: 3,
-      price: "2000$",
-      name: "Sapa Jade Hill",
-      start_date: "02/09/24",
-      end_date:"02/16/24",
-      nights: "7",
-      sleep: "5",
-      view:"high"
-    },
-    {
-      id: 4,
-      price: "2000$",
-      name: "Sapa Jade Hill",
-      start_date: "02/09/24",
-      end_date:"02/16/24",
-      nights: "7",
-      sleep: "5",
-      view:"high"
-    },
-    {
-      id: 5,
-      price: "2000$",
-      name: "Sapa Jade Hill",
-      start_date: "02/09/24",
-      end_date:"02/16/24",
-      nights: "7",
-      sleep: "5",
-      view:"high"
-    },
-    {
-      id: 6,
-      price: "2000$",
-      name: "Sapa Jade Hill",
-      start_date: "02/09/24",
-      end_date:"02/16/24",
-      nights: "7",
-      sleep: "5",
-      view:"high"
-    },
-    {
-      id: 7,
-      price: "2000$",
-      name: "Sapa Jade Hill",
-      start_date: "02/09/24",
-      end_date:"02/16/24",
-      nights: "7",
-      sleep: "5",
-      view:"high"
-    },
-  ];
+  const [timeshare, setTimeshare] = React.useState<TimeshareByOwnerResponse[]>([]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response: any = await timeshareAPI.getTimeshareByOwnerId('6d21c5dc-56a5-4da0-98d5-4b09c31911a7');
+        if (response && response.length > 0) {
+          setTimeshare(response);
+        } 
+        console.log(timeshare, 'timeshare')
+      } catch (error) {
+        console.error('Error fetching bookings:', error);
+      }
+    };
+
+    const initUseEffect = async () => {
+      await fetchData();
+    };
+    initUseEffect();
+  }, []);
+
+  const timeshareWithIds = timeshare.map((timeshare, index) => {
+    return {
+      ...timeshare,
+      id: index + 1, 
+    };
+  });
 
   return (
     <Box
@@ -233,8 +186,9 @@ const TimeshareList = () => {
       <Box>
         <Typography variant="h4">MY TIMESHARE</Typography>
         <DataGrid
-          rows={rows}
+          rows={timeshareWithIds}
           columns={columns}
+          getRowId={(row) => row.timeshareId}
           initialState={{
             pagination: {
               paginationModel: {
@@ -251,58 +205,5 @@ const TimeshareList = () => {
   );
 };
 
-// export default function UserPosting() {
-//   return (
-//     <Box sx={{ height: 500, width: '100%',backgroundColor:'white' ,padding:'25px'}}>
-//       <Box>
-//       <Typography sx={{fontSize:'50px'}}>My Posting</Typography>
-//       <DataGrid
-//         rows={rows}
-//         columns={columns}
-//         initialState={{
-//           pagination: {
-//             paginationModel: {
-//               pageSize: 5,
-//             },
-//           },
-//         }}
-//         pageSizeOptions={[5]}
-//       />
-//       </Box>
-//     </Box>
-//   );
-// }
-
-
-
-// const TimeshareList = () => {
-//   return (
-//     <Box
-//       sx={{
-        
-//         width: '100%',
-//         backgroundColor: 'white',
-//         padding: '60px',
-//         border: 'solid 1px ',
-//         borderColor: 'rgba(0, 0, 0, 0.2)',
-//       }}>
-//       <Box>
-//         <Typography variant='h4'>MY POSTING</Typography>
-//         <DataGrid
-//           rows={rows}
-//           columns={columns}
-//           initialState={{
-//             pagination: {
-//               paginationModel: {
-//                 pageSize: 10,
-//               },
-//             },
-//           }}
-//           pageSizeOptions={[10, 20, 50, 100]}
-//         />
-//       </Box>
-//     </Box>
-//   )
-// }
 
 export default TimeshareList;

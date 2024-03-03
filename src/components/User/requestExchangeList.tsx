@@ -1,11 +1,36 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
-import { IconButton, Stack, Tooltip, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, Divider, Grid, IconButton, Modal, Paper, Stack, Tooltip, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ViewIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+import EventIcon from '@mui/icons-material/Event';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import PersonIcon from '@mui/icons-material/Person';
+import CloseIcon from '@mui/icons-material/Close';
+import { MyRequestResponse } from "../../interfaces/myRequest/myRequestResponse";
+import myRequestAPI from "../../services/timeshare/myRequestAPI";
+import timeshareAPI from "../../services/timeshare/timeshareAPI";
+import DomainIcon from '@mui/icons-material/Domain';
+import BedIcon from '@mui/icons-material/Bed';
+import BathtubIcon from '@mui/icons-material/Bathtub';
+import KitchenIcon from '@mui/icons-material/Kitchen';
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import AirlineSeatIndividualSuiteIcon from '@mui/icons-material/AirlineSeatIndividualSuite';
+import PhotoSizeSelectActualIcon from '@mui/icons-material/PhotoSizeSelectActual';
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  bgcolor: 'background.paper',
+  width: 850,
+  boxShadow: 4,
+  p: 4,
+};
 
 const StyledGridOverlay = styled("div")(({ theme }) => ({
   display: "flex",
@@ -80,47 +105,66 @@ function CustomNoRowsOverlay() {
 
 const RequestExchangeList = () => {
   const navigate = useNavigate();
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = (bookingId: any) => {
+    setSelectedRequestId(bookingId);
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
+  const [selectedRequestId, setSelectedRequestId] = React.useState(null);
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 90 },
+    { field: "index", headerName: "ID", width: 90 },
+    { field: "request_id", headerName: "request_id", width: 90 },
     {
-      field: "name",
-      headerName: "name",
+      field: "timeshare_id",
+      headerName: "Timeshare Name",
+      width: 200,
       flex: 1,
+      valueGetter: (params) => params.row.timeshare_id.timeshareName,
     },
     {
-      field: "date",
-      headerName: "Date",
-      flex: 1,
+      field: 'create_date',
+      headerName: 'Create Date',
+      width: 160,
+      editable: true,
+    },
+    {
+      field: 'message',
+      headerName: 'Message',
+      width: 160,
+      editable: true,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 70,
+
     },
 
     {
-      field: "nights",
-      headerName: "Nights",
+      field: "request_by",
+      headerName: "Request by",
       type: "number",
-      flex: 1,
+      width: 100,
+      valueGetter: (params) => params.row.request_by.user_name,
     },
-    {
-      field: "price",
-      headerName: "Price",
-      type: "number",
-      flex: 1,
-    },
-    {
-      field: "sleep",
-      headerName: "sleeps",
-      type: "number",
-      flex: 1,
-      editable: false,
-    },
+    // {
+    //   field: "sleep",
+    //   headerName: "sleeps",
+    //   type: "number",
+    //   editable: false,
+    // },
     {
       field: "Action",
       headerName: "Action",
-      width: 200,
+      width: 150,
       type: "number",
       renderCell: (params) => {
         const handleButtonClick = () => {
-          console.log("Button clicked for row with ID:", params.id);
+          console.log("Button clicked for row with request ID:", params.id);
+          handleOpen(params.id);
+
         };
 
         return (
@@ -130,10 +174,10 @@ const RequestExchangeList = () => {
                 <PublishedWithChangesIcon sx={{ color: "#00acb3" }} />
               </IconButton>
             </Tooltip>
-            <Tooltip title="View detail timeshare">
+            <Tooltip title="View detail request">
               <IconButton
                 aria-label="view detail"
-                onClick={() => navigate(`/view_timeshare_detail/1`)}
+                onClick={handleButtonClick}
               >
                 <ViewIcon sx={{ color: "#00acb3" }} />
               </IconButton>
@@ -144,63 +188,56 @@ const RequestExchangeList = () => {
     },
   ];
 
-  const rows = [
-    {
-      id: 1,
-      date: "02/09/24-02/16/24",
-      price: "2000$",
-      nights: "7",
-      sleep: "5",
-    },
-    {
-      id: 2,
-      price: "2000$",
-      name: "Sapa Jade Hill",
-      date: "02/09/24-02/16/24",
-      nights: "7",
-      sleep: "5",
-    },
-    {
-      id: 3,
-      price: "2000$",
-      name: "Sapa Jade Hill",
-      date: "02/09/24-02/16/24",
-      nights: "7",
-      sleep: "5",
-    },
-    {
-      id: 4,
-      price: "2000$",
-      name: "Sapa Jade Hill",
-      date: "02/09/24-02/16/24",
-      nights: "7",
-      sleep: "5",
-    },
-    {
-      id: 5,
-      price: "2000$",
-      name: "Sapa Jade Hill",
-      date: "02/09/24-02/16/24",
-      nights: "7",
-      sleep: "5",
-    },
-    {
-      id: 6,
-      price: "2000$",
-      name: "Sapa Jade Hill",
-      date: "02/09/24-02/16/24",
-      nights: "7",
-      sleep: "5",
-    },
-    {
-      id: 1,
-      price: "2000$",
-      name: "Sapa Jade Hill",
-      date: "02/09/24-02/16/24",
-      nights: "7",
-      sleep: "5",
-    },
-  ];
+  const columnIndex = columns.findIndex((column) => column.field === "request_id");
+  if (columnIndex !== -1) {
+    columns.splice(columnIndex, 1);
+  }
+  const [request, setRequest] = React.useState<MyRequestResponse[]>([]);
+  const selectedRequest = request.find(
+    (requesting) => requesting.request_id === selectedRequestId
+  );
+  const [timeshare, setTimeshare] = React.useState<Record<string, any>>({});
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response: any = await myRequestAPI.getRequestByRequestUser('7e1fb61d-437c-465e-8844-71a1db289d4a');
+        if (response && response.length > 0) {
+          setRequest(response);
+        }
+        console.log(request, 'request')
+        fetchTimeshareDetail();
+      } catch (error) {
+        console.error('Error fetching bookings:', error);
+      }
+    };
+
+    const fetchTimeshareDetail = async () => {
+      try {
+        if (selectedRequest && selectedRequest.timeshare_id) {
+          const response = await timeshareAPI.getTimeshareById(selectedRequest.timeshare_id.timeshareId);
+          console.log(response, 'okkk');
+          setTimeshare(response);
+        }
+      } catch (error) {
+        console.error("Error fetching timeshare:", error);
+      }
+    };
+
+    const initUseEffect = async () => {
+      await fetchData();
+      await fetchTimeshareDetail();
+    };
+    initUseEffect();
+  }, []);
+
+
+  const requestWithIds = request.map((request, index) => {
+    return {
+      ...request,
+      index: index + 1, 
+    };
+  });
 
   return (
     <Box
@@ -215,8 +252,9 @@ const RequestExchangeList = () => {
       <Box>
         <Typography variant="h4">MY EXCHANGE REQUEST</Typography>
         <DataGrid
-          rows={rows}
+          rows={requestWithIds}
           columns={columns}
+          getRowId={(row) => row.request_id}
           initialState={{
             pagination: {
               paginationModel: {
@@ -229,6 +267,192 @@ const RequestExchangeList = () => {
           disableRowSelectionOnClick
         />
       </Box>
+
+      {selectedRequest && (
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+
+          <Card sx={style}>
+            <CardContent>
+              <Grid container gap={3}>
+                <Grid2 xs={2}>
+                  <Paper
+                    elevation={5}
+                    sx={{ padding: "10px", width: '300px' }}
+                  >
+                    {timeshare && (
+                      <img
+                        src={timeshare.image_url}
+                        alt="timeshare"
+                        width="100%"
+                        height={160}
+                      />
+                    )}
+                  </Paper>
+                </Grid2>
+
+                <Grid2 xs={10}>
+                  <Typography variant="h4" component="h2" color={'#00acb3'} >
+                    {selectedRequest.timeshare_id.timeshareName}
+                  </Typography>
+
+                  <Typography variant="body1" sx={{ mt: 1, fontWeight: 'bold' }}>
+                    <EventIcon sx={{ mr: 1, verticalAlign: 'middle', color: "#00acb3" }} />
+                    Check-in: {selectedRequest.timeshare_id.dateStart}
+                  </Typography>
+
+                  <Typography variant="body1" sx={{ mt: 1, fontWeight: 'bold' }}>
+                    <EventIcon sx={{ mr: 1, verticalAlign: 'middle', color: "#00acb3" }} />
+                    Check-out: {selectedRequest.timeshare_id.dateEnd}
+                  </Typography>
+
+                  <Typography variant="body1" sx={{ mt: 1 }}>
+                  <span style={{ fontWeight: 'bold', marginRight: '0.5em' }}>
+                    <LocationOnIcon sx={{ mr: 1, verticalAlign: 'middle', color: "#00acb3" }} />
+                    Destination:
+                    </span>
+                     {selectedRequest.timeshare_id.destinationModel.desName}
+                  </Typography>
+
+                  <Button
+                    variant="text"
+                    startIcon={<ViewIcon sx={{ ml: 0.6, color: "#fff" }} />}
+                    onClick={() => navigate(`/view_timeshare_detail/${selectedRequest.timeshare_id.timeshareId}`)}
+                    sx={{
+                      mt: 1,
+                      backgroundColor: '#00acb3',
+                      textTransform: 'none',
+                      color: '#fff',
+                      '&:hover': {
+                        backgroundColor: '#08b7bd',
+                      },
+                    }}
+                  >
+                    View detail
+                  </Button>
+
+                </Grid2>
+              </Grid>
+              {timeshare?.room && (
+                <Box mt={4}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <Typography variant="body1" sx={{ mt: 2 }}>
+                        <span style={{ fontWeight: 'bold', marginRight: '0.5em' }}>
+                          <AirlineSeatIndividualSuiteIcon sx={{ mr:1,verticalAlign: 'middle', color: "#00acb3" }} />
+                          Sleep:
+                        </span>
+                        {timeshare.room.sleeps}
+                      </Typography>
+
+                      <Typography variant="body1" sx={{ mt: 2 }}>
+                      <span style={{ fontWeight: 'bold', marginRight: '0.5em' }}>
+                        <BedIcon sx={{ mr: 1, verticalAlign: 'middle', color: "#00acb3" }} />
+                        Bedroom:
+                        </span>
+                         {timeshare.room.bed}
+                      </Typography>
+
+                      <Typography variant="body1" sx={{ mt: 2 }}>
+                      <span style={{ fontWeight: 'bold', marginRight: '0.5em' }}>
+                        <BathtubIcon sx={{ mr: 1, verticalAlign: 'middle', color: "#00acb3" }} />
+                        Bath: 
+                        </span>
+                        {timeshare.room.bath}
+                      </Typography>
+
+
+                    </Grid>
+
+                    <Grid item xs={6}>
+                      <Typography variant="body1" sx={{ mt: 2 }}>
+                      <span style={{ fontWeight: 'bold', marginRight: '0.5em' }}>
+                        <PhotoSizeSelectActualIcon sx={{ mr: 1, verticalAlign: 'middle', color: "#00acb3" }} />
+                        View: 
+                        </span>
+                        {timeshare.room.roomview}
+                      </Typography>
+
+                      <Typography variant="body1" sx={{ mt: 2 }}>
+                      <span style={{ fontWeight: 'bold', marginRight: '0.5em' }}>
+                        <DomainIcon sx={{ mr: 1, verticalAlign: 'middle', color: "#00acb3" }} />
+                        Room Type: 
+                        </span>
+                        {timeshare.room.name}
+                      </Typography>
+
+                      <Typography variant="body1" sx={{ mt: 2 }}>
+                      <span style={{ fontWeight: 'bold', marginRight: '0.5em' }}>
+                        <KitchenIcon sx={{ mr: 1, verticalAlign: 'middle', color: "#00acb3" }} />
+                        Kitchen: 
+                        </span>
+                        {timeshare.room.kitchen}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Box>
+              )}
+              <IconButton
+                aria-label="close"
+                onClick={handleClose}
+                sx={{ position: 'absolute', top: 5, right: 5 }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </CardContent>
+            <Divider />
+
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <CardActions sx={{ justifyContent: 'flex-start', mt: 2 }}>
+                  <Typography variant="body1" fontSize={20} fontWeight={'40px'}>
+                  <span style={{ fontWeight: 'bold', marginRight: '0.5em' }}>
+                      <PersonIcon sx={{ mr: 2, verticalAlign: 'middle', color: "#fff", fontSize: '30px', backgroundColor: '#00acb3', borderRadius: '5px' }} />
+                      Requested by:
+                      
+                      </span>
+                       {selectedRequest.request_by.fullname}
+                    
+                  </Typography>
+                </CardActions>
+              </Grid>
+              <Grid item xs={6}>
+                <CardActions sx={{ justifyContent: 'flex-end', mt: 2 }}>
+                  <Button
+                    variant="contained"
+                    sx={{
+                      backgroundColor: '#00acb3',
+                      color: '#fff',
+                      '&:hover': {
+                        backgroundColor: '#08b7bd',
+                      },
+                    }}
+                  >
+                    Accept
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      ml: 2,
+                      color: '#00acb3',
+                      '&:hover': {
+                        borderColor: '#08b7bd',
+                      },
+                    }}
+                  >
+                    Reject
+                  </Button>
+                </CardActions>
+              </Grid>
+            </Grid>
+          </Card>
+        </Modal>
+      )}
+
     </Box>
   );
 };

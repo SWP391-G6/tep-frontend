@@ -77,7 +77,7 @@ const ShowTimeshareGrid = () => {
         return (
           <Grid2
             onClick={() => {
-              navigate(`/view_timeshare_detail/${timeshare.timeshare_id}`);
+              window.location.href =`/view_timeshare_detail/${timeshare.timeshare_id}`;
             }}
             key={timeshare.timeshare_id}
             xs={3.75}

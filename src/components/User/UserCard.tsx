@@ -1,6 +1,24 @@
 import { Box, Button, CardActions, CardContent, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 
 const UserCard = () => {
+
+const [fullname,setFullname]= useState('');
+useEffect(() => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    try {
+      const parsedToken = JSON.parse(token);
+      setFullname(parsedToken.token.fullname || '');
+    } catch (error) {
+      console.error('Error parsing token:', error);
+    }
+  } else {
+    console.log('Token not found in local storage');
+  }
+}, []);
+
+
   return (
     <CardContent
       sx={{
@@ -13,21 +31,11 @@ const UserCard = () => {
           display: 'contents',
           alignItems: 'center',
         }}>
-        <img
-          src="https://pbs.twimg.com/profile_images/1555090739679203333/rveDNnWp_400x400.jpg"
-          alt="usercard"
-          style={{
-            borderRadius: '50%',
-            width: '52px',
-            height: '52px',
-            display: 'block',
-            margin: 'auto'
-          }}
-        />
+        
 
         <Box>
-          <Typography variant="h5" align="center" fontWeight={'bold'} marginTop={'15px'}>
-            Minh Duy
+          <Typography variant="h5" align="center" fontWeight={'bold'} marginTop={'15px'} sx={{height:'32px'}}>
+          {fullname}
           </Typography>
           <Typography variant="h6" align="center">
             Guest

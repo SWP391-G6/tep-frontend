@@ -3,7 +3,7 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Divider,
   List,
@@ -15,6 +15,9 @@ import {
 import { makeStyles } from "@mui/styles";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import CheckIcon from "@mui/icons-material/Check";
+import timeshareAPI from "../../services/timeshare/timeshareAPI";
+import { TimeshareResponse } from "../../interfaces/timeshare/timeshareResponse";
+import { useParams } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -26,19 +29,61 @@ const TimeshareDetail = () => {
   const classes = useStyles();
   const [value, setValue] = useState("1");
 
+
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+
+  const [timeshare, setTimeshare] = useState<Record<string, any>>({});
+  const { timeshareId } = useParams();
+  console.log(timeshareId)
+  useEffect(() => {
+    const fetchTimeshareDetail = async () => {
+      try {
+        if (timeshareId) {
+          const response = await timeshareAPI.getTimeshareById(timeshareId);
+          console.log(response, 'okkk');
+          setTimeshare(response);
+        }
+      } catch (error) {
+        console.error("Error fetching timeshare:", error);
+      }
+    };
+
+    const initUseEffect = async () => {
+      await fetchTimeshareDetail();
+    };
+    initUseEffect();
+  }, [timeshareId]);
+
   return (
     <TabContext value={value}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <TabList onChange={handleChange} aria-label="lab API tabs example">
+        <TabList onChange={handleChange} aria-label="lab API tabs example" 
+        TabIndicatorProps={{
+          style: {
+            backgroundColor: "#00acb3"
+          }
+        }}
+        sx={{
+              '& .MuiTab-root': {
+                color: '#00acb3',
+              },
+              '& .Mui-selected': {
+                color: '#00acb3', 
+              },
+              '& .MuiTab-indicator': {
+                backgroundColor: '#00acb3', 
+              },
+            }}>
           <Tab label="Timeshare Detail" value="1" />
           <Tab label="About the resort" value="2" />
-          <Tab label="Images" value="3" />
+          {/* <Tab label="Images" value="3" /> */}
         </TabList>
       </Box>
       <TabPanel value="1">
+
+
         <Grid container>
           <>
             <Grid xs={12}>
@@ -46,51 +91,20 @@ const TimeshareDetail = () => {
                 Kitchen
               </Typography>
             </Grid>
-            <Grid xs={4}>
-              <ListItem disableGutters>
-                <ListItemText
-                  primary={
-                    <Typography fontWeight={400}>• Coffee maker</Typography>
-                  }
-                />
-              </ListItem>
-            </Grid>
-            <Grid xs={4}>
-              <ListItem disableGutters>
-                <ListItemText
-                  primary={
-                    <Typography fontWeight={400}>• Microwave</Typography>
-                  }
-                />
-              </ListItem>
-            </Grid>
-            <Grid xs={4}>
-              <ListItem disableGutters>
-                <ListItemText
-                  primary={
-                    <Typography fontWeight={400}>
-                      • Refrigerator (full-size)
-                    </Typography>
-                  }
-                />
-              </ListItem>
-            </Grid>
-            <Grid xs={4}>
-              <ListItem disableGutters>
-                <ListItemText
-                  primary={
-                    <Typography fontWeight={400}>• Dishwasher</Typography>
-                  }
-                />
-              </ListItem>
-            </Grid>
-            <Grid xs={4}>
-              <ListItem disableGutters>
-                <ListItemText
-                  primary={<Typography fontWeight={400}>• Oven</Typography>}
-                />
-              </ListItem>
-            </Grid>
+
+            {timeshare?.room && (
+              <Grid xs={4}>
+                <ListItem disableGutters>
+                  <ListItemText
+                    primary={
+                      <Typography fontWeight={400}>• {timeshare.room.kitchen}</Typography>
+                    }
+                  />
+                </ListItem>
+              </Grid>
+            )}
+
+
           </>
           <Divider sx={{ width: "100%" }} />
           <>
@@ -99,38 +113,17 @@ const TimeshareDetail = () => {
                 Entertainment
               </Typography>
             </Grid>
-            <Grid xs={4}>
-              <ListItem disableGutters>
-                <ListItemText
-                  primary={
-                    <Typography fontWeight={400}>• Internet access</Typography>
-                  }
-                />
-              </ListItem>
-            </Grid>
-            <Grid xs={4}>
-              <ListItem disableGutters>
-                <ListItemText
-                  primary={<Typography fontWeight={400}>• Smart TV</Typography>}
-                />
-              </ListItem>
-            </Grid>
-            <Grid xs={4}>
-              <ListItem disableGutters>
-                <ListItemText
-                  primary={
-                    <Typography fontWeight={400}>• Telephone</Typography>
-                  }
-                />
-              </ListItem>
-            </Grid>
-            <Grid xs={4}>
-              <ListItem disableGutters>
-                <ListItemText
-                  primary={<Typography fontWeight={400}>• Netflix</Typography>}
-                />
-              </ListItem>
-            </Grid>
+            {timeshare?.room && (
+              <Grid xs={4}>
+                <ListItem disableGutters>
+                  <ListItemText
+                    primary={
+                      <Typography fontWeight={400}>• {timeshare.room.entertaiment}</Typography>
+                    }
+                  />
+                </ListItem>
+              </Grid>
+            )}
           </>
           <Divider sx={{ width: "100%" }} />
           <>
@@ -139,24 +132,17 @@ const TimeshareDetail = () => {
                 Features
               </Typography>
             </Grid>
-            <Grid xs={4}>
-              <ListItem disableGutters>
-                <ListItemText
-                  primary={
-                    <Typography fontWeight={400}>• Air conditioning</Typography>
-                  }
-                />
-              </ListItem>
-            </Grid>
-            <Grid xs={4}>
-              <ListItem disableGutters>
-                <ListItemText
-                  primary={
-                    <Typography fontWeight={400}>• Patio or balcony</Typography>
-                  }
-                />
-              </ListItem>
-            </Grid>
+            {timeshare?.room && (
+              <Grid xs={4}>
+                <ListItem disableGutters>
+                  <ListItemText
+                    primary={
+                      <Typography fontWeight={400}>• {timeshare.room.feature}</Typography>
+                    }
+                  />
+                </ListItem>
+              </Grid>
+            )}
           </>
           <Divider sx={{ width: "100%" }} />
           <>
@@ -165,27 +151,22 @@ const TimeshareDetail = () => {
                 Policies
               </Typography>
             </Grid>
-            <Grid xs={4}>
-              <ListItem disableGutters>
-                <ListItemText
-                  primary={<Typography fontWeight={400}>• No pets</Typography>}
-                />
-              </ListItem>
-            </Grid>
-            <Grid xs={4}>
-              <ListItem disableGutters>
-                <ListItemText
-                  primary={
-                    <Typography fontWeight={400}>• No smoking</Typography>
-                  }
-                />
-              </ListItem>
-            </Grid>
+            {timeshare?.room && (
+              <Grid xs={4}>
+                <ListItem disableGutters>
+                  <ListItemText
+                    primary={
+                      <Typography fontWeight={400}>• {timeshare.room.policies}</Typography>
+                    }
+                  />
+                </ListItem>
+              </Grid>
+            )}
           </>
         </Grid>
       </TabPanel>
       <TabPanel value="2">Item Two</TabPanel>
-      <TabPanel value="3">Item Three</TabPanel>
+      {/* <TabPanel value="3">Item Three</TabPanel> */}
     </TabContext>
   );
 };

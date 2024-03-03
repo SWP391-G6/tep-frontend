@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings";
 import ContactsIcon from "@mui/icons-material/Contacts";
 import ApartmentIcon from "@mui/icons-material/Apartment";
+import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 
 const UserActivityTab = () => {
   const location = useLocation();
@@ -21,9 +22,10 @@ const UserActivityTab = () => {
       case "/user/exchange_request":
         setSelectedTab("exchange_request");
         break;
-      default:
-        setSelectedTab("posting");
+      case "/user/booking_history":
+        setSelectedTab("booking_history");
         break;
+
     }
   }, [location]);
 
@@ -41,7 +43,6 @@ const UserActivityTab = () => {
 
 
       {/* USER PROFILE */}
-
       <Link to="/user/profile" style={{ textDecoration: "none", color: "black" }}>
         <ListItemButton
           selected={selectedTab === "profile"}
@@ -55,6 +56,7 @@ const UserActivityTab = () => {
         </ListItemButton>
       </Link>
       <Divider />
+
       {/* USER POSTING */}
       <Link to="/user/posting" style={{ textDecoration: "none", color: "black" }}>
         <ListItemButton
@@ -88,6 +90,28 @@ const UserActivityTab = () => {
           />
         </ListItemButton>
       </Link>
+
+
+      {/* USER HISTORY BOOKING  */}
+      <Divider />
+      <Link
+        to="/user/booking_history"
+        style={{ textDecoration: "none", color: "black" }}
+      >
+        <ListItemButton
+          selected={selectedTab === "booking_history"}
+          onClick={() => setSelectedTab("booking_history")}
+        >
+          <ListItemIcon sx={{ fontSize: 24 }}>
+            <WorkHistoryIcon fontSize="small" sx={{ color: "black" }} />
+          </ListItemIcon>
+          <ListItemText
+            primaryTypographyProps={{ variant: "subtitle1" }}
+            primary="My Booking History"
+          />
+        </ListItemButton>
+      </Link>
+
     </List>
   );
 };
