@@ -1,7 +1,6 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import ErrorMessage from "../Error/errorMessage";
 import {
-  Avatar,
   Box,
   Button,
   Card,
@@ -15,13 +14,8 @@ import {
   DialogTitle,
   Grid,
   IconButton,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   Paper,
   Stack,
-  TextField,
   Theme,
   Typography,
 } from "@mui/material";
@@ -44,6 +38,9 @@ import { TimeshareResponse } from "../../interfaces/timeshare/timeshareResponse"
 import { CreateExchangeRequest } from "../../interfaces/request/createExchangeRequest";
 import { isEmpty } from "lodash";
 import InstructMessage from "../Instruct/instructMessage";
+import requestAPI from "../../services/request/requestAPI";
+import { ToastContainer, toast } from "react-toastify";
+
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 
 dayjs.extend(customParseFormat);
@@ -137,7 +134,27 @@ const TimesharePriceInformation = (props: Props) => {
     resolver: yupResolver(validationSchema),
   });
 
-  const onSubmit = (data: CreateExchangeRequest) => console.log(data);
+  const onSubmit = async (data: CreateExchangeRequest) => {
+    try {
+      const response: any = await requestAPI.createExchangeRequest({
+        request_by: "6d21c5dc-56a5-4da0-98d5-4b09c31911a7",
+        timeshare_request_id: props.timeshareID,
+        timeshare_response_id: timeshareID,
+        message: data.message,
+      });
+      if (response) {
+        toast.success("New request will be sent to the owner!", {
+          position: "top-center",
+        });
+        return;
+      }
+      toast.error("Exchange failed!", {
+        position: "top-center",
+      });
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
 
   const handleClick = (index: any) => {
     const newSelectedItems = timeshareList.map((item, idx) => {
@@ -437,14 +454,7 @@ const TimesharePriceInformation = (props: Props) => {
               <Button
                 sx={{ color: "#00acb3" }}
                 onClick={() => {
-                  if (
-                    !errors &&
-                    !isEmpty(errors) &&
-                    timeshareID &&
-                    !isEmpty(timeshareID)
-                  ) {
-                    handleClickOpenConfirmDialog();
-                  }
+                  handleClickOpenConfirmDialog();
                 }}
                 type="submit"
               >
@@ -487,8 +497,12 @@ const TimesharePriceInformation = (props: Props) => {
                 }}
                 variant="contained"
                 onClick={() => {
-                  handleCreateExchangeRequest();
                   handleClickCloseConfirmDialog();
+                  handleCloseSelectTimeshareDialog();
+                  let formValue = getValues();
+                  if (formValue || !isEmpty(formValue)) {
+                    onSubmit(formValue);
+                  }
                 }}
                 autoFocus
               >
@@ -513,6 +527,10 @@ const TimesharePriceInformation = (props: Props) => {
           </Dialog>
         </form>
       </Container>
+      <ToastContainer
+        autoClose={2000}
+        style={{ marginTop: "50px", width: "400px" }}
+      />
     </Box>
   );
 };
