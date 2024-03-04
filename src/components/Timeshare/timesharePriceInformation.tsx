@@ -1,15 +1,172 @@
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import ErrorMessage from "../Error/errorMessage";
 import {
   Box,
   Button,
+  Card,
+  CardContent,
+  CardMedia,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
+  IconButton,
+  Paper,
+  Stack,
+  Theme,
   Typography,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import { makeStyles } from "@mui/styles";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import timeshareAPI from "../../services/timeshare/timeshareAPI";
+import Textarea from "@mui/joy/Textarea";
+import { TimeshareByOwnerResponse } from "../../interfaces/timeshare/timeshareByOwnerResponse";
+import dayjs from "dayjs";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { TimeshareResponse } from "../../interfaces/timeshare/timeshareResponse";
+import { CreateExchangeRequest } from "../../interfaces/request/createExchangeRequest";
+import { isEmpty } from "lodash";
+import InstructMessage from "../Instruct/instructMessage";
+import requestAPI from "../../services/request/requestAPI";
+import { ToastContainer, toast } from "react-toastify";
 
-const TimesharePriceInformation = () => {
+var customParseFormat = require("dayjs/plugin/customParseFormat");
+
+dayjs.extend(customParseFormat);
+dayjs.locale("vi");
+type Props = { timeshareID: any };
+
+const useStyles: any = makeStyles((theme: Theme) => ({
+  hoverContainer: {
+    cursor: "pointer",
+    overflow: "hidden",
+    position: "relative",
+
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      bottom: 0,
+      left: "-100%",
+      width: "100%",
+      height: "5px",
+      backgroundColor: "#00acb3",
+      transition: "transform 0.5s ease-in-out",
+      zIndex: 1,
+      // borderRadius: "8px",
+    },
+    "&:hover::before": {
+      transform: "translateX(100%)",
+    },
+  },
+  selectedItem: {
+    borderRadius: "5px solid #00acb3",
+  },
+}));
+
+const validationSchema = yup.object({
+  message: yup.string().required("Message can't be empty!"),
+});
+
+const TimesharePriceInformation = (props: Props) => {
+  // let selectedID: string = "";
+  const [timeshareID, setTimeshareID] = useState("");
   const navigate = useNavigate();
+  const classes = useStyles();
+  const [timeshareList, setTimeshareList] = useState<
+    TimeshareByOwnerResponse[]
+  >([]);
+  const [openSelectTimeshareDialog, setOpenSelectTimeshareDialog] =
+    useState(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+
+  const handleClickOpenSelectTimeshareDialog = () => {
+    setOpenSelectTimeshareDialog(true);
+  };
+
+  const handleCloseSelectTimeshareDialog = () => {
+    setOpenSelectTimeshareDialog(false);
+  };
+
+  const handleCreateExchangeRequest = () => {};
+
+  const handleClickOpenConfirmDialog = () => {
+    console.log(1);
+    setOpenConfirmDialog(true);
+  };
+
+  const handleClickCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
+  };
+
+  useEffect(() => {
+    const getTimeshareByOwner = async () => {
+      let temp = [];
+      const data: any = await timeshareAPI.getTimeshareByUserID(
+        "6d21c5dc-56a5-4da0-98d5-4b09c31911a7"
+      );
+      if (data.length > 0) {
+        temp = data.map((item: any) => ({ ...item, isSelected: false }));
+        setTimeshareList(temp);
+      }
+    };
+    const initUseEffect = async () => {
+      await getTimeshareByOwner();
+    };
+    initUseEffect();
+  }, []);
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
+
+  const onSubmit = async (data: CreateExchangeRequest) => {
+    try {
+      const response: any = await requestAPI.createExchangeRequest({
+        request_by: "6d21c5dc-56a5-4da0-98d5-4b09c31911a7",
+        timeshare_request_id: props.timeshareID,
+        timeshare_response_id: timeshareID,
+        message: data.message,
+      });
+      if (response) {
+        toast.success("New request will be sent to the owner!", {
+          position: "top-center",
+        });
+        return;
+      }
+      toast.error("Exchange failed!", {
+        position: "top-center",
+      });
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  };
+
+  const handleClick = (index: any) => {
+    const newSelectedItems = timeshareList.map((item, idx) => {
+      if (idx === index) {
+        setTimeshareID(item.timeshareId);
+        return { ...item, isSelected: !item.isSelected };
+      }
+      return { ...item, isSelected: false };
+    });
+    setTimeshareList(newSelectedItems);
+  };
+
   return (
     <Box>
       <Container disableGutters sx={{ textAlign: "center" }}>
@@ -33,24 +190,35 @@ const TimesharePriceInformation = () => {
             700,000 VNĐ (100,000 VNĐ/night)
           </Typography>
         </Box>
-        <div>
-          <Typography variant="h6" sx={{ marginTop: "10px" }} fontWeight={700}>
+        <Grid
+          container
+          flexDirection="row"
+          justifyContent="center"
+          alignItems="left"
+        >
+          <Typography
+            variant="caption"
+            width="100%"
+            fontSize={18}
+            fontWeight={700}
+            color="#00acb3"
+          >
             7-night stay
           </Typography>
-          <Typography variant="h6">
+          <Typography variant="caption" fontSize={18}>
             Check-in:
-            <strong> Tue, Feb 20, 2024</strong>
+            <strong style={{ color: "#00acb3" }}> Tue, Feb 20, 2024</strong>
           </Typography>
-          <Typography variant="h6">
+          <Typography variant="caption" fontSize={18}>
             Check-out:
-            <strong> Mon, Feb 26, 2024</strong>
+            <strong style={{ color: "#00acb3" }}> Mon, Feb 26, 2024</strong>
           </Typography>
 
-          <Typography variant="h6">
+          <Typography variant="caption" fontSize={18}>
             Cancellation policy:
-            <strong> Strict</strong>
+            <strong style={{ color: "#00acb3" }}> Strict</strong>
           </Typography>
-        </div>
+        </Grid>
         <Box marginTop={"9px"}>
           <img
             src="https://fininme.vn/wp-content/uploads/2022/11/logo-vi-vnpay.png"
@@ -75,7 +243,12 @@ const TimesharePriceInformation = () => {
             <AccountCircleIcon style={{ fontSize: "35px", color: "#00acb3" }} />
           </Grid>
           <Grid item xs={9}>
-            <Typography variant="poster" color="#00acb3" fontSize={18} fontWeight={900}>
+            <Typography
+              variant="poster"
+              color="#00acb3"
+              fontSize={18}
+              fontWeight={900}
+            >
               Posted by Lorraine B.
             </Typography>
           </Grid>
@@ -88,7 +261,6 @@ const TimesharePriceInformation = () => {
               sx={{
                 width: "100%",
                 height: "50px",
-                fontSize: "16px",
                 marginTop: "20px",
                 background: "#00acb3",
                 "&:hover": {
@@ -96,7 +268,7 @@ const TimesharePriceInformation = () => {
                 },
               }}
             >
-              REQUEST TO BOOK
+              Request to book
             </Button>
           </Grid>
           <Grid item xs={12}>
@@ -105,22 +277,260 @@ const TimesharePriceInformation = () => {
               sx={{
                 width: "100%",
                 height: "50px",
-                fontSize: "16px",
                 marginTop: "20px",
                 color: "#00acb3",
                 "&:hover": {
                   borderColor: "#08b7bd",
                 },
               }}
-              onClick={() => {
-                // navigate("/user/exchange_request");
-              }}
+              onClick={handleClickOpenSelectTimeshareDialog}
             >
               Request to exchange
             </Button>
           </Grid>
         </Grid>
+        <form onSubmit={handleSubmit(handleClickOpenConfirmDialog)}>
+          <Dialog
+            open={openSelectTimeshareDialog}
+            onClose={handleCloseSelectTimeshareDialog}
+            maxWidth="md"
+            fullWidth
+          >
+            <DialogTitle
+              sx={{ m: 0, p: 2, color: "#00acb3", fontWeight: 900 }}
+              id="customized-dialog-title"
+            >
+              Request to exchange
+            </DialogTitle>
+            <IconButton
+              aria-label="close"
+              onClick={handleCloseSelectTimeshareDialog}
+              sx={{
+                position: "absolute",
+                right: 8,
+                top: 8,
+                color: (theme) => theme.palette.grey[500],
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+            <DialogContent dividers>
+              <Typography
+                variant="caption"
+                fontSize={18}
+                fontWeight={500}
+                gutterBottom
+                mt={1}
+              >
+                Message
+              </Typography>
+              <Textarea
+                sx={{ marginBottom: "15px" }}
+                color="primary"
+                disabled={false}
+                minRows={2}
+                placeholder="Type the message...."
+                size="lg"
+                variant="soft"
+                {...register("message")}
+              />
+              {errors["message"]?.message ? (
+                <ErrorMessage message={errors["message"].message} />
+              ) : null}
+              <Typography
+                variant="caption"
+                fontSize={18}
+                fontWeight={500}
+                gutterBottom
+              >
+                Select your timeshare to exchange
+              </Typography>
+              {!timeshareID && isEmpty(timeshareID) ? (
+                <InstructMessage
+                  message={"Please select your timeshare you want to exchange!"}
+                />
+              ) : null}
+              <Paper
+                sx={{
+                  width: "100%",
+                  padding: "10px 20px",
+                  marginTop: "5px",
+                  maxHeight: "300px",
+                  overflowY: "auto",
+                }}
+                elevation={3}
+              >
+                <Grid2
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  rowGap={2}
+                >
+                  {timeshareList.map((timeshare: any, index) => {
+                    return (
+                      <Grid2
+                        onClick={() => handleClick(index)}
+                        xs={3.75}
+                        height={350}
+                        key={timeshare.timeshareId}
+                      >
+                        <Card
+                          className={
+                            timeshare.isSelected
+                              ? classes.selectedItem
+                              : classes.hoverContainer
+                          }
+                          elevation={timeshare.isSelected ? 7 : 1}
+                        >
+                          <CardMedia
+                            component="img"
+                            image={"https://i.ibb.co/VpBzSSn/jadehillsapa.jpg"}
+                            width="320px"
+                            height="100%"
+                            alt={`${timeshare.timeshareName}`}
+                          />
+                          <CardContent>
+                            <Stack
+                              direction="row"
+                              justifyContent="flex-start"
+                              alignItems="center"
+                              spacing={1}
+                              height="40px"
+                            >
+                              <LocationOnIcon
+                                sx={{ color: "#00acb3", fontSize: "15px" }}
+                              />
+                              <Typography
+                                fontSize="16px"
+                                fontWeight={900}
+                                color="#00acb3"
+                              >
+                                {timeshare.timeshareName}
+                              </Typography>
+                            </Stack>
+                            <Stack
+                              direction="row"
+                              justifyContent="flex-start"
+                              alignItems="center"
+                              spacing={1}
+                              mt={1}
+                            >
+                              <AttachMoneyIcon
+                                sx={{ color: "#00acb3", fontSize: "15px" }}
+                              />
+                              <Typography fontSize="16px" fontWeight={300}>
+                                {timeshare.price} - ({timeshare.nights} nights)
+                              </Typography>
+                            </Stack>
+                            <Stack
+                              direction="row"
+                              justifyContent="flex-start"
+                              alignItems="center"
+                              spacing={1}
+                              mt={1}
+                            >
+                              <AccessTimeIcon
+                                sx={{ color: "#00acb3", fontSize: "15px" }}
+                              />
+                              <Typography fontSize="16px" fontWeight={300}>
+                                {dayjs(timeshare.dateStart)
+                                  .format("DD-MM-YYYY")
+                                  .toString()}{" "}
+                                -{" "}
+                                {dayjs(timeshare.dateEnd)
+                                  .format("DD-MM-YYYY")
+                                  .toString()}
+                              </Typography>
+                            </Stack>
+                          </CardContent>
+                        </Card>
+                      </Grid2>
+                    );
+                  })}
+                </Grid2>
+              </Paper>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                sx={{ color: "#00acb3" }}
+                onClick={() => {
+                  handleClickOpenConfirmDialog();
+                }}
+                type="submit"
+              >
+                Exchange
+              </Button>
+              <Button
+                sx={{ color: "#00acb3" }}
+                onClick={handleCloseSelectTimeshareDialog}
+              >
+                Cancel
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+          <Dialog
+            open={openConfirmDialog}
+            onClose={handleClickCloseConfirmDialog}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Confirm to exchange!"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Do you want to exchange this timeshare?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                sx={{
+                  my: 2,
+                  color: "#ffffff",
+                  backgroundColor: "#00acb3",
+                  display: "block",
+                  marginLeft: "10px",
+                  "&:hover": {
+                    backgroundColor: "#08b7bd",
+                  },
+                }}
+                variant="contained"
+                onClick={() => {
+                  handleClickCloseConfirmDialog();
+                  handleCloseSelectTimeshareDialog();
+                  let formValue = getValues();
+                  if (formValue || !isEmpty(formValue)) {
+                    onSubmit(formValue);
+                  }
+                }}
+                autoFocus
+              >
+                Yes
+              </Button>
+              <Button
+                sx={{
+                  my: 2,
+                  color: "#00acb3",
+                  display: "block",
+                  marginLeft: "10px",
+                  "&:hover": {
+                    borderColor: "#08b7bd",
+                  },
+                }}
+                variant="outlined"
+                onClick={handleClickCloseConfirmDialog}
+              >
+                No
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </form>
       </Container>
+      <ToastContainer
+        autoClose={2000}
+        style={{ marginTop: "50px", width: "400px" }}
+      />
     </Box>
   );
 };

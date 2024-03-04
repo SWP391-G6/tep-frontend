@@ -2,14 +2,12 @@ import {
   Avatar,
   Box,
   Card,
-  CardActionArea,
   CardContent,
   CardMedia,
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
-  Paper,
   Stack,
   Typography,
 } from "@mui/material";
@@ -59,7 +57,6 @@ const ShowTimeshareGrid = () => {
   useEffect(() => {
     const getTimeshareList = async () => {
       const data: any = await timeshareAPI.getAllTimeshare();
-      console.log("Timeshare List", data);
       if (data && data.length > 0) {
         setTimeShareList(data);
       }
@@ -73,76 +70,75 @@ const ShowTimeshareGrid = () => {
 
   return (
     <Grid2 container direction="row" justifyContent="space-between" rowGap={2}>
-      {timeshareList.map((timeshare) => {
-        return (
-          <Grid2
-            onClick={() => {
-              navigate(`/view_timeshare_detail/${timeshare.timeshare_id}`);
-            }}
-            key={timeshare.timeshare_id}
-            xs={3.75}
-            height={350}
-          >
-            <Card className={classes.hoverContainer} elevation={3}>
-              <CardMedia
-                component="img"
-                image={`${timeshare.image_url}`}
-                width="320px"
-                height="200px"
-                alt="Sapa Jade Hill Resort"
-              />
-              <CardContent>
-                <Typography
-                  gutterBottom
-                  variant="h5"
-                  noWrap
-                  component="div"
-                ></Typography>
-                <Stack
-                  direction="row"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                  spacing={1}
-                >
-                  <LocationOnIcon sx={{ color: "#00acb3" }} />
-                  <Typography fontSize="16px" fontWeight={500}>
-                    {timeshare.name}
-                  </Typography>
-                </Stack>
-                <List>
-                  <ListItem disablePadding>
-                    <ListItemAvatar>
-                      <Avatar sx={{ backgroundColor: "#00acb3" }}>
-                        <VpnKeyIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={
-                        <Typography fontWeight={700}>
-                          ${timeshare.price} ( $
-                          {timeshare.price / timeshare.nights}/night)
-                        </Typography>
-                      }
-                      secondary={
-                        <Box>
-                          {/* <Typography color="#83b3b5" fontWeight={500}>
+      {timeshareList.map((timeshare, index) => {
+        if (index <= 5)
+          return (
+            <Grid2
+              onClick={() => {
+                navigate(`/view_timeshare_detail/${timeshare.timeshare_id}`);
+              }}
+              key={timeshare.timeshare_id}
+              xs={3.75}
+              height="100%"
+            >
+              <Card
+                className={classes.hoverContainer}
+                elevation={3}
+                sx={{ borderRadius: 0 }}
+              >
+                <CardMedia
+                  component="img"
+                  image={`${timeshare.image_url}`}
+                  width="320px"
+                  height="200px"
+                  alt="Sapa Jade Hill Resort"
+                />
+                <CardContent>
+                  <Stack
+                    direction="row"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    spacing={1}
+                    height="40px"
+                  >
+                    <LocationOnIcon sx={{ color: "#00acb3" }} />
+                    <Typography fontSize="16px" fontWeight={900}>
+                      {timeshare.name}, <span style={{fontWeight: 500, color: "#00acb3"}}>{timeshare.city}</span>
+                    </Typography>
+                  </Stack>
+                  <List>
+                    <ListItem disablePadding>
+                      <ListItemAvatar>
+                        <Avatar  sx={{ backgroundColor: "#00acb3" }}>
+                          <VpnKeyIcon sx={{fontSize: "15px"}} />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={
+                          <Typography fontWeight={700}>
+                            ${timeshare.price} ( $
+                            {timeshare.price / timeshare.nights}/night)
+                          </Typography>
+                        }
+                        secondary={
+                          <Box>
+                            {/* <Typography color="#83b3b5" fontWeight={500}>
                             {timeshare.date_start} - {timeshare.date_end}
                           </Typography> */}
-                          <Typography color="#83b3b5" fontWeight={500}>
-                            {timeshare.date_start.toString()} -{" "}
-                            {timeshare.date_end.toString()}
-                          </Typography>
-                        </Box>
-                      }
-                    />
-                  </ListItem>
-                </List>
-              </CardContent>
-            </Card>
-          </Grid2>
-        );
+                            <Typography color="#83b3b5" fontWeight={500}>
+                            {dayjs(timeshare.date_start).format("DD-MM-YYYY").toString()} - {dayjs(timeshare.date_end).format("DD-MM-YYYY").toString()}
+                            </Typography>
+                          </Box>
+                        }
+                      />
+                    </ListItem>
+                  </List>
+                </CardContent>
+              </Card>
+            </Grid2>
+          );
       })}
-      <Grid2
+      {/* <Grid2
         onClick={() => {
           navigate(`/view_timeshare_detail/1`);
         }}
@@ -172,7 +168,7 @@ const ShowTimeshareGrid = () => {
             >
               <LocationOnIcon sx={{ color: "#00acb3" }} />
               <Typography fontSize="16px" fontWeight={500}>
-                Lao Cai - Sapa
+                Lao Cai, Sapa
               </Typography>
             </Stack>
             <List>
@@ -200,7 +196,7 @@ const ShowTimeshareGrid = () => {
             </List>
           </CardContent>
         </Card>
-      </Grid2>
+      </Grid2> */}
     </Grid2>
   );
 };

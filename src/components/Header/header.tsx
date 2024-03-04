@@ -238,6 +238,102 @@ const Header = () => {
                   </Button>
                 </>
               )}
+              {/* <Tooltip title="Account Profile">
+                <IconButton
+                  onClick={handleClick}
+                  size="small"
+                  sx={{ ml: 2 }}
+                  aria-controls={open ? "account-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                >
+                  <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+                </IconButton>
+              </Tooltip>
+              <Menu
+                anchorEl={anchorEl}
+                id="account-menu"
+                open={open}
+                onClose={handleClose}
+                onClick={handleClose}
+                PaperProps={{
+                  elevation: 0,
+                  sx: {
+                    overflow: "visible",
+                    filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                    mt: 1.5,
+                    "& .MuiAvatar-root": {
+                      width: 32,
+                      height: 32,
+                      ml: -0.5,
+                      mr: 1,
+                    },
+                    "&::before": {
+                      content: '""',
+                      display: "block",
+                      position: "absolute",
+                      top: 0,
+                      right: 14,
+                      width: 10,
+                      height: 10,
+                      bgcolor: "background.paper",
+                      transform: "translateY(-50%) rotate(45deg)",
+                      zIndex: 0,
+                    },
+                  },
+                }}
+                transformOrigin={{ horizontal: "right", vertical: "top" }}
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+              >
+                <MenuItem
+                  onClick={() => {
+                    navigate("/user/exchange_request");
+                    handleClose();
+                  }}
+                >
+                  <Avatar /> My Account
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleClose}>
+                  <ListItemIcon>
+                    <Logout fontSize="small" />
+                  </ListItemIcon>
+                  Logout
+                </MenuItem>
+              </Menu> */}
+
+              <Button
+                sx={{
+                  my: 2,
+                  color: "#ffffff",
+                  backgroundColor: "#00acb3",
+                  display: "block",
+                  marginLeft: "10px",
+                  "&:hover": {
+                    backgroundColor: "#08b7bd",
+                  },
+                }}
+                variant="contained"
+                onClick={() => {
+                  navigate("/login");
+                }}
+              >
+                Sign In
+              </Button>
+              <Button
+                sx={{
+                  my: 2,
+                  color: "#00acb3",
+                  display: "block",
+                  marginLeft: "10px",
+                  "&:hover": {
+                    borderColor: "#08b7bd",
+                  },
+                }}
+                variant="outlined"
+              >
+                Sign Up
+              </Button>
             </Box>
           </Toolbar>
         </Container>

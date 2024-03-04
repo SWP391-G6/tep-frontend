@@ -3,7 +3,7 @@ import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { green, red } from "@mui/material/colors";
 import { useEffect } from "react";
 import vnpayAPI from "../../services/payment/vnpayAPI";
-import { useNavigate } from "react-router";
+import { redirectDocument, useNavigate } from "react-router";
 import { redirect } from "react-router-dom";
 
 const PaymentSummaryComponent = () => {
@@ -28,12 +28,13 @@ const PaymentSummaryComponent = () => {
         total: 700000,
         fullname: "Minh Duy",
         payment_method: "1",
-        user_id: 1,
-        timeshare_id: 2,
+        user_id: "cbd9c1e0-bb0a-46c6-9f7f-a93c8768c7d8",
+        timeshare_id: "304fcd30-480c-494e-803d-7a24b2a06def",
       });
       if (data && data.data) {
-        link = window.location.href = `${data.data}`;
-        navigate(link);
+        // link = window.location.href = `${data.data}`;
+        // navigate(link);
+        window.open(`${data.data}`);
       }
     } catch (error) {
       console.log("Error at Handle Checkout");
@@ -86,7 +87,14 @@ const PaymentSummaryComponent = () => {
             </Typography>
             <Button
               variant="contained"
-              sx={{ marginTop: "10px", width: "150px" }}
+              sx={{
+                marginTop: "10px",
+                width: "150px",
+                background: "#00acb3",
+                "&:hover": {
+                  backgroundColor: "#08b7bd",
+                },
+              }}
               onClick={handleCheckOut}
             >
               Check Out
