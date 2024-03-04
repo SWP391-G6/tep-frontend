@@ -106,7 +106,7 @@ const TimeshareInformationComponent = () => {
         </Grid2>
         <Grid2 xs={12} container justifyContent="center" alignItems="center">
           <img
-            src={require("../../assets/Logo.png")}
+            src={"https://i.ibb.co/995RZ07/logo.png"}
             width="50px"
             height="50px"
             alt=""

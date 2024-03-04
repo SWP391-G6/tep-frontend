@@ -67,13 +67,13 @@ const Header = () => {
         <Container maxWidth={false}>
           <Toolbar disableGutters>
             <img
-              src={require("../../assets/Logo.png")}
+              src={"https://i.ibb.co/995RZ07/logo.png"}
               width="50px"
               height="50px"
               alt=""
             />
             <img
-              src={require("../../assets/logo-name.png")}
+              src={"https://i.ibb.co/mJCJ7Jt/logo-name.png"}
               width="220px"
               height="50px"
               style={{ marginLeft: "5px" }}
