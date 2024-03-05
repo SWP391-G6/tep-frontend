@@ -1,8 +1,8 @@
+import Logout from "@mui/icons-material/Logout";
 import {
   AppBar,
   Avatar,
   Box,
-  Button,
   Container,
   Divider,
   IconButton,
@@ -13,12 +13,9 @@ import {
   Tooltip,
 } from "@mui/material";
 import { useState } from "react";
-import PersonAdd from "@mui/icons-material/PersonAdd";
-import Settings from "@mui/icons-material/Settings";
-import Logout from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router";
 
-const Header = () => {
+const AdminHeader = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -28,7 +25,6 @@ const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
   return (
     <Box
       sx={{
@@ -42,56 +38,11 @@ const Header = () => {
         <Container maxWidth={false}>
           <Toolbar disableGutters>
             <img
-              src={"https://i.ibb.co/995RZ07/logo.png"}
+              src={require("../../../assets/logo.png")}
               width="50px"
               height="50px"
               alt=""
             />
-            <img
-              src={"https://i.ibb.co/mJCJ7Jt/logo-name.png"}
-              width="220px"
-              height="50px"
-              style={{ marginLeft: "5px" }}
-              alt=""
-            />
-
-            <Box
-              sx={{
-                flexGrow: 1,
-                display: { xs: "none", md: "flex", marginLeft: "10px" },
-              }}
-            >
-              <Button
-                sx={{
-                  my: 2,
-                  color: "#00acb3",
-                  display: "block",
-                  marginLeft: "10px",
-                }}
-              >
-                Book a trip
-              </Button>
-              <Button
-                sx={{
-                  my: 2,
-                  color: "#00acb3",
-                  display: "block",
-                  marginLeft: "10px",
-                }}
-              >
-                Post Your timeshare
-              </Button>
-              <Button
-                sx={{
-                  my: 2,
-                  color: "#00acb3",
-                  display: "block",
-                  marginLeft: "10px",
-                }}
-              >
-                About
-              </Button>
-            </Box>
 
             <Box
               sx={{
@@ -100,7 +51,7 @@ const Header = () => {
                 justifyContent: "right",
               }}
             >
-              {/* <Tooltip title="Account Profile">
+              <Tooltip title="Account Profile">
                 <IconButton
                   onClick={handleClick}
                   size="small"
@@ -162,40 +113,37 @@ const Header = () => {
                   </ListItemIcon>
                   Logout
                 </MenuItem>
-              </Menu> */}
+              </Menu>
 
-              <Button
-                sx={{
-                  my: 2,
-                  color: "#ffffff",
-                  backgroundColor: "#00acb3",
-                  display: "block",
-                  marginLeft: "10px",
-                  "&:hover": {
-                    backgroundColor: "#08b7bd",
-                  },
-                }}
-                variant="contained"
-                onClick={() => {
-                  navigate("/login");
-                }}
-              >
-                Sign In
-              </Button>
-              <Button
-                sx={{
-                  my: 2,
-                  color: "#00acb3",
-                  display: "block",
-                  marginLeft: "10px",
-                  "&:hover": {
-                    borderColor: "#08b7bd",
-                  },
-                }}
-                variant="outlined"
-              >
-                Sign Up
-              </Button>
+              {/* <Button
+                  sx={{
+                    my: 2,
+                    color: "#ffffff",
+                    backgroundColor: "#00acb3",
+                    display: "block",
+                    marginLeft: "10px",
+                    "&:hover": {
+                      backgroundColor: "#08b7bd",
+                    },
+                  }}
+                  variant="contained"
+                >
+                  Sign In
+                </Button>
+                <Button
+                  sx={{
+                    my: 2,
+                    color: "#00acb3",
+                    display: "block",
+                    marginLeft: "10px",
+                    "&:hover": {
+                      borderColor: "#08b7bd",
+                    },
+                  }}
+                  variant="outlined"
+                >
+                  Sign Up
+                </Button> */}
             </Box>
           </Toolbar>
         </Container>
@@ -204,4 +152,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default AdminHeader;
