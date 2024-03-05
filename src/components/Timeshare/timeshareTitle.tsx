@@ -16,6 +16,7 @@ import ApartmentIcon from "@mui/icons-material/Apartment";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import timeshareAPI from "../../services/timeshare/timeshareAPI";
+import { TimeshareDetailResponse } from "../../interfaces/timeshare/timeshareDetailResponse";
 
 const useStyles = makeStyles({
   tiltedImage: {
@@ -23,31 +24,10 @@ const useStyles = makeStyles({
   },
 });
 
-const TimeshareTitle = () => {
+type Props = { timeshare: TimeshareDetailResponse };
+
+const TimeshareTitle = (props: Props) => {
   const classes = useStyles();
-
-  const [timeshare, setTimeshare] = useState<Record<string, any>>({});
-  const { timeshareId } = useParams();
-  console.log(timeshareId)
-  useEffect(() => {
-    const fetchTimeshareDetail = async () => {
-      try {
-        if (timeshareId) {
-          const response = await timeshareAPI.getTimeshareById(timeshareId);
-          console.log(response, 'okkk');
-          setTimeshare(response);
-        }
-      } catch (error) {
-        console.error("Error fetching timeshare:", error);
-      }
-    };
-
-    const initUseEffect = async () => {
-      await fetchTimeshareDetail();
-    };
-    initUseEffect();
-  }, [timeshareId]);
-
 
   return (
     <Box>
@@ -59,7 +39,7 @@ const TimeshareTitle = () => {
             className={classes.tiltedImage}
           >
             <img
-              src="https://i.ibb.co/VpBzSSn/jadehillsapa.jpg"
+              src={props.timeshare.image_url}
               alt="Jade Hill Resort"
               width="100%"
               height={150}
@@ -70,14 +50,19 @@ const TimeshareTitle = () => {
           <Typography
             variant="h4"
             fontWeight={900}
-            fontSize={50}
+            fontSize={30}
             color="#00acb3"
             lineHeight={1}
           >
-           {timeshare.name}
+            {props.timeshare.timeshareName}
           </Typography>
-          <Typography fontSize={25} fontWeight={500} lineHeight={2} color={'gray'}>
-            {timeshare.city}
+          <Typography
+            fontSize={20}
+            fontWeight={500}
+            lineHeight={2}
+            color={"gray"}
+          >
+            {props.timeshare.city}
           </Typography>
         </Grid2>
         <Grid2 xs={12} mt={4} sx={{ height: "200px", padding: "10px" }}>
@@ -88,57 +73,55 @@ const TimeshareTitle = () => {
               </Avatar>
               <List sx={{ marginLeft: "20px", gap: "10px" }} disablePadding>
                 <ListItem disablePadding>
-                {timeshare?.room && (
-                  <ListItemText
-                    primary={
-                      <Typography variant="subtitle1" fontWeight={500}>
-                        {timeshare.room.bed} Bedrooms
-                      </Typography>
-                    }
-                  />
-                )}
+                  {1 && (
+                    <ListItemText
+                      primary={
+                        <Typography variant="subtitle1" fontWeight={500}>
+                          1 Bedrooms
+                        </Typography>
+                      }
+                    />
+                  )}
                 </ListItem>
                 <ListItem disablePadding>
-                {timeshare?.room && (
-                  <ListItemText
-                    primary={
-                      <Typography variant="subtitle1" fontWeight={500}>
-                        Sleeps {timeshare?.room.sleeps}
-                      </Typography>
-                    }
-                  />
-                )}
+                  {1 && (
+                    <ListItemText
+                      primary={
+                        <Typography variant="subtitle1" fontWeight={500}>
+                          Sleeps
+                        </Typography>
+                      }
+                    />
+                  )}
                 </ListItem>
-                
               </List>
             </Box>
-            
+
             <Box display="flex" width="300px">
               <Avatar sx={{ backgroundColor: "#00acb3" }}>
                 <ApartmentIcon />
               </Avatar>
               <List sx={{ marginLeft: "20px", gap: "10px" }} disablePadding>
-                
-              {timeshare?.room && (
+                {1 && (
                   <ListItemText
                     primary={
                       <Typography variant="subtitle1" fontWeight={500}>
-                        Room: {timeshare?.room.name}
+                        Room:
                       </Typography>
                     }
                   />
                 )}
 
                 <ListItem disablePadding>
-                {timeshare?.room && (
-                  <ListItemText
-                    primary={
-                      <Typography variant="subtitle1" fontWeight={500}>
-                        View: {timeshare?.room.roomview}
-                      </Typography>
-                    }
-                  />
-                )}
+                  {2 && (
+                    <ListItemText
+                      primary={
+                        <Typography variant="subtitle1" fontWeight={500}>
+                          View:
+                        </Typography>
+                      }
+                    />
+                  )}
                 </ListItem>
               </List>
             </Box>
@@ -150,15 +133,15 @@ const TimeshareTitle = () => {
               </Avatar>
               <List sx={{ marginLeft: "20px", gap: "10px" }} disablePadding>
                 <ListItem disablePadding>
-                {timeshare?.room && (
-                  <ListItemText
-                    primary={
-                      <Typography variant="subtitle1" fontWeight={500}>
-                        {timeshare?.room.bath} Bathrooms
-                      </Typography>
-                    }
-                  />
-                )}
+                  {1 && (
+                    <ListItemText
+                      primary={
+                        <Typography variant="subtitle1" fontWeight={500}>
+                          Bathrooms
+                        </Typography>
+                      }
+                    />
+                  )}
                 </ListItem>
               </List>
             </Box>
@@ -168,15 +151,15 @@ const TimeshareTitle = () => {
               </Avatar>
               <List sx={{ marginLeft: "20px", gap: "10px" }} disablePadding>
                 <ListItem disablePadding>
-                {timeshare?.room && (
-                  <ListItemText
-                    primary={
-                      <Typography variant="subtitle1" fontWeight={500}>
-                        {timeshare.room.kitchen} 
-                      </Typography>
-                    }
-                  />
-                )}
+                  {1 && (
+                    <ListItemText
+                      primary={
+                        <Typography variant="subtitle1" fontWeight={500}>
+                          kitchen
+                        </Typography>
+                      }
+                    />
+                  )}
                 </ListItem>
               </List>
             </Box>
@@ -188,5 +171,3 @@ const TimeshareTitle = () => {
 };
 
 export default TimeshareTitle;
-
-

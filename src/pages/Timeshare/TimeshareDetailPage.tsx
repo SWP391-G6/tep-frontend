@@ -7,20 +7,61 @@ import TimesharePriceInformation from "../../components/Timeshare/timesharePrice
 import TimeshareDetail from "../../components/Timeshare/timeshareDetail";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { useParams } from "react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import timeshareAPI from "../../services/timeshare/timeshareAPI";
+import { TimeshareDetailResponse } from "../../interfaces/timeshare/timeshareDetailResponse";
 
 const TimeshareDetailPage = () => {
   let { timeshareID } = useParams();
+  const [timeshareDetail, setTimeshareDetail] =
+    useState<TimeshareDetailResponse>({
+      "timeshareId": "",
+      "timeshareName": "",
+      "description": "",
+      "status": true,
+      "price": 0,
+      "nights": 0,
+      "postBy": {
+          "user_id": "",
+          "user_name": "",
+          "password": "",
+          "fullname": "",
+          "email": "",
+          "phone": "",
+          "dob": new Date,
+          "gender": true,
+          "status": true,
+          "role": ""
+      },
+      "destinationModel": {
+          "destinationId": "",
+          "address": "",
+          "branch": "",
+          "city": "",
+          "country": "",
+          "description": "",
+          "desName": ""
+      },
+      "dateStart": new Date,
+      "dateEnd": new Date,
+      "exchange": false,
+      "city": "",
+      "image_url": ""
+  });
 
   useEffect(() => {
-    const getBillByID = async () => {
-      if (timeshareID) {
-        const data: any = await timeshareAPI.getTimeshareByID(timeshareID);
+    const getBillByID = async (timeshareID: string) => {
+      const data: any = await timeshareAPI.getTimeshareByTimeshareID(
+        timeshareID
+      );
+      if (data) {
+        setTimeshareDetail(data);
       }
     };
     const initUseEffect = async () => {
-      await getBillByID();
+      if (timeshareID) {
+        await getBillByID(timeshareID);
+      }
     };
     initUseEffect();
   }, [timeshareID]);
@@ -45,7 +86,7 @@ const TimeshareDetailPage = () => {
               backgroundColor: "#ffffff",
             }}
           >
-            <TimeshareTitle />
+            <TimeshareTitle timeshare={timeshareDetail} />
           </Grid2>
           <Grid2
             xs={3.5}
@@ -59,7 +100,7 @@ const TimeshareDetailPage = () => {
               backgroundColor: "#ffffff",
             }}
           >
-            <TimesharePriceInformation timeshareID={timeshareID} />
+            <TimesharePriceInformation timeshareID={timeshareID} timeshare={timeshareDetail} />
           </Grid2>
           <Grid2
             xs={8}
@@ -68,7 +109,7 @@ const TimeshareDetailPage = () => {
               backgroundColor: "#ffffff",
             }}
           >
-            <TimeshareDetail />
+            <TimeshareDetail timeshare={timeshareDetail} />
           </Grid2>
         </Grid2>
       </Container>

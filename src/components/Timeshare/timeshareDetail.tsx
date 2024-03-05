@@ -19,16 +19,20 @@ import timeshareAPI from "../../services/timeshare/timeshareAPI";
 import { TimeshareResponse } from "../../interfaces/timeshare/timeshareResponse";
 import { useParams } from "react-router";
 
+import React from "react";
+import { TimeshareDetailResponse } from "../../interfaces/timeshare/timeshareDetailResponse";
+
+type Props = { timeshare: TimeshareDetailResponse };
+
 const useStyles = makeStyles((theme) => ({
   listItem: {
     listStyleType: "inherit",
   },
 }));
 
-const TimeshareDetail = () => {
+const TimeshareDetail = (props: Props) => {
   const classes = useStyles();
   const [value, setValue] = useState("1");
-
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -36,13 +40,12 @@ const TimeshareDetail = () => {
 
   const [timeshare, setTimeshare] = useState<Record<string, any>>({});
   const { timeshareId } = useParams();
-  console.log(timeshareId)
   useEffect(() => {
     const fetchTimeshareDetail = async () => {
       try {
         if (timeshareId) {
-          const response = await timeshareAPI.getTimeshareById(timeshareId);
-          console.log(response, 'okkk');
+          const response = await timeshareAPI.getTimeshareByUserID(timeshareId);
+
           setTimeshare(response);
         }
       } catch (error) {
@@ -59,31 +62,36 @@ const TimeshareDetail = () => {
   return (
     <TabContext value={value}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <TabList onChange={handleChange} aria-label="lab API tabs example" 
-        TabIndicatorProps={{
-          style: {
-            backgroundColor: "#00acb3"
-          }
-        }}
-        sx={{
-              '& .MuiTab-root': {
-                color: '#00acb3',
-              },
-              '& .Mui-selected': {
-                color: '#00acb3', 
-              },
-              '& .MuiTab-indicator': {
-                backgroundColor: '#00acb3', 
-              },
-            }}>
+        <TabList
+          onChange={handleChange}
+          aria-label="lab API tabs example"
+          TabIndicatorProps={{
+            style: {
+              backgroundColor: "#00acb3",
+            },
+          }}
+          sx={{
+            "& .MuiTab-root": {
+              color: "#00acb3",
+            },
+            "& .Mui-selected": {
+              color: "#00acb3",
+            },
+            "& .MuiTab-indicator": {
+              backgroundColor: "#00acb3",
+              color: "#00acb3",
+            },
+            "& .MuiTab-textColorInherit": {
+              color: "#00acb3",
+            },
+          }}
+        >
           <Tab label="Timeshare Detail" value="1" />
           <Tab label="About the resort" value="2" />
-          {/* <Tab label="Images" value="3" /> */}
+          <Tab label="Images" value="3" />
         </TabList>
       </Box>
       <TabPanel value="1">
-
-
         <Grid container>
           <>
             <Grid xs={12}>
@@ -97,14 +105,14 @@ const TimeshareDetail = () => {
                 <ListItem disableGutters>
                   <ListItemText
                     primary={
-                      <Typography fontWeight={400}>• {timeshare.room.kitchen}</Typography>
+                      <Typography fontWeight={400}>
+                        • {timeshare.room.kitchen}
+                      </Typography>
                     }
                   />
                 </ListItem>
               </Grid>
             )}
-
-
           </>
           <Divider sx={{ width: "100%" }} />
           <>
@@ -118,7 +126,9 @@ const TimeshareDetail = () => {
                 <ListItem disableGutters>
                   <ListItemText
                     primary={
-                      <Typography fontWeight={400}>• {timeshare.room.entertaiment}</Typography>
+                      <Typography fontWeight={400}>
+                        • {timeshare.room.entertaiment}
+                      </Typography>
                     }
                   />
                 </ListItem>
@@ -137,7 +147,9 @@ const TimeshareDetail = () => {
                 <ListItem disableGutters>
                   <ListItemText
                     primary={
-                      <Typography fontWeight={400}>• {timeshare.room.feature}</Typography>
+                      <Typography fontWeight={400}>
+                        • {timeshare.room.feature}
+                      </Typography>
                     }
                   />
                 </ListItem>
@@ -156,7 +168,9 @@ const TimeshareDetail = () => {
                 <ListItem disableGutters>
                   <ListItemText
                     primary={
-                      <Typography fontWeight={400}>• {timeshare.room.policies}</Typography>
+                      <Typography fontWeight={400}>
+                        • {timeshare.room.policies}
+                      </Typography>
                     }
                   />
                 </ListItem>

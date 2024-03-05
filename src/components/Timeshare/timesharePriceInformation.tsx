@@ -40,13 +40,15 @@ import { isEmpty } from "lodash";
 import InstructMessage from "../Instruct/instructMessage";
 import requestAPI from "../../services/request/requestAPI";
 import { ToastContainer, toast } from "react-toastify";
-import moment from 'moment';
+import moment from "moment";
+import { TimeshareDetailResponse } from "../../interfaces/timeshare/timeshareDetailResponse";
+import { formatNumber } from "../../helpers/numberHelpers";
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 
 dayjs.extend(customParseFormat);
-dayjs.locale("vi");
-type Props = { timeshareID: any };
+dayjs.locale("en");
+type Props = { timeshareID: any; timeshare: TimeshareDetailResponse };
 
 const useStyles: any = makeStyles((theme: Theme) => ({
   hoverContainer: {
@@ -168,39 +170,15 @@ const TimesharePriceInformation = (props: Props) => {
     setTimeshareList(newSelectedItems);
   };
 
-  const [timeshare, setTimeshare] = useState<Record<string, any>>({});
-  const { timeshareId } = useParams();
-  console.log(timeshareId)
-  useEffect(() => {
-    const fetchTimeshareDetail = async () => {
-      try {
-        if (timeshareId) {
-          const response = await timeshareAPI.getTimeshareById(timeshareId);
-          console.log(response, 'okkk');
-          setTimeshare(response);
-        }
-      } catch (error) {
-        console.error("Error fetching timeshare:", error);
-      }
-    };
+  // const startDateStr = props.timeshare.dateStart;
+  // const formattedStartDate = moment(startDateStr).format("ddd, MMM DD, YYYY");
 
-    const initUseEffect = async () => {
-      await fetchTimeshareDetail();
-    };
-    initUseEffect();
-  }, [timeshareId]);
-
-
-
-  const startDateStr = timeshare.date_start;
-  const formattedStartDate = moment(startDateStr).format('ddd, MMM DD, YYYY');
-
-  const endDateStr = timeshare.date_end;
-  const formattedEndDate = moment(endDateStr).format('ddd, MMM DD, YYYY');
+  // const endDateStr = timeshare.date_end;
+  // const formattedEndDate = moment(endDateStr).format("ddd, MMM DD, YYYY");
 
   return (
     <Box>
-      <Container disableGutters sx={{ textAlign: "center", mt:3 }}>
+      <Container disableGutters sx={{ textAlign: "center", mt: 3 }}>
         <Box
           display={"flex"}
           flexDirection="row"
@@ -213,48 +191,49 @@ const TimesharePriceInformation = (props: Props) => {
             height={"30px"}
           />
 
-          {timeshare && (
-            <Typography
-              ml="10px"
-              fontWeight={900}
-              fontSize={18}
-              lineHeight="30px"
-            >
-              {parseInt(timeshare.price).toLocaleString()}VNĐ (100,000 VNĐ/night)
-            </Typography>
-          )}
-
+          <Typography
+            ml="10px"
+            fontWeight={900}
+            fontSize={20}
+            lineHeight="30px"
+          >
+            {formatNumber(props.timeshare.price)} VNĐ ({props.timeshare.nights}{" "}
+            nights)
+          </Typography>
         </Box>
         <Grid
           container
           flexDirection="row"
           justifyContent="center"
           alignItems="left"
+          columnGap={2}
         >
           <Typography
             variant="caption"
             width="100%"
-            fontSize={18}
+            fontSize={16}
             fontWeight={700}
             color="#00acb3"
           >
-            7-night stay
+            {formatNumber(props.timeshare.price / props.timeshare.nights)}{" "}
+            VNĐ/night
           </Typography>
-          <Typography variant="caption" fontSize={18}>
-            Check-in:
-            <strong> {formattedStartDate}</strong>
+          <Typography variant="caption" fontSize={18} width="100%">
+            Check-in:{" "}
+            <strong>
+              {dayjs(props.timeshare.dateStart)
+                .format("DD MMM YYYY")
+                .toString()}
+            </strong>
           </Typography>
-          <Typography variant="caption" fontSize={18}>
-            Check-out:
-            <strong> {formattedEndDate}</strong>
-          </Typography>
-
-          <Typography variant="caption" fontSize={18}>
-            Cancellation policy:
-            <strong style={{ color: "#00acb3" }}> Strict</strong>
+          <Typography variant="caption" fontSize={18} width="100%">
+            Check-out:{" "}
+            <strong>
+              {dayjs(props.timeshare.dateEnd).format("DD MMM YYYY").toString()}
+            </strong>
           </Typography>
         </Grid>
-        <Box marginTop={"9px"}>
+        <Box marginTop={"20px"}>
           <img
             src="https://fininme.vn/wp-content/uploads/2022/11/logo-vi-vnpay.png"
             alt="postedby"
@@ -275,11 +254,16 @@ const TimesharePriceInformation = (props: Props) => {
       >
         <Grid container alignItems={"center"}>
           <Grid item xs={3} textAlign={"center"}>
-            <AccountCircleIcon style={{ fontSize: "35px", color: "#00acb3" }} />
+            <AccountCircleIcon style={{ fontSize: "30px", color: "#00acb3" }} />
           </Grid>
           <Grid item xs={9}>
-            <Typography variant="poster" color="#00acb3" fontSize={18} fontWeight={900}>
-              Posted by {timeshare.post_by}
+            <Typography
+              variant="poster"
+              color="#00acb3"
+              fontSize={16}
+              fontWeight={900}
+            >
+              Posted by {props.timeshare.postBy.fullname}
             </Typography>
           </Grid>
           <Grid item xs={12}>

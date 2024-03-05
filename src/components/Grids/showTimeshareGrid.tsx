@@ -20,10 +20,11 @@ import { TimeshareResponse } from "../../interfaces/timeshare/timeshareResponse"
 import timeshareAPI from "../../services/timeshare/timeshareAPI";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
+import { formatNumber } from "../../helpers/numberHelpers";
 require("dayjs/locale/vi");
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
-dayjs.locale("vi");
+dayjs.locale("en");
 
 const useStyles: any = makeStyles({
   hoverContainer: {
@@ -91,7 +92,7 @@ const ShowTimeshareGrid = () => {
                   image={`${timeshare.image_url}`}
                   width="320px"
                   height="200px"
-                  alt="Sapa Jade Hill Resort"
+                  alt={timeshare.name}
                 />
                 <CardContent>
                   <Stack
@@ -116,17 +117,14 @@ const ShowTimeshareGrid = () => {
                       <ListItemText
                         primary={
                           <Typography fontWeight={700}>
-                            ${timeshare.price} ( $
-                            {timeshare.price / timeshare.nights}/night)
+                            {formatNumber(timeshare.price)} VNĐ (
+                            {formatNumber(timeshare.price / timeshare.nights)}/night)
                           </Typography>
                         }
                         secondary={
                           <Box>
-                            {/* <Typography color="#83b3b5" fontWeight={500}>
-                            {timeshare.date_start} - {timeshare.date_end}
-                          </Typography> */}
-                            <Typography color="#83b3b5" fontWeight={500}>
-                            {dayjs(timeshare.date_start).format("DD-MM-YYYY").toString()} - {dayjs(timeshare.date_end).format("DD-MM-YYYY").toString()}
+                            <Typography color="#00acb3" fontWeight={500}>
+                            {dayjs(timeshare.date_start).format("DD MMM YYYY").toString()} - {dayjs(timeshare.date_end).format("DD MMM YYYY").toString()}
                             </Typography>
                           </Box>
                         }
