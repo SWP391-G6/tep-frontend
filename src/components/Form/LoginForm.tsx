@@ -117,7 +117,7 @@ const LoginForm = () => {
             }}
             size="large"
           >
-            Sign Up
+            Sign In
           </Button>
 
           <Box>

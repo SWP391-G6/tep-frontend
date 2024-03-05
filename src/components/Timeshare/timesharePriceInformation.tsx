@@ -20,7 +20,7 @@ import {
   Typography,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
@@ -40,6 +40,7 @@ import { isEmpty } from "lodash";
 import InstructMessage from "../Instruct/instructMessage";
 import requestAPI from "../../services/request/requestAPI";
 import { ToastContainer, toast } from "react-toastify";
+import moment from 'moment';
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 
@@ -167,9 +168,39 @@ const TimesharePriceInformation = (props: Props) => {
     setTimeshareList(newSelectedItems);
   };
 
+  const [timeshare, setTimeshare] = useState<Record<string, any>>({});
+  const { timeshareId } = useParams();
+  console.log(timeshareId)
+  useEffect(() => {
+    const fetchTimeshareDetail = async () => {
+      try {
+        if (timeshareId) {
+          const response = await timeshareAPI.getTimeshareById(timeshareId);
+          console.log(response, 'okkk');
+          setTimeshare(response);
+        }
+      } catch (error) {
+        console.error("Error fetching timeshare:", error);
+      }
+    };
+
+    const initUseEffect = async () => {
+      await fetchTimeshareDetail();
+    };
+    initUseEffect();
+  }, [timeshareId]);
+
+
+
+  const startDateStr = timeshare.date_start;
+  const formattedStartDate = moment(startDateStr).format('ddd, MMM DD, YYYY');
+
+  const endDateStr = timeshare.date_end;
+  const formattedEndDate = moment(endDateStr).format('ddd, MMM DD, YYYY');
+
   return (
     <Box>
-      <Container disableGutters sx={{ textAlign: "center" }}>
+      <Container disableGutters sx={{ textAlign: "center", mt:3 }}>
         <Box
           display={"flex"}
           flexDirection="row"
@@ -181,14 +212,18 @@ const TimesharePriceInformation = (props: Props) => {
             alt="Icon Rental"
             height={"30px"}
           />
-          <Typography
-            ml="10px"
-            fontWeight={900}
-            fontSize={18}
-            lineHeight="30px"
-          >
-            700,000 VNĐ (100,000 VNĐ/night)
-          </Typography>
+
+          {timeshare && (
+            <Typography
+              ml="10px"
+              fontWeight={900}
+              fontSize={18}
+              lineHeight="30px"
+            >
+              {parseInt(timeshare.price).toLocaleString()}VNĐ (100,000 VNĐ/night)
+            </Typography>
+          )}
+
         </Box>
         <Grid
           container
@@ -207,11 +242,11 @@ const TimesharePriceInformation = (props: Props) => {
           </Typography>
           <Typography variant="caption" fontSize={18}>
             Check-in:
-            <strong style={{ color: "#00acb3" }}> Tue, Feb 20, 2024</strong>
+            <strong> {formattedStartDate}</strong>
           </Typography>
           <Typography variant="caption" fontSize={18}>
             Check-out:
-            <strong style={{ color: "#00acb3" }}> Mon, Feb 26, 2024</strong>
+            <strong> {formattedEndDate}</strong>
           </Typography>
 
           <Typography variant="caption" fontSize={18}>
@@ -243,13 +278,8 @@ const TimesharePriceInformation = (props: Props) => {
             <AccountCircleIcon style={{ fontSize: "35px", color: "#00acb3" }} />
           </Grid>
           <Grid item xs={9}>
-            <Typography
-              variant="poster"
-              color="#00acb3"
-              fontSize={18}
-              fontWeight={900}
-            >
-              Posted by Lorraine B.
+            <Typography variant="poster" color="#00acb3" fontSize={18} fontWeight={900}>
+              Posted by {timeshare.post_by}
             </Typography>
           </Grid>
           <Grid item xs={12}>

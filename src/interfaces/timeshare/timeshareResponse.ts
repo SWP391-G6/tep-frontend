@@ -7,8 +7,34 @@ export interface TimeshareResponse {
     status:         boolean;
     name:           string;
     post_by:        string;
-    destination_id: string;
+    destination_id: Destination;
     description:    string;
     image_url:      string;
     city:           string;
+    room:           RoomType;
 }
+
+export interface Destination {
+    destinationId:  string;
+    address:        string;
+    branch:         string;
+    city:           string;
+    description:    string;
+    name:           string;
+    country:        string;
+}
+
+export interface RoomType {
+    roomtypeId:     string;
+    roomview:       string;
+    policies:       string;
+    name:           string;
+    kitchen:        string;
+    feature:        string;
+    entertaiment:   string;
+    bath:           number,
+    bed:            number,
+    sleeps:         number,
+    
+}
+

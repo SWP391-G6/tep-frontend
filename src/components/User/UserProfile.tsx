@@ -9,17 +9,38 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { MuiTelInput } from 'mui-tel-input'
 
 
 
 const UserProfile = () => {
   const [value, setValue] = React.useState('')
+  const [userData, setUserData] = useState({
+    fullname: '',
+    user_name: '',
+    dob: '',
+    phone: '',
+    email: ''
+  });
 
   const handleChange = (s: React.SetStateAction<string>) => {
     setValue(s)
   }
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const parsedToken = JSON.parse(token);
+        setUserData(parsedToken.token);
+        console.log(parsedToken.token);
+      } catch (error) {
+        console.error('Error parsing token:', error);
+      }
+    } else {
+      console.log('Token not found in local storage');
+    }
+  }, []);
 
   return (
     <Box
@@ -42,13 +63,13 @@ const UserProfile = () => {
         <Grid item xs={7}>
           <Box>
             <Typography variant="subtitle1" >Full Name *</Typography>
-            <TextField variant="outlined" fullWidth size="small" />
+            <TextField variant="outlined" fullWidth size="small" value={userData.fullname}/>
             <Typography variant="subtitle1" marginTop={'10px'}>User Name *</Typography>
-            <TextField variant="outlined" fullWidth size="small" />
+            <TextField variant="outlined" fullWidth size="small" value={userData.user_name}/>
             <Typography variant="subtitle1" marginTop={'10px'}>Date of Birth</Typography>
-            <TextField variant="outlined" fullWidth size="small" />
+            <TextField variant="outlined" fullWidth size="small" value={userData.dob}/>
             <Typography variant="subtitle1" marginTop={'10px'}>Phone number</Typography>
-            <MuiTelInput value={value} onChange={handleChange} size="small" />
+            <TextField variant="outlined" fullWidth size="small" value={userData.phone}/>
           </Box>
 
           <Box>
@@ -68,7 +89,8 @@ const UserProfile = () => {
               height: '55px',
               marginTop: '40px',
               "&:hover": {
-                backgroundColor: "#08b7bd",}
+                backgroundColor: "#08b7bd",
+              }
             }}>
             <Typography variant="subtitle1">
               SAVE CHANGES
@@ -83,32 +105,6 @@ const UserProfile = () => {
             <Grid item xs={12} sx={{
               backgroundColor: 'rgb(250,250,249)'
             }}>
-
-              {/* AVATAR */}
-              {/* <CardContent
-                sx={{
-                  border: 'solid 1px',
-                  borderColor: 'lightgray'
-                }}>
-                <Typography variant="h5">My Picture</Typography>
-                <CardContent
-                  style={{
-                    display: 'contents',
-                    alignItems: 'center',
-                  }}>
-                  <img
-                    src="https://pbs.twimg.com/profile_images/1555090739679203333/rveDNnWp_400x400.jpg"
-                    alt="profile"
-                    style={{
-                      borderRadius: '50%',
-                      width: '120px',
-                      height: '120px',
-                      display: 'block',
-                      margin: 'auto'
-                    }}
-                  />
-                </CardContent>
-              </CardContent> */}
 
               {/* PASSWORD */}
             </Grid>
@@ -126,9 +122,11 @@ const UserProfile = () => {
                   }}>
                   <Typography variant="subtitle1" fontWeight={'bold'}>*******</Typography>
                 </CardContent>
-                <Button variant="contained" sx={{ backgroundColor: '#00acb3' ,"&:hover": {
-                        backgroundColor: "#08b7bd",
-                      },}} >
+                <Button variant="contained" sx={{
+                  backgroundColor: '#00acb3', "&:hover": {
+                    backgroundColor: "#08b7bd",
+                  },
+                }} >
                   <Typography variant="caption">
                     Change
                   </Typography>
@@ -148,11 +146,13 @@ const UserProfile = () => {
                     display: 'contents',
                     alignItems: 'center',
                   }}>
-                  <Typography variant="subtitle1" >minhduy@gmail.com</Typography>
+                  <Typography variant="subtitle1" >{userData.email}</Typography>
                 </CardContent>
-                <Button variant="contained" sx={{ backgroundColor: '#00acb3', "&:hover": {
-                        backgroundColor: "#08b7bd",
-                      }, }}>
+                <Button variant="contained" sx={{
+                  backgroundColor: '#00acb3', "&:hover": {
+                    backgroundColor: "#08b7bd",
+                  },
+                }}>
                   <Typography variant="caption">
                     Change
                   </Typography>
