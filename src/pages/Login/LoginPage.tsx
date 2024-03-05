@@ -49,7 +49,7 @@ const LoginPage = (props: Props) =>{
                       left: '2.5%',
                     }}>
                     <img
-                      src={require("../../assets/Logo.png")}
+                      src={"https://i.ibb.co/995RZ07/logo.png"}
                       width="150px"
                       height="150px"
                       alt="logo"

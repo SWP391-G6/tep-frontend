@@ -23,26 +23,25 @@ const NotFoundPage = React.lazy(() => import("./pages/Error/notFoundPage"));
 function isAuthenticated() {
   // Check if the user is logged in by verifying the presence of a token in localStorage
   const token = localStorage.getItem("token");
-  console.log(token)
   return !!token; // Return true if the token exists, false otherwise
   
 }
 
-function hasAdminRole() {
-  // Check if the user has the admin role by verifying the presence of a role in localStorage
-  const token = localStorage.getItem("token");
-  const role = token ? JSON.parse(token).token.role : null;
-  console.log(role,'authen');
-  return role === "admin"; // Return true if the role is 'admin', false otherwise
-}
+// function hasAdminRole() {
+//   // Check if the user has the admin role by verifying the presence of a role in localStorage
+//   const token = localStorage.getItem("token");
+//   const role = token ? JSON.parse(token).token.role : null;
+//   // console.log(role,'authen');
+//   return role === "admin"; // Return true if the role is 'admin', false otherwise
+// }
 
-function hasUserRole() {
-  // Check if the user has the admin role by verifying the presence of a role in localStorage
-  const token = localStorage.getItem("token");
-  const role = token ? JSON.parse(token).token.role : null;
-  console.log(role,'authen');
-  return role === "user"; // Return true if the role is 'admin', false otherwise
-}
+// function hasUserRole() {
+//   // Check if the user has the admin role by verifying the presence of a role in localStorage
+//   const token = localStorage.getItem("token");
+//   const role = token ? JSON.parse(token).token.role : null;
+//   console.log(role,'authen');
+//   return role === "user"; // Return true if the role is 'admin', false otherwise
+// }
 
 
 function App() {
@@ -65,18 +64,18 @@ function App() {
               path="booking_information"
               element={<BookingInformationPage />}
             />
-            {isAuthenticated() && hasUserRole() && (
+            {/* {isAuthenticated() && hasUserRole() && (
             <Route path="/user/profile" element={<MemberPage />} />
-            )}
+            )} */}
 
             <Route path="/user/posting" element={<UserPostingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
 
             {/* Protected admin route */}
-            {isAuthenticated() && hasAdminRole() && (
+            {/* {isAuthenticated() && hasAdminRole() && (
               <Route path="/admin/account" element={<AccountManagePage />} />
-            )}
+            )} */}
 
             <Route
               path="/user/exchange_request"
