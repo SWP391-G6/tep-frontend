@@ -17,34 +17,14 @@ import RegisterPage from "./pages/Register/RegisterPage";
 import AccountManagePage from "./pages/Account/AccountManagePage";
 import SuccessfulPaymentPage from "./pages/Payment/SuccessfulPaymentPage";
 import "react-toastify/dist/ReactToastify.css";
+import AdminRoutes from "./routes/AdminRoutes";
+import { USER_ROLE_KEY, USER_TOKEN_KEY } from "./constant";
 
 const NotFoundPage = React.lazy(() => import("./pages/Error/notFoundPage"));
 
-function isAuthenticated() {
-  // Check if the user is logged in by verifying the presence of a token in localStorage
-  const token = localStorage.getItem("token");
-  return !!token; // Return true if the token exists, false otherwise
-  
-}
-
-// function hasAdminRole() {
-//   // Check if the user has the admin role by verifying the presence of a role in localStorage
-//   const token = localStorage.getItem("token");
-//   const role = token ? JSON.parse(token).token.role : null;
-//   // console.log(role,'authen');
-//   return role === "admin"; // Return true if the role is 'admin', false otherwise
-// }
-
-// function hasUserRole() {
-//   // Check if the user has the admin role by verifying the presence of a role in localStorage
-//   const token = localStorage.getItem("token");
-//   const role = token ? JSON.parse(token).token.role : null;
-//   console.log(role,'authen');
-//   return role === "user"; // Return true if the role is 'admin', false otherwise
-// }
-
-
 function App() {
+  const token = JSON.parse(localStorage.getItem(USER_TOKEN_KEY)!);
+  const role = JSON.parse(localStorage.getItem(USER_ROLE_KEY)!);
   return (
     <ErrorBoundary>
       <Suspense fallback={<h1>Đang load nè!!!!</h1>}>
@@ -60,32 +40,38 @@ function App() {
               path="/view_timeshare_detail/:timeshareID"
               element={<TimeshareDetailPage />}
             />
+
+            <Route
+              path={ROUTE_PATH.ADMIN}
+              element={
+                <AdminRoutes
+                  token={token}
+                  isAllowed={role === "admin" ? true : false}
+                />
+              }
+            />
+            <Route path={ROUTE_PATH.MEMBER} />
+
             <Route
               path="booking_information"
               element={<BookingInformationPage />}
             />
-            {/* {isAuthenticated() && hasUserRole() && (
-            <Route path="/user/profile" element={<MemberPage />} />
-            )} */}
 
             <Route path="/user/posting" element={<UserPostingPage />} />
-            <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-
-            {/* Protected admin route */}
-            {/* {isAuthenticated() && hasAdminRole() && (
-              <Route path="/admin/account" element={<AccountManagePage />} />
-            )} */}
 
             <Route
               path="/user/exchange_request"
               element={<UserRequestPage />}
             />
-            <Route path={ROUTE_PATH.PAYMENT_SUCCESSFUL} element={<SuccessfulPaymentPage />}/>
+            <Route path="/login" element={<LoginPage />} />
+            <Route
+              path={ROUTE_PATH.PAYMENT_SUCCESSFUL}
+              element={<SuccessfulPaymentPage />}
+            />
             <Route path={ROUTE_PATH.NOT_FOUND} element={<NotFoundPage />} />
             <Route path={ROUTE_PATH.ERROR} element={<NotFoundPage />} />
           </Routes>
-          
         </BrowserRouter>
       </Suspense>
     </ErrorBoundary>
