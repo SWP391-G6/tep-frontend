@@ -128,6 +128,7 @@ const TimesharePriceInformation = (props: Props) => {
     };
     initUseEffect();
   }, []);
+  
   const {
     register,
     handleSubmit,

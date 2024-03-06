@@ -12,6 +12,7 @@ const ErrorMessage = (props: Props) => {
         gap: "7px",
         // mt: "4px",
         ml: "5px",
+        width: "100%",
       }}
     >
       <ErrorIcon color="error" sx={{ width: "20px" }} />
