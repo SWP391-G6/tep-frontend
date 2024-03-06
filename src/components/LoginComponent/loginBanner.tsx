@@ -3,24 +3,24 @@ import { Box, Grid } from "@mui/material";
 const LoginBanner = () => {
   const boxStyle = {
     width: 450,
-    height: 500,
+    height: 600,
     margin: "0 auto",
   };
 
   return (
     <Grid
-      container
-      justifyContent="center"
-      alignItems="center"
-      direction="column"
+    container
+    direction="row"
+    justifyContent="center"
+    alignItems="center"
       style={{
-        height: 800,
+        height: 600,
         width: "50%",
         backgroundColor: "#00acb3",
-        paddingTop: "50px",
+        paddingTop: "100px",
       }}
     >
-      <Box style={boxStyle}>
+      <Grid style={boxStyle}>
         <Grid
           container
           justifyContent="center"
@@ -46,7 +46,7 @@ const LoginBanner = () => {
             </h2>
           </Grid>
         </Grid>
-      </Box>
+      </Grid>
     </Grid>
   );
 };

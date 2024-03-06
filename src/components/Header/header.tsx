@@ -9,12 +9,11 @@ import {
   ListItemIcon,
   Menu,
   MenuItem,
+  Stack,
   Toolbar,
   Tooltip,
 } from "@mui/material";
 import { useState } from "react";
-import PersonAdd from "@mui/icons-material/PersonAdd";
-import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router";
 import { USER_ID_KEY, USER_TOKEN_KEY } from "../../constant";
@@ -23,6 +22,8 @@ const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+  const token = JSON.parse(localStorage.getItem(USER_TOKEN_KEY)!);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -33,6 +34,7 @@ const Header = () => {
   const handleLogout = () => {
     localStorage.removeItem(USER_ID_KEY);
     localStorage.removeItem(USER_TOKEN_KEY);
+    setAnchorEl(null);
   };
 
   return (
@@ -106,18 +108,56 @@ const Header = () => {
                 justifyContent: "right",
               }}
             >
-              {/* <Tooltip title="Account Profile">
-                <IconButton
-                  onClick={handleClick}
-                  size="small"
-                  sx={{ ml: 2 }}
-                  aria-controls={open ? "account-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
-                >
-                  <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
-                </IconButton>
-              </Tooltip>
+              {token ? (
+                <Tooltip title="Account Profile">
+                  <IconButton
+                    onClick={handleClick}
+                    size="small"
+                    sx={{ ml: 2 }}
+                    aria-controls={open ? "account-menu" : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? "true" : undefined}
+                  >
+                    <Avatar sx={{ width: 32, height: 32 }}></Avatar>
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <Stack direction={"row"}>
+                  <Button
+                    sx={{
+                      my: 2,
+                      color: "#ffffff",
+                      backgroundColor: "#00acb3",
+                      display: "block",
+                      marginLeft: "10px",
+                      "&:hover": {
+                        backgroundColor: "#08b7bd",
+                      },
+                    }}
+                    variant="contained"
+                    onClick={() => {
+                      navigate("/login");
+                    }}
+                  >
+                    Sign In
+                  </Button>
+                  <Button
+                    sx={{
+                      my: 2,
+                      color: "#00acb3",
+                      display: "block",
+                      marginLeft: "10px",
+                      "&:hover": {
+                        borderColor: "#08b7bd",
+                      },
+                    }}
+                    variant="outlined"
+                  >
+                    Sign Up
+                  </Button>
+                </Stack>
+              )}
+
               <Menu
                 anchorEl={anchorEl}
                 id="account-menu"
@@ -159,49 +199,16 @@ const Header = () => {
                     handleClose();
                   }}
                 >
-                  <Avatar /> My Account
+                  <Avatar /> My Profile
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleLogout}>
                   <ListItemIcon>
                     <Logout fontSize="small" />
                   </ListItemIcon>
-                  Logout
+                  Log out
                 </MenuItem>
-              </Menu> */}
-
-              <Button
-                sx={{
-                  my: 2,
-                  color: "#ffffff",
-                  backgroundColor: "#00acb3",
-                  display: "block",
-                  marginLeft: "10px",
-                  "&:hover": {
-                    backgroundColor: "#08b7bd",
-                  },
-                }}
-                variant="contained"
-                onClick={() => {
-                  navigate("/login");
-                }}
-              >
-                Sign In
-              </Button>
-              <Button
-                sx={{
-                  my: 2,
-                  color: "#00acb3",
-                  display: "block",
-                  marginLeft: "10px",
-                  "&:hover": {
-                    borderColor: "#08b7bd",
-                  },
-                }}
-                variant="outlined"
-              >
-                Sign Up
-              </Button>
+              </Menu>
             </Box>
           </Toolbar>
         </Container>

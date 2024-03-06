@@ -4,7 +4,7 @@ import LoginForm from "../../components/LoginComponent/loginForm";
 
 const paperStyle = {
   width: 1100,
-  height: 800,
+  height: 600,
   margin: "0 auto",
 };
 
