@@ -19,6 +19,7 @@ import SuccessfulPaymentPage from "./pages/Payment/SuccessfulPaymentPage";
 import "react-toastify/dist/ReactToastify.css";
 import AdminRoutes from "./routes/AdminRoutes";
 import { USER_ROLE_KEY, USER_TOKEN_KEY } from "./constant";
+import MemberRoutes from "./routes/MemberRoutes";
 
 const NotFoundPage = React.lazy(() => import("./pages/Error/notFoundPage"));
 
@@ -50,7 +51,15 @@ function App() {
                 />
               }
             />
-            <Route path={ROUTE_PATH.MEMBER} />
+            <Route
+              path={ROUTE_PATH.MEMBER}
+              element={
+                <MemberRoutes
+                  token={token}
+                  isAllowed={role === "member" ? true : false}
+                />
+              }
+            />
 
             <Route
               path="booking_information"

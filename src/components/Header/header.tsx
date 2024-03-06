@@ -16,7 +16,7 @@ import {
 import { useState } from "react";
 import Logout from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router";
-import { USER_ID_KEY, USER_TOKEN_KEY } from "../../constant";
+import { USER_ID_KEY, USER_ROLE_KEY, USER_TOKEN_KEY } from "../../constant";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -34,6 +34,7 @@ const Header = () => {
   const handleLogout = () => {
     localStorage.removeItem(USER_ID_KEY);
     localStorage.removeItem(USER_TOKEN_KEY);
+    localStorage.removeItem(USER_ROLE_KEY);
     setAnchorEl(null);
   };
 

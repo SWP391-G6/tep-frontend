@@ -17,7 +17,7 @@ import ManagePlanPage from "./ManagePlanPage";
 
 type Props = {};
 
-function AdminDasboard({}: Props) {
+function AdminDashboard({}: Props) {
   return (
     <Box>
       <AdminHeader />
@@ -61,4 +61,4 @@ function AdminDasboard({}: Props) {
   );
 }
 
-export default AdminDasboard;
+export default AdminDashboard;

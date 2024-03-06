@@ -4,10 +4,9 @@ interface Props {
   children: JSX.Element;
   isAllowed: boolean;
   token: string;
-  role: string;
 }
 
-const ProtectedRoute = ({ children, isAllowed, token, role }: Props) => {
+const ProtectedRoute = ({ children, isAllowed, token }: Props) => {
   if (!token) {
     return <Navigate to="/" />;
   }

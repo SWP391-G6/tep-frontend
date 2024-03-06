@@ -38,7 +38,7 @@ const AdminHeader = () => {
         <Container maxWidth={false}>
           <Toolbar disableGutters>
             <img
-              src={require("../../../assets/logo.png")}
+               src={"https://i.ibb.co/995RZ07/logo.png"}
               width="50px"
               height="50px"
               alt=""

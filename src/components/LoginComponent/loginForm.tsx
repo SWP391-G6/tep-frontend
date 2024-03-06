@@ -30,6 +30,7 @@ import ErrorMessage from "../Error/errorMessage";
 import { LoginRequest } from "../../interfaces/login/loginRequest";
 import loginAPI from "../../services/login/loginAPI";
 import { USER_ID_KEY, USER_ROLE_KEY, USER_TOKEN_KEY } from "../../constant";
+import { isEmpty } from "lodash";
 
 const boxStyle = {
   width: 450,
@@ -78,13 +79,10 @@ const LoginForm = () => {
         username: data.username,
         password: data.password,
       });
-      if (response) {
+      if (response && !isEmpty(response)) {
         localStorage.setItem(USER_TOKEN_KEY, JSON.stringify(response.token));
-        localStorage.setItem(
-          USER_ID_KEY,
-          JSON.stringify(response.user.userid)
-        );
-        localStorage.setItem(USER_ROLE_KEY, JSON.stringify(response.user.role))
+        localStorage.setItem(USER_ID_KEY, JSON.stringify(response.user.userid));
+        localStorage.setItem(USER_ROLE_KEY, JSON.stringify(response.user.role));
         switch (response.user.role) {
           case "member":
             navigate("/");
