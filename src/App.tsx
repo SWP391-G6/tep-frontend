@@ -7,9 +7,9 @@ import GlobalStyles from "./GlobalStyles";
 import HomePage from "./pages/Home/HomePage";
 import { ROUTE_PATH } from "./configs";
 import TimeshareDetailPage from "./pages/Timeshare/TimeshareDetailPage";
-import UserRequestPage from "./pages/User/UserRequestPage";
+import UserRequestPage from "./pages/Member/MyExchangeRequestPage";
 import ScrollToTop from "./utils/ScrollToTop";
-import UserPostingPage from "./pages/User/UserProfilePage";
+import UserPostingPage from "./pages/Member/MyProfilePage";
 import LoginPage from "./pages/Login/LoginPage";
 import RegisterPage from "./pages/Register/RegisterPage";
 import SuccessfulPaymentPage from "./pages/Payment/SuccessfulPaymentPage";
@@ -17,7 +17,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AdminRoutes from "./routes/AdminRoutes";
 import { USER_ROLE_KEY, USER_TOKEN_KEY } from "./constant";
 import MemberRoutes from "./routes/MemberRoutes";
-import HomeDashboard from "./components/Home/homeDashboard";
+import HomeDashboard from "./components/Dashboard/homeDashboard";
 
 const NotFoundPage = React.lazy(() => import("./pages/Error/notFoundPage"));
 

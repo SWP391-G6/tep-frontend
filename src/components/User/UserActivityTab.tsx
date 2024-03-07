@@ -1,31 +1,44 @@
 import React, { useState } from "react";
-import { Divider, List, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import {
+  Divider,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings";
 import ContactsIcon from "@mui/icons-material/Contacts";
 import ApartmentIcon from "@mui/icons-material/Apartment";
-import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
+import WorkHistoryIcon from "@mui/icons-material/WorkHistory";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 
 const UserActivityTab = () => {
   const location = useLocation();
-  const [selectedTab, setSelectedTab] = useState("posting");
+  const [selectedTab, setSelectedTab] = useState("");
 
   React.useEffect(() => {
     const pathname = location.pathname;
     switch (pathname) {
-      case "/user/posting":
-        setSelectedTab("posting");
-        break;
-      case "/user/profile":
-        setSelectedTab("profile");
-        break;
-      case "/user/exchange_request":
-        setSelectedTab("exchange_request");
-        break;
-      case "/user/booking_history":
-        setSelectedTab("booking_history");
+      case "/member/profile":
+        setSelectedTab("dashboard");
         break;
 
+      case "/member/profile/my_timeshare":
+        setSelectedTab("posting");
+        break;
+
+      case "/member/profile/my_profile":
+        setSelectedTab("profile");
+        break;
+
+      case "/member/profile/my_exchange_request":
+        setSelectedTab("exchange_request");
+        break;
+
+      case "/member/profile/my_booking_history":
+        setSelectedTab("booking_history");
+        break;
     }
   }, [location]);
 
@@ -36,29 +49,54 @@ const UserActivityTab = () => {
       sx={{
         width: "100%",
         backgroundColor: "white",
-        border: 'solid 1px ',
-        borderColor: 'rgba(0, 0, 0, 0.2)',
+        border: "solid 1px ",
+        borderColor: "rgba(0, 0, 0, 0.2)",
       }}
     >
+      <Link
+        to="/member/profile"
+        style={{ textDecoration: "none", color: "black" }}
+      >
+        <ListItemButton
+          selected={selectedTab === "dashboard"}
+          onClick={() => setSelectedTab("dashboard")}
+        >
+          <ListItemIcon sx={{ fontSize: 24 }}>
+            <DashboardIcon fontSize="small" sx={{ color: "black" }} />
+          </ListItemIcon>
+          <ListItemText
+            primaryTypographyProps={{ variant: "subtitle1" }}
+            primary="Dashboard"
+          />
+        </ListItemButton>
+      </Link>
+      <Divider />
 
-
-      {/* USER PROFILE */}
-      <Link to="/user/profile" style={{ textDecoration: "none", color: "black" }}>
+      {/* MY PROFILE */}
+      <Link
+        to="/member/profile/my_profile"
+        style={{ textDecoration: "none", color: "black" }}
+      >
         <ListItemButton
           selected={selectedTab === "profile"}
           onClick={() => setSelectedTab("profile")}
         >
           <ListItemIcon sx={{ fontSize: 24 }}>
-
             <ContactsIcon fontSize="small" sx={{ color: "black" }} />
           </ListItemIcon>
-          <ListItemText primaryTypographyProps={{ variant: "subtitle1" }} primary="My Profile" />
+          <ListItemText
+            primaryTypographyProps={{ variant: "subtitle1" }}
+            primary="My Profile"
+          />
         </ListItemButton>
       </Link>
       <Divider />
 
-      {/* USER POSTING */}
-      <Link to="/user/posting" style={{ textDecoration: "none", color: "black" }}>
+      {/* MY TIMESHARE */}
+      <Link
+        to="/member/profile/my_timeshare"
+        style={{ textDecoration: "none", color: "black" }}
+      >
         <ListItemButton
           sx={{ width: "100%" }}
           selected={selectedTab === "posting"}
@@ -67,14 +105,17 @@ const UserActivityTab = () => {
           <ListItemIcon sx={{ fontSize: 24 }}>
             <ApartmentIcon fontSize="small" sx={{ color: "black" }} />
           </ListItemIcon>
-          <ListItemText primaryTypographyProps={{ variant: "subtitle1" }} primary="My Timeshare" />
+          <ListItemText
+            primaryTypographyProps={{ variant: "subtitle1" }}
+            primary="My Timeshare"
+          />
         </ListItemButton>
       </Link>
 
-      {/* USER REQUEST */}
+      {/* MY EXCHANGE REQUEST */}
       <Divider />
       <Link
-        to="/user/exchange_request"
+        to="/member/profile/my_exchange_request"
         style={{ textDecoration: "none", color: "black" }}
       >
         <ListItemButton
@@ -91,11 +132,10 @@ const UserActivityTab = () => {
         </ListItemButton>
       </Link>
 
-
-      {/* USER HISTORY BOOKING  */}
+      {/* MY HISTORY BOOKING  */}
       <Divider />
       <Link
-        to="/user/booking_history"
+        to="/member/profile/my_booking_history"
         style={{ textDecoration: "none", color: "black" }}
       >
         <ListItemButton
@@ -111,7 +151,6 @@ const UserActivityTab = () => {
           />
         </ListItemButton>
       </Link>
-
     </List>
   );
 };

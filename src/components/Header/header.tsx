@@ -196,7 +196,7 @@ const Header = () => {
               >
                 <MenuItem
                   onClick={() => {
-                    navigate("/user/exchange_request");
+                    navigate("profile");
                     handleClose();
                   }}
                 >

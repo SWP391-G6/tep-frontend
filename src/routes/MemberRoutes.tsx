@@ -1,11 +1,15 @@
 import { Route, Routes } from "react-router";
 import ProtectedRoute from "./ProtectedRoute";
-import HomePage from "../pages/Home/HomePage";
 import NotFoundAuthorizedPage from "../pages/Error/notFoundAuthorizedPage";
 import TimeshareDetailPage from "../pages/Timeshare/TimeshareDetailPage";
 import BookingInformationPage from "../pages/Payment/BookingInformationPage";
-import HomeDashboard from "../components/Home/homeDashboard";
-import TimeshareDetailDashboard from "../components/Timeshare/timeshareDetailDashboard";
+import TimeshareDetailDashboard from "../components/Dashboard/timeshareDetailDashboard";
+import HomeDashboard from "../components/Dashboard/homeDashboard";
+import UserProfilePage from "../pages/Member/MyProfilePage";
+import MyTimesharePage from "../pages/Member/MyTimesharePage";
+import MyExchangeRequestPage from "../pages/Member/MyExchangeRequestPage";
+import MyHistoryBookingPage from "../pages/Member/MyBookingHistoryPage";
+import ProfileDashboardPage from "../pages/Member/ProfileDashboardPage";
 
 type Props = {
   isAllowed: boolean;
@@ -30,8 +34,13 @@ function MemberRoutes(props: Props) {
             element={<BookingInformationPage />}
           />
         </Route>
-        <Route path="profile"></Route>
-
+        <Route path="profile">
+          <Route index element={<ProfileDashboardPage />} />
+          <Route path="my_profile" element={<UserProfilePage />} />
+          <Route path="my_timeshare" element={<MyTimesharePage />} />
+          <Route path="my_exchange_request" element={<MyExchangeRequestPage />} />
+          <Route path="my_booking_history" element={<MyHistoryBookingPage />} />
+        </Route>
         <Route path="*" element={<NotFoundAuthorizedPage />} />
       </Route>
     </Routes>

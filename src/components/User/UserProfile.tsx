@@ -27,20 +27,6 @@ const UserProfile = () => {
   const handleChange = (s: React.SetStateAction<string>) => {
     setValue(s)
   }
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const parsedToken = JSON.parse(token);
-        setUserData(parsedToken.token);
-        console.log(parsedToken.token);
-      } catch (error) {
-        console.error('Error parsing token:', error);
-      }
-    } else {
-      console.log('Token not found in local storage');
-    }
-  }, []);
 
   return (
     <Box

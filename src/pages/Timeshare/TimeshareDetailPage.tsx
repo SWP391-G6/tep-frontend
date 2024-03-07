@@ -10,7 +10,7 @@ import { Outlet, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import timeshareAPI from "../../services/timeshare/timeshareAPI";
 import { TimeshareDetailResponse } from "../../interfaces/timeshare/timeshareDetailResponse";
-import TimeshareDetailDashboard from "../../components/Timeshare/timeshareDetailDashboard";
+import TimeshareDetailDashboard from "../../components/Dashboard/timeshareDetailDashboard";
 
 const TimeshareDetailPage = () => {
   return (

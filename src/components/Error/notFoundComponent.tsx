@@ -45,7 +45,6 @@ const BootstrapButton = styled(Button)({
 const NotFoundComponent = () => {
   const navigate = useNavigate();
   const handleClick = () => {
-    localStorage.removeItem("persist:root");
     navigate("/");
   };
   return (
