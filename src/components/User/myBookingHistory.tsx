@@ -1,7 +1,14 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
-import { Button, IconButton, Modal, Stack, Tooltip, Typography } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  Modal,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ViewIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router";
@@ -10,12 +17,12 @@ import myBookingAPI from "../../services/timeshare/myBookingAPI";
 import { MyBookingResponse } from "../../interfaces/mybooking/myBookingResponse";
 
 const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 550,
-  bgcolor: 'background.paper',
+  bgcolor: "background.paper",
   boxShadow: 4,
   p: 4,
 };
@@ -99,10 +106,9 @@ const BookingHistoryList = () => {
     setOpen(true);
   };
 
-  
   const columns: GridColDef[] = [
     { field: "index", headerName: "ID", width: 150 },
-    { field: "booking_id", headerName: "bookingid", width: 150  },
+    { field: "booking_id", headerName: "bookingid", width: 150 },
     {
       field: "fullname",
       headerName: "Fullname",
@@ -110,15 +116,15 @@ const BookingHistoryList = () => {
       flex: 1,
     },
     {
-      field: 'dateStart',
-      headerName: 'Start Date',
+      field: "dateStart",
+      headerName: "Start Date",
       width: 150,
       valueGetter: (params) => params.row.timeshare_id.dateStart,
       editable: true,
     },
     {
-      field: 'dateEnd',
-      headerName: 'End Date',
+      field: "dateEnd",
+      headerName: "End Date",
       width: 150,
       valueGetter: (params) => params.row.timeshare_id.dateEnd,
       editable: true,
@@ -127,7 +133,6 @@ const BookingHistoryList = () => {
       field: "postal_code",
       headerName: "Postal Code",
       width: 100,
-
     },
     {
       field: "total",
@@ -155,10 +160,7 @@ const BookingHistoryList = () => {
         return (
           <Stack direction="row" spacing={1}>
             <Tooltip title="View detail timeshare">
-              <IconButton
-                aria-label="view detail"
-                onClick={handleButtonClick}
-              >
+              <IconButton aria-label="view detail" onClick={handleButtonClick}>
                 <ViewIcon sx={{ color: "#00acb3" }} />
               </IconButton>
             </Tooltip>
@@ -169,7 +171,9 @@ const BookingHistoryList = () => {
   ];
   const [bookingDetail, setBookingDetail] = React.useState(null);
   const handleClose = () => setOpen(false);
-  const columnIndex = columns.findIndex((column) => column.field === "booking_id");
+  const columnIndex = columns.findIndex(
+    (column) => column.field === "booking_id"
+  );
   if (columnIndex !== -1) {
     columns.splice(columnIndex, 1);
   }
@@ -179,17 +183,18 @@ const BookingHistoryList = () => {
     (booking) => booking.booking_id === selectedBookingId
   );
 
-  
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response: any = await myBookingAPI.getBookingByUserId('9b9b21e5-43f4-4d2e-b059-6db982563d4a');
+        const response: any = await myBookingAPI.getBookingByUserId(
+          "9b9b21e5-43f4-4d2e-b059-6db982563d4a"
+        );
         if (response && response.length > 0) {
           setBookings(response);
         }
-        console.log(bookings, 'booking')
+        console.log(bookings, "booking");
       } catch (error) {
-        console.error('Error fetching bookings:', error);
+        console.error("Error fetching bookings:", error);
       }
     };
 
@@ -197,7 +202,6 @@ const BookingHistoryList = () => {
       await fetchData();
     };
     initUseEffect();
-    
   }, []);
 
   const bookingsWithIds = bookings.map((booking, index) => {
@@ -212,13 +216,15 @@ const BookingHistoryList = () => {
       sx={{
         width: "100%",
         backgroundColor: "white",
-        padding: "60px",
-        border: 'solid 1px ',
-        borderColor: 'rgba(0, 0, 0, 0.2)',
+        padding: "30px",
+        border: "solid 1px ",
+        borderColor: "rgba(0, 0, 0, 0.2)",
       }}
     >
       <Box>
-        <Typography variant="h4">MY BOOKING HISTORY</Typography>
+        <Typography variant="h5" fontWeight={700}>
+          My Booking History
+        </Typography>
         <DataGrid
           rows={bookingsWithIds}
           columns={columns}
@@ -235,9 +241,6 @@ const BookingHistoryList = () => {
           disableRowSelectionOnClick
         />
       </Box>
-
-      
-
     </Box>
   );
 };

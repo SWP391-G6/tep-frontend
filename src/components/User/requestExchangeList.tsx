@@ -1,32 +1,45 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
-import { Button, Card, CardActions, CardContent, Divider, Grid, IconButton, Modal, Paper, Stack, Tooltip, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Divider,
+  Grid,
+  IconButton,
+  Modal,
+  Paper,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ViewIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
-import EventIcon from '@mui/icons-material/Event';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import PersonIcon from '@mui/icons-material/Person';
-import CloseIcon from '@mui/icons-material/Close';
+import EventIcon from "@mui/icons-material/Event";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import PersonIcon from "@mui/icons-material/Person";
+import CloseIcon from "@mui/icons-material/Close";
 import { MyRequestResponse } from "../../interfaces/myRequest/myRequestResponse";
 import myRequestAPI from "../../services/timeshare/myRequestAPI";
 import timeshareAPI from "../../services/timeshare/timeshareAPI";
-import DomainIcon from '@mui/icons-material/Domain';
-import BedIcon from '@mui/icons-material/Bed';
-import BathtubIcon from '@mui/icons-material/Bathtub';
-import KitchenIcon from '@mui/icons-material/Kitchen';
+import DomainIcon from "@mui/icons-material/Domain";
+import BedIcon from "@mui/icons-material/Bed";
+import BathtubIcon from "@mui/icons-material/Bathtub";
+import KitchenIcon from "@mui/icons-material/Kitchen";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import AirlineSeatIndividualSuiteIcon from '@mui/icons-material/AirlineSeatIndividualSuite';
-import PhotoSizeSelectActualIcon from '@mui/icons-material/PhotoSizeSelectActual';
+import AirlineSeatIndividualSuiteIcon from "@mui/icons-material/AirlineSeatIndividualSuite";
+import PhotoSizeSelectActualIcon from "@mui/icons-material/PhotoSizeSelectActual";
 const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
   width: 850,
   boxShadow: 4,
   p: 4,
@@ -124,14 +137,14 @@ const RequestExchangeList = () => {
       valueGetter: (params) => params.row.timeshare_id.timeshareName,
     },
     {
-      field: 'create_date',
-      headerName: 'Create Date',
+      field: "create_date",
+      headerName: "Create Date",
       width: 160,
       editable: true,
     },
     {
-      field: 'message',
-      headerName: 'Message',
+      field: "message",
+      headerName: "Message",
       width: 160,
       editable: true,
     },
@@ -139,7 +152,6 @@ const RequestExchangeList = () => {
       field: "status",
       headerName: "Status",
       width: 70,
-
     },
 
     {
@@ -164,7 +176,6 @@ const RequestExchangeList = () => {
         const handleButtonClick = () => {
           console.log("Button clicked for row with request ID:", params.id);
           handleOpen(params.id);
-
         };
 
         return (
@@ -175,10 +186,7 @@ const RequestExchangeList = () => {
               </IconButton>
             </Tooltip>
             <Tooltip title="View detail request">
-              <IconButton
-                aria-label="view detail"
-                onClick={handleButtonClick}
-              >
+              <IconButton aria-label="view detail" onClick={handleButtonClick}>
                 <ViewIcon sx={{ color: "#00acb3" }} />
               </IconButton>
             </Tooltip>
@@ -188,7 +196,9 @@ const RequestExchangeList = () => {
     },
   ];
 
-  const columnIndex = columns.findIndex((column) => column.field === "request_id");
+  const columnIndex = columns.findIndex(
+    (column) => column.field === "request_id"
+  );
   if (columnIndex !== -1) {
     columns.splice(columnIndex, 1);
   }
@@ -198,44 +208,43 @@ const RequestExchangeList = () => {
   );
   const [timeshare, setTimeshare] = React.useState<Record<string, any>>({});
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response: any = await myRequestAPI.getRequestByRequestUser('7e1fb61d-437c-465e-8844-71a1db289d4a');
-        if (response && response.length > 0) {
-          setRequest(response);
-        }
-        console.log(request, 'request')
-        fetchTimeshareDetail();
-      } catch (error) {
-        console.error('Error fetching bookings:', error);
-      }
-    };
+  // React.useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response: any = await myRequestAPI.getRequestByRequestUser('7e1fb61d-437c-465e-8844-71a1db289d4a');
+  //       if (response && response.length > 0) {
+  //         setRequest(response);
+  //       }
+  //       console.log(request, 'request')
+  //       fetchTimeshareDetail();
+  //     } catch (error) {
+  //       console.error('Error fetching bookings:', error);
+  //     }
+  //   };
 
-    const fetchTimeshareDetail = async () => {
-      try {
-        if (selectedRequest && selectedRequest.timeshare_id) {
-          const response = await timeshareAPI.getTimeshareById(selectedRequest.timeshare_id.timeshareId);
-          console.log(response, 'okkk');
-          setTimeshare(response);
-        }
-      } catch (error) {
-        console.error("Error fetching timeshare:", error);
-      }
-    };
+  //   const fetchTimeshareDetail = async () => {
+  //     try {
+  //       if (selectedRequest && selectedRequest.timeshare_id) {
+  //         const response = await timeshareAPI.getTimeshareById(selectedRequest.timeshare_id.timeshareId);
+  //         console.log(response, 'okkk');
+  //         setTimeshare(response);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching timeshare:", error);
+  //     }
+  //   };
 
-    const initUseEffect = async () => {
-      await fetchData();
-      await fetchTimeshareDetail();
-    };
-    initUseEffect();
-  }, []);
-
+  //   const initUseEffect = async () => {
+  //     await fetchData();
+  //     await fetchTimeshareDetail();
+  //   };
+  //   initUseEffect();
+  // }, []);
 
   const requestWithIds = request.map((request, index) => {
     return {
       ...request,
-      index: index + 1, 
+      index: index + 1,
     };
   });
 
@@ -244,17 +253,20 @@ const RequestExchangeList = () => {
       sx={{
         width: "100%",
         backgroundColor: "white",
-        padding: "60px",
-        border: 'solid 1px ',
-        borderColor: 'rgba(0, 0, 0, 0.2)',
+        padding: "30px",
+        border: "solid 1px ",
+        borderColor: "rgba(0, 0, 0, 0.2)",
       }}
     >
       <Box>
-        <Typography variant="h4">MY EXCHANGE REQUEST</Typography>
+        <Typography variant="h5" fontWeight={700}>
+          My Exchange Request
+        </Typography>
         <DataGrid
           rows={requestWithIds}
           columns={columns}
           getRowId={(row) => row.request_id}
+          sx={{marginTop: "10px"}}
           initialState={{
             pagination: {
               paginationModel: {
@@ -275,15 +287,11 @@ const RequestExchangeList = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-
           <Card sx={style}>
             <CardContent>
               <Grid container gap={3}>
                 <Grid2 xs={2}>
-                  <Paper
-                    elevation={5}
-                    sx={{ padding: "10px", width: '300px' }}
-                  >
+                  <Paper elevation={5} sx={{ padding: "10px", width: "300px" }}>
                     {timeshare && (
                       <img
                         src={timeshare.image_url}
@@ -296,45 +304,64 @@ const RequestExchangeList = () => {
                 </Grid2>
 
                 <Grid2 xs={10}>
-                  <Typography variant="h4" component="h2" color={'#00acb3'} >
+                  <Typography variant="h4" component="h2" color={"#00acb3"}>
                     {selectedRequest.timeshare_id.timeshareName}
                   </Typography>
 
-                  <Typography variant="body1" sx={{ mt: 1, fontWeight: 'bold' }}>
-                    <EventIcon sx={{ mr: 1, verticalAlign: 'middle', color: "#00acb3" }} />
+                  <Typography
+                    variant="body1"
+                    sx={{ mt: 1, fontWeight: "bold" }}
+                  >
+                    <EventIcon
+                      sx={{ mr: 1, verticalAlign: "middle", color: "#00acb3" }}
+                    />
                     Check-in: {selectedRequest.timeshare_id.dateStart}
                   </Typography>
 
-                  <Typography variant="body1" sx={{ mt: 1, fontWeight: 'bold' }}>
-                    <EventIcon sx={{ mr: 1, verticalAlign: 'middle', color: "#00acb3" }} />
+                  <Typography
+                    variant="body1"
+                    sx={{ mt: 1, fontWeight: "bold" }}
+                  >
+                    <EventIcon
+                      sx={{ mr: 1, verticalAlign: "middle", color: "#00acb3" }}
+                    />
                     Check-out: {selectedRequest.timeshare_id.dateEnd}
                   </Typography>
 
                   <Typography variant="body1" sx={{ mt: 1 }}>
-                  <span style={{ fontWeight: 'bold', marginRight: '0.5em' }}>
-                    <LocationOnIcon sx={{ mr: 1, verticalAlign: 'middle', color: "#00acb3" }} />
-                    Destination:
+                    <span style={{ fontWeight: "bold", marginRight: "0.5em" }}>
+                      <LocationOnIcon
+                        sx={{
+                          mr: 1,
+                          verticalAlign: "middle",
+                          color: "#00acb3",
+                        }}
+                      />
+                      Destination:
                     </span>
-                     {selectedRequest.timeshare_id.destinationModel.desName}
+                    {selectedRequest.timeshare_id.destinationModel.desName}
                   </Typography>
 
                   <Button
                     variant="text"
                     startIcon={<ViewIcon sx={{ ml: 0.6, color: "#fff" }} />}
-                    onClick={() => navigate(`/view_timeshare_detail/${selectedRequest.timeshare_id.timeshareId}`)}
+                    onClick={() =>
+                      navigate(
+                        `/view_timeshare_detail/${selectedRequest.timeshare_id.timeshareId}`
+                      )
+                    }
                     sx={{
                       mt: 1,
-                      backgroundColor: '#00acb3',
-                      textTransform: 'none',
-                      color: '#fff',
-                      '&:hover': {
-                        backgroundColor: '#08b7bd',
+                      backgroundColor: "#00acb3",
+                      textTransform: "none",
+                      color: "#fff",
+                      "&:hover": {
+                        backgroundColor: "#08b7bd",
                       },
                     }}
                   >
                     View detail
                   </Button>
-
                 </Grid2>
               </Grid>
               {timeshare?.room && (
@@ -342,53 +369,99 @@ const RequestExchangeList = () => {
                   <Grid container spacing={2}>
                     <Grid item xs={6}>
                       <Typography variant="body1" sx={{ mt: 2 }}>
-                        <span style={{ fontWeight: 'bold', marginRight: '0.5em' }}>
-                          <AirlineSeatIndividualSuiteIcon sx={{ mr:1,verticalAlign: 'middle', color: "#00acb3" }} />
+                        <span
+                          style={{ fontWeight: "bold", marginRight: "0.5em" }}
+                        >
+                          <AirlineSeatIndividualSuiteIcon
+                            sx={{
+                              mr: 1,
+                              verticalAlign: "middle",
+                              color: "#00acb3",
+                            }}
+                          />
                           Sleep:
                         </span>
                         {timeshare.room.sleeps}
                       </Typography>
 
                       <Typography variant="body1" sx={{ mt: 2 }}>
-                      <span style={{ fontWeight: 'bold', marginRight: '0.5em' }}>
-                        <BedIcon sx={{ mr: 1, verticalAlign: 'middle', color: "#00acb3" }} />
-                        Bedroom:
+                        <span
+                          style={{ fontWeight: "bold", marginRight: "0.5em" }}
+                        >
+                          <BedIcon
+                            sx={{
+                              mr: 1,
+                              verticalAlign: "middle",
+                              color: "#00acb3",
+                            }}
+                          />
+                          Bedroom:
                         </span>
-                         {timeshare.room.bed}
+                        {timeshare.room.bed}
                       </Typography>
 
                       <Typography variant="body1" sx={{ mt: 2 }}>
-                      <span style={{ fontWeight: 'bold', marginRight: '0.5em' }}>
-                        <BathtubIcon sx={{ mr: 1, verticalAlign: 'middle', color: "#00acb3" }} />
-                        Bath: 
+                        <span
+                          style={{ fontWeight: "bold", marginRight: "0.5em" }}
+                        >
+                          <BathtubIcon
+                            sx={{
+                              mr: 1,
+                              verticalAlign: "middle",
+                              color: "#00acb3",
+                            }}
+                          />
+                          Bath:
                         </span>
                         {timeshare.room.bath}
                       </Typography>
-
-
                     </Grid>
 
                     <Grid item xs={6}>
                       <Typography variant="body1" sx={{ mt: 2 }}>
-                      <span style={{ fontWeight: 'bold', marginRight: '0.5em' }}>
-                        <PhotoSizeSelectActualIcon sx={{ mr: 1, verticalAlign: 'middle', color: "#00acb3" }} />
-                        View: 
+                        <span
+                          style={{ fontWeight: "bold", marginRight: "0.5em" }}
+                        >
+                          <PhotoSizeSelectActualIcon
+                            sx={{
+                              mr: 1,
+                              verticalAlign: "middle",
+                              color: "#00acb3",
+                            }}
+                          />
+                          View:
                         </span>
                         {timeshare.room.roomview}
                       </Typography>
 
                       <Typography variant="body1" sx={{ mt: 2 }}>
-                      <span style={{ fontWeight: 'bold', marginRight: '0.5em' }}>
-                        <DomainIcon sx={{ mr: 1, verticalAlign: 'middle', color: "#00acb3" }} />
-                        Room Type: 
+                        <span
+                          style={{ fontWeight: "bold", marginRight: "0.5em" }}
+                        >
+                          <DomainIcon
+                            sx={{
+                              mr: 1,
+                              verticalAlign: "middle",
+                              color: "#00acb3",
+                            }}
+                          />
+                          Room Type:
                         </span>
                         {timeshare.room.name}
                       </Typography>
 
                       <Typography variant="body1" sx={{ mt: 2 }}>
-                      <span style={{ fontWeight: 'bold', marginRight: '0.5em' }}>
-                        <KitchenIcon sx={{ mr: 1, verticalAlign: 'middle', color: "#00acb3" }} />
-                        Kitchen: 
+                        <span
+                          style={{ fontWeight: "bold", marginRight: "0.5em" }}
+                        >
+                          <KitchenIcon
+                            sx={{
+                              mr: 1,
+                              verticalAlign: "middle",
+                              color: "#00acb3",
+                            }}
+                          />
+                          Kitchen:
                         </span>
                         {timeshare.room.kitchen}
                       </Typography>
@@ -399,7 +472,7 @@ const RequestExchangeList = () => {
               <IconButton
                 aria-label="close"
                 onClick={handleClose}
-                sx={{ position: 'absolute', top: 5, right: 5 }}
+                sx={{ position: "absolute", top: 5, right: 5 }}
               >
                 <CloseIcon />
               </IconButton>
@@ -408,27 +481,34 @@ const RequestExchangeList = () => {
 
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <CardActions sx={{ justifyContent: 'flex-start', mt: 2 }}>
-                  <Typography variant="body1" fontSize={20} fontWeight={'40px'}>
-                  <span style={{ fontWeight: 'bold', marginRight: '0.5em' }}>
-                      <PersonIcon sx={{ mr: 2, verticalAlign: 'middle', color: "#fff", fontSize: '30px', backgroundColor: '#00acb3', borderRadius: '5px' }} />
+                <CardActions sx={{ justifyContent: "flex-start", mt: 2 }}>
+                  <Typography variant="body1" fontSize={20} fontWeight={"40px"}>
+                    <span style={{ fontWeight: "bold", marginRight: "0.5em" }}>
+                      <PersonIcon
+                        sx={{
+                          mr: 2,
+                          verticalAlign: "middle",
+                          color: "#fff",
+                          fontSize: "30px",
+                          backgroundColor: "#00acb3",
+                          borderRadius: "5px",
+                        }}
+                      />
                       Requested by:
-                      
-                      </span>
-                       {selectedRequest.request_by.fullname}
-                    
+                    </span>
+                    {selectedRequest.request_by.fullname}
                   </Typography>
                 </CardActions>
               </Grid>
               <Grid item xs={6}>
-                <CardActions sx={{ justifyContent: 'flex-end', mt: 2 }}>
+                <CardActions sx={{ justifyContent: "flex-end", mt: 2 }}>
                   <Button
                     variant="contained"
                     sx={{
-                      backgroundColor: '#00acb3',
-                      color: '#fff',
-                      '&:hover': {
-                        backgroundColor: '#08b7bd',
+                      backgroundColor: "#00acb3",
+                      color: "#fff",
+                      "&:hover": {
+                        backgroundColor: "#08b7bd",
                       },
                     }}
                   >
@@ -438,9 +518,9 @@ const RequestExchangeList = () => {
                     variant="outlined"
                     sx={{
                       ml: 2,
-                      color: '#00acb3',
-                      '&:hover': {
-                        borderColor: '#08b7bd',
+                      color: "#00acb3",
+                      "&:hover": {
+                        borderColor: "#08b7bd",
                       },
                     }}
                   >
@@ -452,7 +532,6 @@ const RequestExchangeList = () => {
           </Card>
         </Modal>
       )}
-
     </Box>
   );
 };

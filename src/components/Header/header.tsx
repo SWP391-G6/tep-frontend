@@ -17,6 +17,7 @@ import { useState } from "react";
 import Logout from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router";
 import { USER_ID_KEY, USER_ROLE_KEY, USER_TOKEN_KEY } from "../../constant";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -50,19 +51,21 @@ const Header = () => {
       <AppBar position="static" sx={{ backgroundColor: "#ffffff" }}>
         <Container maxWidth={false}>
           <Toolbar disableGutters>
-            <img
-              src={"https://i.ibb.co/995RZ07/logo.png"}
-              width="50px"
-              height="50px"
-              alt=""
-            />
-            <img
-              src={"https://i.ibb.co/mJCJ7Jt/logo-name.png"}
-              width="220px"
-              height="50px"
-              style={{ marginLeft: "5px" }}
-              alt=""
-            />
+            <Link to={token ? "/member" : "/"}>
+              <img
+                src={"https://i.ibb.co/995RZ07/logo.png"}
+                width="50px"
+                height="50px"
+                alt=""
+              />
+              <img
+                src={"https://i.ibb.co/mJCJ7Jt/logo-name.png"}
+                width="220px"
+                height="50px"
+                style={{ marginLeft: "5px" }}
+                alt=""
+              />
+            </Link>
 
             <Box
               sx={{

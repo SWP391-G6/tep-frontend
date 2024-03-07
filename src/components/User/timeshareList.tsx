@@ -1,14 +1,18 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams } from '@mui/x-data-grid';
-import { Button, IconButton, Stack, Tooltip, Typography } from '@mui/material';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import {
+  DataGrid,
+  GridColDef,
+  GridToolbar,
+  GridValueGetterParams,
+} from "@mui/x-data-grid";
+import { Button, IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useNavigate } from 'react-router';
+import { useNavigate } from "react-router";
 import ViewIcon from "@mui/icons-material/Visibility";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
-import { TimeshareByOwnerResponse } from '../../interfaces/timeshare/timeshareByOwnerResponse';
-import timeshareAPI from '../../services/timeshare/timeshareAPI';
-
+import { TimeshareByOwnerResponse } from "../../interfaces/timeshare/timeshareByOwnerResponse";
+import timeshareAPI from "../../services/timeshare/timeshareAPI";
 
 const StyledGridOverlay = styled("div")(({ theme }) => ({
   display: "flex",
@@ -93,29 +97,29 @@ const TimeshareList = () => {
       flex: 1,
     },
     {
-      field: 'dateStart',
-      headerName: 'Start Date',
+      field: "dateStart",
+      headerName: "Start Date",
       width: 160,
       //valueGetter: (params) => params.row.timeshareId.dateStart,
       editable: true,
     },
     {
-      field: 'dateEnd',
-      headerName: 'End Date',
+      field: "dateEnd",
+      headerName: "End Date",
       width: 160,
       editable: true,
     },
     {
-      field: 'price',
-      headerName: 'Price',
-      type: 'number',
+      field: "price",
+      headerName: "Price",
+      type: "number",
       width: 110,
       editable: true,
     },
     {
-      field: 'nights',
-      headerName: 'Night',
-      type: 'number',
+      field: "nights",
+      headerName: "Night",
+      type: "number",
       width: 130,
       editable: true,
     },
@@ -145,18 +149,22 @@ const TimeshareList = () => {
     },
   ];
 
-  const [timeshare, setTimeshare] = React.useState<TimeshareByOwnerResponse[]>([]);
+  const [timeshare, setTimeshare] = React.useState<TimeshareByOwnerResponse[]>(
+    []
+  );
 
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response: any = await timeshareAPI.getTimeshareByOwnerId('6d21c5dc-56a5-4da0-98d5-4b09c31911a7');
+        const response: any = await timeshareAPI.getTimeshareByOwnerId(
+          "6d21c5dc-56a5-4da0-98d5-4b09c31911a7"
+        );
         if (response && response.length > 0) {
           setTimeshare(response);
-        } 
-        console.log(timeshare, 'timeshare')
+        }
+        console.log(timeshare, "timeshare");
       } catch (error) {
-        console.error('Error fetching bookings:', error);
+        console.error("Error fetching bookings:", error);
       }
     };
 
@@ -169,7 +177,7 @@ const TimeshareList = () => {
   const timeshareWithIds = timeshare.map((timeshare, index) => {
     return {
       ...timeshare,
-      id: index + 1, 
+      id: index + 1,
     };
   });
 
@@ -178,17 +186,20 @@ const TimeshareList = () => {
       sx={{
         width: "100%",
         backgroundColor: "white",
-        padding: "60px",
-        border: 'solid 1px ',
-        borderColor: 'rgba(0, 0, 0, 0.2)',
+        padding: "30px",
+        border: "solid 1px ",
+        borderColor: "rgba(0, 0, 0, 0.2)",
       }}
     >
       <Box>
-        <Typography variant="h4">MY TIMESHARE</Typography>
+        <Typography variant="h5" fontWeight={700}>
+          My Timeshares
+        </Typography>
         <DataGrid
           rows={timeshareWithIds}
           columns={columns}
           getRowId={(row) => row.timeshareId}
+          sx={{marginTop: "10px"}}
           initialState={{
             pagination: {
               paginationModel: {
@@ -204,6 +215,5 @@ const TimeshareList = () => {
     </Box>
   );
 };
-
 
 export default TimeshareList;

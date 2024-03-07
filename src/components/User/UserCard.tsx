@@ -55,6 +55,7 @@ const UserCard = () => {
         style={{
           display: "contents",
           alignItems: "center",
+          height: "300px"
         }}
       >
         <Grid
@@ -84,7 +85,11 @@ const UserCard = () => {
               {userProfile.fullname}
             </Typography>
           </Grid>
-          <Typography variant="h6" align="center" sx={{ width: "100%" }}>
+          <Typography
+            variant="subtitle2"
+            align="center"
+            sx={{ width: "100%", fontSize: "16px", color: "#00acb3" }}
+          >
             {userProfile.role === "member" ? "Member" : userProfile.role}
           </Typography>
           <Grid>
