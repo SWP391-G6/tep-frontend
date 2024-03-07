@@ -7,9 +7,8 @@ import UserCard from "../../components/User/UserCard";
 import UserProfile from "../../components/User/UserProfile";
 import BackButton from "../../components/Button/backButton";
 
-type Props = {}
 
-const MemberPage = (props: Props) => {
+const MemberPage = () => {
 
     return (
         <Box sx={{ backgroundColor: "#d6dbdb51" }}>

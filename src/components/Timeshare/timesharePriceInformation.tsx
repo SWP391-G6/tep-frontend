@@ -43,6 +43,7 @@ import { ToastContainer, toast } from "react-toastify";
 import moment from "moment";
 import { TimeshareDetailResponse } from "../../interfaces/timeshare/timeshareDetailResponse";
 import { formatNumber } from "../../helpers/numberHelpers";
+import { USER_TOKEN_KEY } from "../../constant";
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 
@@ -82,10 +83,10 @@ const validationSchema = yup.object({
 });
 
 const TimesharePriceInformation = (props: Props) => {
-  // let selectedID: string = "";
   const [timeshareID, setTimeshareID] = useState("");
   const navigate = useNavigate();
   const classes = useStyles();
+  const token = JSON.parse(localStorage.getItem(USER_TOKEN_KEY)!);
   const [timeshareList, setTimeshareList] = useState<
     TimeshareByOwnerResponse[]
   >([]);
@@ -128,7 +129,7 @@ const TimesharePriceInformation = (props: Props) => {
     };
     initUseEffect();
   }, []);
-  
+
   const {
     register,
     handleSubmit,
@@ -271,7 +272,11 @@ const TimesharePriceInformation = (props: Props) => {
             <Button
               variant="contained"
               onClick={() => {
-                navigate("/booking_information");
+                {
+                  token
+                    ? navigate("booking_information")
+                    : navigate("/login");
+                }
               }}
               sx={{
                 width: "100%",

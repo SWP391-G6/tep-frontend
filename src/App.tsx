@@ -7,19 +7,17 @@ import GlobalStyles from "./GlobalStyles";
 import HomePage from "./pages/Home/HomePage";
 import { ROUTE_PATH } from "./configs";
 import TimeshareDetailPage from "./pages/Timeshare/TimeshareDetailPage";
-import MemberPage from "./pages/User/MemberPage";
 import UserRequestPage from "./pages/User/UserRequestPage";
 import ScrollToTop from "./utils/ScrollToTop";
 import UserPostingPage from "./pages/User/UserProfilePage";
-import BookingInformationPage from "./pages/Payment/BookingInformationPage";
 import LoginPage from "./pages/Login/LoginPage";
 import RegisterPage from "./pages/Register/RegisterPage";
-import AccountManagePage from "./pages/Account/AccountManagePage";
 import SuccessfulPaymentPage from "./pages/Payment/SuccessfulPaymentPage";
 import "react-toastify/dist/ReactToastify.css";
 import AdminRoutes from "./routes/AdminRoutes";
 import { USER_ROLE_KEY, USER_TOKEN_KEY } from "./constant";
 import MemberRoutes from "./routes/MemberRoutes";
+import HomeDashboard from "./components/Home/homeDashboard";
 
 const NotFoundPage = React.lazy(() => import("./pages/Error/notFoundPage"));
 
@@ -34,14 +32,9 @@ function App() {
           <CssBaseline />
           <GlobalStyles />
           <Routes>
-            <Route path="/" element={<HomePage />} />
-
-            <Route
-              index
-              path="/view_timeshare_detail/:timeshareID"
-              element={<TimeshareDetailPage />}
-            />
-
+            <Route path="/" element={<HomePage />}>
+              <Route index element={<HomeDashboard />} />
+            </Route>
             <Route
               path={ROUTE_PATH.ADMIN}
               element={
@@ -62,17 +55,16 @@ function App() {
             />
 
             <Route
-              path="booking_information"
-              element={<BookingInformationPage />}
+              path="/view_timeshare_detail/:timeshareID"
+              element={<TimeshareDetailPage />}
             />
-
             <Route path="/user/posting" element={<UserPostingPage />} />
-            <Route path="/register" element={<RegisterPage />} />
 
             <Route
               path="/user/exchange_request"
               element={<UserRequestPage />}
             />
+            <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route
               path={ROUTE_PATH.PAYMENT_SUCCESSFUL}

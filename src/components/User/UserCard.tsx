@@ -1,11 +1,12 @@
 import { Box, Button, CardActions, CardContent, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { USER_TOKEN_KEY } from "../../constant";
 
 const UserCard = () => {
 
 const [fullname,setFullname]= useState('');
 useEffect(() => {
-  const token = localStorage.getItem('token');
+  const token = JSON.parse(localStorage.getItem(USER_TOKEN_KEY)!);
   if (token) {
     try {
       const parsedToken = JSON.parse(token);
