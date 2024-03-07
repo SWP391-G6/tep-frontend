@@ -93,40 +93,35 @@ const TimeshareList = () => {
     {
       field: "timeshareName",
       headerName: "name",
-      width: 150,
       flex: 1,
     },
     {
       field: "dateStart",
       headerName: "Start Date",
-      width: 160,
+      flex: 1,
       //valueGetter: (params) => params.row.timeshareId.dateStart,
-      editable: true,
     },
     {
       field: "dateEnd",
       headerName: "End Date",
-      width: 160,
-      editable: true,
+      flex: 1,
     },
     {
       field: "price",
       headerName: "Price",
       type: "number",
-      width: 110,
-      editable: true,
+      flex: 1,
     },
     {
       field: "nights",
       headerName: "Night",
       type: "number",
-      width: 130,
-      editable: true,
+      flex: 1,
     },
     {
       field: "Action",
       headerName: "Action",
-      width: 125,
+      flex: 1,
       type: "number",
       renderCell: (params) => {
         const handleButtonClick = () => {

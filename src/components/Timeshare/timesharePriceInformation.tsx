@@ -43,7 +43,7 @@ import { ToastContainer, toast } from "react-toastify";
 import moment from "moment";
 import { TimeshareDetailResponse } from "../../interfaces/timeshare/timeshareDetailResponse";
 import { formatNumber } from "../../helpers/numberHelpers";
-import { USER_TOKEN_KEY } from "../../constant";
+import { USER_ID_KEY, USER_TOKEN_KEY } from "../../constant";
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 
@@ -83,6 +83,7 @@ const validationSchema = yup.object({
 });
 
 const TimesharePriceInformation = (props: Props) => {
+  const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
   const [timeshareID, setTimeshareID] = useState("");
   const navigate = useNavigate();
   const classes = useStyles();
@@ -102,10 +103,7 @@ const TimesharePriceInformation = (props: Props) => {
     setOpenSelectTimeshareDialog(false);
   };
 
-  const handleCreateExchangeRequest = () => {};
-
   const handleClickOpenConfirmDialog = () => {
-    console.log(1);
     setOpenConfirmDialog(true);
   };
 
@@ -116,9 +114,7 @@ const TimesharePriceInformation = (props: Props) => {
   useEffect(() => {
     const getTimeshareByOwner = async () => {
       let temp = [];
-      const data: any = await timeshareAPI.getTimeshareByUserID(
-        "6d21c5dc-56a5-4da0-98d5-4b09c31911a7"
-      );
+      const data: any = await timeshareAPI.getTimeshareByUserID(userID);
       if (data.length > 0) {
         temp = data.map((item: any) => ({ ...item, isSelected: false }));
         setTimeshareList(temp);
@@ -142,9 +138,9 @@ const TimesharePriceInformation = (props: Props) => {
   const onSubmit = async (data: CreateExchangeRequest) => {
     try {
       const response: any = await requestAPI.createExchangeRequest({
-        request_by: "6d21c5dc-56a5-4da0-98d5-4b09c31911a7",
-        timeshare_request_id: props.timeshareID,
-        timeshare_response_id: timeshareID,
+        request_by: userID,
+        timeshare_request_id: timeshareID,
+        timeshare_response_id: props.timeshareID,
         message: data.message,
       });
       if (response) {
@@ -160,6 +156,7 @@ const TimesharePriceInformation = (props: Props) => {
       console.log("Error: ", error);
     }
   };
+  console.log(timeshareList);
 
   const handleClick = (index: any) => {
     const newSelectedItems = timeshareList.map((item, idx) => {
@@ -171,12 +168,6 @@ const TimesharePriceInformation = (props: Props) => {
     });
     setTimeshareList(newSelectedItems);
   };
-
-  // const startDateStr = props.timeshare.dateStart;
-  // const formattedStartDate = moment(startDateStr).format("ddd, MMM DD, YYYY");
-
-  // const endDateStr = timeshare.date_end;
-  // const formattedEndDate = moment(endDateStr).format("ddd, MMM DD, YYYY");
 
   return (
     <Box>
@@ -273,9 +264,7 @@ const TimesharePriceInformation = (props: Props) => {
               variant="contained"
               onClick={() => {
                 {
-                  token
-                    ? navigate("booking_information")
-                    : navigate("/login");
+                  token ? navigate("booking_information") : navigate("/login");
                 }
               }}
               sx={{
@@ -283,6 +272,7 @@ const TimesharePriceInformation = (props: Props) => {
                 height: "50px",
                 marginTop: "20px",
                 background: "#00acb3",
+                border: "#00acb3",
                 "&:hover": {
                   backgroundColor: "#08b7bd",
                 },
@@ -292,21 +282,41 @@ const TimesharePriceInformation = (props: Props) => {
             </Button>
           </Grid>
           <Grid item xs={12}>
-            <Button
-              variant="outlined"
-              sx={{
-                width: "100%",
-                height: "50px",
-                marginTop: "20px",
-                color: "#00acb3",
-                "&:hover": {
-                  borderColor: "#08b7bd",
-                },
-              }}
-              onClick={handleClickOpenSelectTimeshareDialog}
-            >
-              Request to exchange
-            </Button>
+            {timeshareList.length >= 0 && isEmpty(timeshareList) ? (
+              <Button
+                disabled
+                variant="outlined"
+                sx={{
+                  width: "100%",
+                  height: "50px",
+                  marginTop: "20px",
+                  color: "#00acb3",
+                  borderColor: "#00acb3",
+                  "&:hover": {
+                    borderColor: "#08b7bd",
+                  },
+                }}
+              >
+                Request to exchange
+              </Button>
+            ) : (
+              <Button
+                variant="outlined"
+                sx={{
+                  width: "100%",
+                  height: "50px",
+                  marginTop: "20px",
+                  color: "#00acb3",
+                  borderColor: "#00acb3",
+                  "&:hover": {
+                    borderColor: "#08b7bd",
+                  },
+                }}
+                onClick={handleClickOpenSelectTimeshareDialog}
+              >
+                Request to exchange
+              </Button>
+            )}
           </Grid>
         </Grid>
         <form onSubmit={handleSubmit(handleClickOpenConfirmDialog)}>
@@ -404,7 +414,7 @@ const TimesharePriceInformation = (props: Props) => {
                         >
                           <CardMedia
                             component="img"
-                            image={"https://i.ibb.co/VpBzSSn/jadehillsapa.jpg"}
+                            image={timeshare.image_url}
                             width="320px"
                             height="100%"
                             alt={`${timeshare.timeshareName}`}

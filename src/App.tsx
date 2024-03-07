@@ -18,6 +18,8 @@ import AdminRoutes from "./routes/AdminRoutes";
 import { USER_ROLE_KEY, USER_TOKEN_KEY } from "./constant";
 import MemberRoutes from "./routes/MemberRoutes";
 import HomeDashboard from "./components/Dashboard/homeDashboard";
+import TimeshareDetail from "./components/Timeshare/timeshareDetail";
+import TimeshareDetailDashboard from "./components/Dashboard/timeshareDetailDashboard";
 
 const NotFoundPage = React.lazy(() => import("./pages/Error/notFoundPage"));
 
@@ -34,6 +36,12 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />}>
               <Route index element={<HomeDashboard />} />
+            </Route>
+            <Route
+              path="view_timeshare_detail/:timeshareID"
+              element={<TimeshareDetailPage />}
+            >
+              <Route index element={<TimeshareDetailDashboard />} />
             </Route>
             <Route
               path={ROUTE_PATH.ADMIN}
@@ -54,16 +62,6 @@ function App() {
               }
             />
 
-            <Route
-              path="/view_timeshare_detail/:timeshareID"
-              element={<TimeshareDetailPage />}
-            />
-            <Route path="/user/posting" element={<UserPostingPage />} />
-
-            <Route
-              path="/user/exchange_request"
-              element={<UserRequestPage />}
-            />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route

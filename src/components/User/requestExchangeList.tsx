@@ -1,4 +1,3 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import {
@@ -34,6 +33,10 @@ import KitchenIcon from "@mui/icons-material/Kitchen";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import AirlineSeatIndividualSuiteIcon from "@mui/icons-material/AirlineSeatIndividualSuite";
 import PhotoSizeSelectActualIcon from "@mui/icons-material/PhotoSizeSelectActual";
+import { useEffect, useState } from "react";
+import { GetExchangeRequestResponse } from "../../interfaces/myRequest/getExchangeRequestResponse";
+import requestAPI from "../../services/request/requestAPI";
+import { USER_ID_KEY } from "../../constant";
 const style = {
   position: "absolute" as "absolute",
   top: "50%",
@@ -111,83 +114,91 @@ function CustomNoRowsOverlay() {
           </g>
         </g>
       </svg>
-      <Box sx={{ mt: 1 }}>No request yet!</Box>
+      <Box sx={{ mt: 1 }}>No Request Yet!</Box>
     </StyledGridOverlay>
   );
 }
 
 const RequestExchangeList = () => {
   const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [requestList, setRequestList] = useState<GetExchangeRequestResponse[]>(
+    []
+  );
+
+  const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
   const handleOpen = (bookingId: any) => {
     setSelectedRequestId(bookingId);
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
-  const [selectedRequestId, setSelectedRequestId] = React.useState(null);
+  const [selectedRequestId, setSelectedRequestId] = useState(null);
 
   const columns: GridColDef[] = [
-    { field: "index", headerName: "ID", width: 90 },
-    { field: "request_id", headerName: "request_id", width: 90 },
+    { field: "no", headerName: "No", width: 90 },
     {
-      field: "timeshare_id",
+      field: "timeshareName",
       headerName: "Timeshare Name",
-      width: 200,
       flex: 1,
-      valueGetter: (params) => params.row.timeshare_id.timeshareName,
+      renderCell: (param) => {
+        return (
+          <Typography noWrap>
+            {param.row.timeshare_response_id.timeshareName}
+          </Typography>
+        );
+      },
     },
     {
       field: "create_date",
       headerName: "Create Date",
-      width: 160,
-      editable: true,
+      flex: 1,
     },
     {
-      field: "message",
-      headerName: "Message",
-      width: 160,
-      editable: true,
+      field: "request_by",
+      headerName: "Request By",
+      flex: 1,
+      renderCell: (param) => {
+        return <Typography noWrap>{param.row.request_by.fullname}</Typography>;
+      },
     },
     {
       field: "status",
       headerName: "Status",
-      width: 70,
+      flex: 1,
+      renderCell: (param) => {
+        return (
+          <Typography>
+            {param.row.status === 0
+              ? "Waiting"
+              : param.row.status === 1
+              ? "Accepted"
+              : param.row.status === 3
+              ? "Rejected"
+              : param.row.status}
+          </Typography>
+        );
+      },
+    },
+    {
+      field: "message",
+      headerName: "Message",
+      flex: 1,
     },
 
     {
-      field: "request_by",
-      headerName: "Request by",
-      type: "number",
-      width: 100,
-      valueGetter: (params) => params.row.request_by.user_name,
-    },
-    // {
-    //   field: "sleep",
-    //   headerName: "sleeps",
-    //   type: "number",
-    //   editable: false,
-    // },
-    {
-      field: "Action",
+      field: "action",
       headerName: "Action",
-      width: 150,
-      type: "number",
-      renderCell: (params) => {
-        const handleButtonClick = () => {
-          console.log("Button clicked for row with request ID:", params.id);
-          handleOpen(params.id);
-        };
-
+      sortable: false,
+      flex: 1,
+      renderCell: (param) => {
         return (
           <Stack direction="row" spacing={1}>
-            <Tooltip title="Accept Request">
-              <IconButton aria-label="Accept Request">
-                <PublishedWithChangesIcon sx={{ color: "#00acb3" }} />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="View detail request">
-              <IconButton aria-label="view detail" onClick={handleButtonClick}>
-                <ViewIcon sx={{ color: "#00acb3" }} />
+            <Tooltip title="View Detail">
+              <IconButton
+                aria-label="view detail"
+                onClick={handleOpen}
+              >
+                <ViewIcon />
               </IconButton>
             </Tooltip>
           </Stack>
@@ -195,51 +206,30 @@ const RequestExchangeList = () => {
       },
     },
   ];
-
   const columnIndex = columns.findIndex(
     (column) => column.field === "request_id"
   );
   if (columnIndex !== -1) {
     columns.splice(columnIndex, 1);
   }
-  const [request, setRequest] = React.useState<MyRequestResponse[]>([]);
+  const [request, setRequest] = useState<MyRequestResponse[]>([]);
   const selectedRequest = request.find(
     (requesting) => requesting.request_id === selectedRequestId
   );
-  const [timeshare, setTimeshare] = React.useState<Record<string, any>>({});
+  const [timeshare, setTimeshare] = useState<Record<string, any>>({});
+  useEffect(() => {
+    const getRequestListByUserID = async () => {
+      const data: any = await requestAPI.getRequestByUserID(userID);
+      if (data && data.length > 0) {
+        setRequestList(data);
+      }
+    };
 
-  // React.useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response: any = await myRequestAPI.getRequestByRequestUser('7e1fb61d-437c-465e-8844-71a1db289d4a');
-  //       if (response && response.length > 0) {
-  //         setRequest(response);
-  //       }
-  //       console.log(request, 'request')
-  //       fetchTimeshareDetail();
-  //     } catch (error) {
-  //       console.error('Error fetching bookings:', error);
-  //     }
-  //   };
-
-  //   const fetchTimeshareDetail = async () => {
-  //     try {
-  //       if (selectedRequest && selectedRequest.timeshare_id) {
-  //         const response = await timeshareAPI.getTimeshareById(selectedRequest.timeshare_id.timeshareId);
-  //         console.log(response, 'okkk');
-  //         setTimeshare(response);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching timeshare:", error);
-  //     }
-  //   };
-
-  //   const initUseEffect = async () => {
-  //     await fetchData();
-  //     await fetchTimeshareDetail();
-  //   };
-  //   initUseEffect();
-  // }, []);
+    const initUseEffect = async () => {
+      await getRequestListByUserID();
+    };
+    initUseEffect();
+  }, []);
 
   const requestWithIds = request.map((request, index) => {
     return {
@@ -262,22 +252,35 @@ const RequestExchangeList = () => {
         <Typography variant="h5" fontWeight={700}>
           My Exchange Request
         </Typography>
-        <DataGrid
-          rows={requestWithIds}
-          columns={columns}
-          getRowId={(row) => row.request_id}
-          sx={{marginTop: "10px"}}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 10,
+        {requestList.length == 0 ? (
+          <DataGrid
+            sx={{ height: "550px", marginTop: "10px" }}
+            columns={columns}
+            slots={{
+              noRowsOverlay: CustomNoRowsOverlay,
+            }}
+            rows={[]}
+          />
+        ) : (
+          <DataGrid
+            rows={requestList.map((item, index) => {
+              return { no: index + 1, ...item };
+            })}
+            getRowId={(row) => row.request_id}
+            style={{ height: "550px", marginTop: "10px" }}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 10,
+                },
               },
-            },
-          }}
-          slots={{ toolbar: GridToolbar }}
-          pageSizeOptions={[10, 20, 50, 100]}
-          disableRowSelectionOnClick
-        />
+            }}
+            slots={{ toolbar: GridToolbar }}
+            pageSizeOptions={[10, 25]}
+            disableRowSelectionOnClick
+          />
+        )}
       </Box>
 
       {selectedRequest && (

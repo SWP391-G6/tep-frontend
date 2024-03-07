@@ -22,15 +22,23 @@ import { useParams } from "react-router";
 import React from "react";
 import { TimeshareDetailResponse } from "../../interfaces/timeshare/timeshareDetailResponse";
 
-type Props = { timeshare: TimeshareDetailResponse };
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
     listStyleType: "inherit",
   },
+  tabs: {
+    "& .MuiTabs-indicator": {
+      backgroundColor: "#00acb3",
+      color: "#00acb3 ",
+    },
+    "& .MuiTab-root.Mui-selected": {
+      color: "#00acb3",
+    },
+  },
 }));
 
-const TimeshareDetail = (props: Props) => {
+const TimeshareDetail = () => {
   const classes = useStyles();
   const [value, setValue] = useState("1");
 
@@ -68,6 +76,7 @@ const TimeshareDetail = (props: Props) => {
           TabIndicatorProps={{
             style: {
               backgroundColor: "#00acb3",
+              color: "#00acb3",
             },
           }}
           sx={{
@@ -84,9 +93,12 @@ const TimeshareDetail = (props: Props) => {
             "& .MuiTab-textColorInherit": {
               color: "#00acb3",
             },
+            "& .MuiButtonBase-root-MuiTab-root.Mui-selected": {
+              color: "#00acb3",
+            },
           }}
         >
-          <Tab label="Timeshare Detail" value="1" />
+          <Tab className={classes.tabs} label="Timeshare Detail" value="1" />
           <Tab label="About the resort" value="2" />
           <Tab label="Images" value="3" />
         </TabList>

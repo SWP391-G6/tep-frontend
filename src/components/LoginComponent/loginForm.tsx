@@ -95,10 +95,10 @@ const LoginForm = () => {
           default:
             console.log("Lỗi Role: ", response.user.role);
         }
-        toast.error("Login Failed!", {
-          position: "top-center",
-        });
       }
+      toast.error("Login Failed!", {
+        position: "top-center",
+      });
     } catch (error) {
       console.log("Error: ", error);
     }
