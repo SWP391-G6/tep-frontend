@@ -80,15 +80,18 @@ const LoginForm = () => {
         password: data.password,
       });
       if (response && !isEmpty(response)) {
+        console.log("Role: ", response.user.role)
         localStorage.setItem(USER_TOKEN_KEY, JSON.stringify(response.token));
         localStorage.setItem(USER_ID_KEY, JSON.stringify(response.user.userid));
         localStorage.setItem(USER_ROLE_KEY, JSON.stringify(response.user.role));
         switch (response.user.role) {
           case "member":
+            console.log(2)
             navigate("/member");
             break;
 
           case "admin":
+            console.log(1)
             navigate("/admin");
             break;
 

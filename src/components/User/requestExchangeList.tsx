@@ -23,7 +23,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import PersonIcon from "@mui/icons-material/Person";
 import CloseIcon from "@mui/icons-material/Close";
-import { MyRequestResponse } from "../../interfaces/myRequest/myRequestResponse";
+import { MyRequestResponse } from "../../interfaces/request/myRequestResponse";
 import myRequestAPI from "../../services/timeshare/myRequestAPI";
 import timeshareAPI from "../../services/timeshare/timeshareAPI";
 import DomainIcon from "@mui/icons-material/Domain";
@@ -34,7 +34,7 @@ import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import AirlineSeatIndividualSuiteIcon from "@mui/icons-material/AirlineSeatIndividualSuite";
 import PhotoSizeSelectActualIcon from "@mui/icons-material/PhotoSizeSelectActual";
 import { useEffect, useState } from "react";
-import { GetExchangeRequestResponse } from "../../interfaces/myRequest/getExchangeRequestResponse";
+import { GetExchangeRequestResponse } from "../../interfaces/request/getExchangeRequestResponse";
 import requestAPI from "../../services/request/requestAPI";
 import { USER_ID_KEY } from "../../constant";
 const style = {

@@ -32,73 +32,6 @@ const validationSchema = yup.object({
 
 const RegisterForm = () => {
 
-    const [error, setError] = useState(false);
-
-
-    const formik = useFormik({
-        initialValues: {
-            user_name: '',
-            fullname: '',
-            password: '',
-            confirmPassword: '',
-            email: '',
-            phone: '',
-            dob: '',
-            role: 'user',
-        },
-        validationSchema: validationSchema,
-        onSubmit: async (values) => {
-            try {
-                const registrationResponse = await registerAPI.register(values);
-                console.log(registrationResponse.status);
-                if (registrationResponse.status === 500) {
-                    throw new Error('registrationResponse.data is undefined');
-                }
-
-                toast.success('Registration successful!', {
-                    position: 'top-center',
-                    autoClose: 3000,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                });
-
-
-                const credentials = {
-                    email: values.email,
-                    password: values.password,
-                };
-
-                const response = await loginAPI.login(credentials);
-                const tokenObject = {
-                    token: response.data,
-                };
-                localStorage.setItem('token', JSON.stringify(tokenObject));
-                console.log(response.data.role, 'login success!');
-                const userRole = response.data.role;
-                if (userRole === 'user') {
-                    setTimeout(() => {
-                        window.location.href = '/';
-                    }, 3000);
-                } else if (userRole === 'admin') {
-                    window.location.href = '/admin/account';
-                } else {
-                    window.location.href = '/unauthorize';
-                }
-            } catch (error) {
-
-                toast.error('Register fail !', {
-                    position: 'top-center',
-                    autoClose: 3000,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                });
-                console.error(error);
-                console.log('login failed!');
-            }
-        },
-    });
 
     return (
         <Box alignItems="center" padding="50px" textAlign="center" width="600px">
@@ -108,11 +41,10 @@ const RegisterForm = () => {
                     Sign Up
                 </Typography>
             </Box>
-
+{/* 
             <Box display="grid">
                 <FormControl
                     component="form"
-                    onSubmit={formik.handleSubmit}
                     variant="outlined"
                     sx={{ display: 'flex', gap: '20px' }}
                 >
@@ -238,7 +170,7 @@ const RegisterForm = () => {
                         </Typography>
                     </Box>
                 </FormControl>
-            </Box>
+            </Box> */}
 
         </Box>
     );

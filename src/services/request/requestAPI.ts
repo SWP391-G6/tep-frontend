@@ -1,4 +1,4 @@
-import { GetExchangeRequestResponse } from "../../interfaces/myRequest/getExchangeRequestResponse";
+import { GetExchangeRequestResponse } from "../../interfaces/request/getExchangeRequestResponse";
 import { NewExchangeRequest } from "../../interfaces/request/newExchangeRequest";
 import axiosClient from "../axiosClient";
 

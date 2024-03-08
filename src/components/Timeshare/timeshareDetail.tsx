@@ -22,7 +22,6 @@ import { useParams } from "react-router";
 import React from "react";
 import { TimeshareDetailResponse } from "../../interfaces/timeshare/timeshareDetailResponse";
 
-
 const useStyles = makeStyles((theme) => ({
   listItem: {
     listStyleType: "inherit",
@@ -40,32 +39,25 @@ const useStyles = makeStyles((theme) => ({
 
 const TimeshareDetail = () => {
   const classes = useStyles();
+  const timeshareID = useParams();
   const [value, setValue] = useState("1");
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
-  const [timeshare, setTimeshare] = useState<Record<string, any>>({});
-  const { timeshareId } = useParams();
-  useEffect(() => {
-    const fetchTimeshareDetail = async () => {
-      try {
-        if (timeshareId) {
-          const response = await timeshareAPI.getTimeshareByUserID(timeshareId);
+  // useEffect(() => {
+  //   const getRoomTypeByTimeshareID = async (timeshareID) => {
+  //     const data: any = await timeshareAPI.getAllTimeshare();
+  //     if (data && data.length > 0) {
+  //     }
+  //   };
 
-          setTimeshare(response);
-        }
-      } catch (error) {
-        console.error("Error fetching timeshare:", error);
-      }
-    };
-
-    const initUseEffect = async () => {
-      await fetchTimeshareDetail();
-    };
-    initUseEffect();
-  }, [timeshareId]);
+  //   const initUseEffect = async () => {
+  //     if (timeshareID) await getRoomTypeByTimeshareID(timeshareID);
+  //   };
+  //   initUseEffect();
+  // }, [timeshareID]);
 
   return (
     <TabContext value={value}>
@@ -112,7 +104,7 @@ const TimeshareDetail = () => {
               </Typography>
             </Grid>
 
-            {timeshare?.room && (
+            {/* {timeshare?.room && (
               <Grid xs={4}>
                 <ListItem disableGutters>
                   <ListItemText
@@ -124,7 +116,7 @@ const TimeshareDetail = () => {
                   />
                 </ListItem>
               </Grid>
-            )}
+            )} */}
           </>
           <Divider sx={{ width: "100%" }} />
           <>
@@ -133,7 +125,7 @@ const TimeshareDetail = () => {
                 Entertainment
               </Typography>
             </Grid>
-            {timeshare?.room && (
+            {/* {timeshare?.room && (
               <Grid xs={4}>
                 <ListItem disableGutters>
                   <ListItemText
@@ -145,7 +137,7 @@ const TimeshareDetail = () => {
                   />
                 </ListItem>
               </Grid>
-            )}
+            )} */}
           </>
           <Divider sx={{ width: "100%" }} />
           <>
@@ -154,7 +146,7 @@ const TimeshareDetail = () => {
                 Features
               </Typography>
             </Grid>
-            {timeshare?.room && (
+            {/* {timeshare?.room && (
               <Grid xs={4}>
                 <ListItem disableGutters>
                   <ListItemText
@@ -166,7 +158,7 @@ const TimeshareDetail = () => {
                   />
                 </ListItem>
               </Grid>
-            )}
+            )} */}
           </>
           <Divider sx={{ width: "100%" }} />
           <>
@@ -175,7 +167,7 @@ const TimeshareDetail = () => {
                 Policies
               </Typography>
             </Grid>
-            {timeshare?.room && (
+            {/* {timeshare?.room && (
               <Grid xs={4}>
                 <ListItem disableGutters>
                   <ListItemText
@@ -187,7 +179,7 @@ const TimeshareDetail = () => {
                   />
                 </ListItem>
               </Grid>
-            )}
+            )} */}
           </>
         </Grid>
       </TabPanel>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router';
 import myBookingAPI from '../../services/timeshare/myBookingAPI';
-import { MyBookingResponse } from '../../interfaces/mybooking/myBookingResponse';
+import { MyBookingResponse } from '../../interfaces/booking/bookingResponse';
 import {
     Card,
     CardContent,

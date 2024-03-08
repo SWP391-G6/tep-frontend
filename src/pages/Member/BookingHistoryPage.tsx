@@ -1,15 +1,11 @@
 import { Box, Container, Grid } from "@mui/material"
-
-import Header from "../../components/Header/header";
-import Footer from "../../components/Footer/footer";
 import UserActivityTab from "../../components/User/UserActivityTab";
 import UserCard from "../../components/User/UserCard";
 import BackButton from "../../components/Button/backButton";
-import BookingHistoryList from "../../components/User/myBookingHistory";
+import BookingHistoryDataGrid from "../../components/User/bookingHistoryDataGrid";
 
-type Props = {}
 
-const MyHistoryBookingPage = (props: Props) => {
+const BookingHistoryPage = () => {
 
     return (
         <Box sx={{ backgroundColor: "#d6dbdb51" }}>
@@ -31,7 +27,7 @@ const MyHistoryBookingPage = (props: Props) => {
 
                         <Grid item xs={9}>
                             <Box>
-                                <BookingHistoryList/>
+                                <BookingHistoryDataGrid />
                             </Box>
                         </Grid>
                     </Grid>
@@ -41,4 +37,4 @@ const MyHistoryBookingPage = (props: Props) => {
     )
 }
 
-export default MyHistoryBookingPage
+export default BookingHistoryPage;

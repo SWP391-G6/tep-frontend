@@ -8,8 +8,8 @@ import HomeDashboard from "../components/Dashboard/homeDashboard";
 import UserProfilePage from "../pages/Member/MyProfilePage";
 import MyTimesharePage from "../pages/Member/MyTimesharePage";
 import MyExchangeRequestPage from "../pages/Member/MyExchangeRequestPage";
-import MyHistoryBookingPage from "../pages/Member/MyBookingHistoryPage";
 import ProfileDashboardPage from "../pages/Member/ProfileDashboardPage";
+import BookingHistoryPage from "../pages/Member/BookingHistoryPage";
 
 type Props = {
   isAllowed: boolean;
@@ -39,7 +39,7 @@ function MemberRoutes(props: Props) {
           <Route path="my_profile" element={<UserProfilePage />} />
           <Route path="my_timeshare" element={<MyTimesharePage />} />
           <Route path="my_exchange_request" element={<MyExchangeRequestPage />} />
-          <Route path="my_booking_history" element={<MyHistoryBookingPage />} />
+          <Route path="my_booking_history" element={<BookingHistoryPage />} />
         </Route>
         <Route path="*" element={<NotFoundAuthorizedPage />} />
       </Route>
