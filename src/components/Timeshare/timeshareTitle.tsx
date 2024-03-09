@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import timeshareAPI from "../../services/timeshare/timeshareAPI";
 import { TimeshareDetailResponse } from "../../interfaces/timeshare/timeshareDetailResponse";
+import { RoomTypeResponse } from "../../interfaces/roomtype/roomTypeResponse";
 
 const useStyles = makeStyles({
   tiltedImage: {
@@ -24,7 +25,7 @@ const useStyles = makeStyles({
   },
 });
 
-type Props = { timeshare: TimeshareDetailResponse };
+type Props = { timeshare: TimeshareDetailResponse; roomType: RoomTypeResponse };
 
 const TimeshareTitle = (props: Props) => {
   const classes = useStyles();
@@ -73,26 +74,28 @@ const TimeshareTitle = (props: Props) => {
               </Avatar>
               <List sx={{ marginLeft: "20px", gap: "10px" }} disablePadding>
                 <ListItem disablePadding>
-                  {1 && (
-                    <ListItemText
-                      primary={
-                        <Typography variant="subtitle1" fontWeight={500}>
-                          1 Bedrooms
-                        </Typography>
-                      }
-                    />
-                  )}
+                  <ListItemText
+                    primary={
+                      <Typography variant="subtitle1" fontWeight={500}>
+                        Bedrooms{" "}
+                        <span style={{ color: "#00acb3" }}>
+                          {props.roomType.bed}
+                        </span>
+                      </Typography>
+                    }
+                  />
                 </ListItem>
                 <ListItem disablePadding>
-                  {1 && (
-                    <ListItemText
-                      primary={
-                        <Typography variant="subtitle1" fontWeight={500}>
-                          Sleeps
-                        </Typography>
-                      }
-                    />
-                  )}
+                  <ListItemText
+                    primary={
+                      <Typography variant="subtitle1" fontWeight={500}>
+                        Sleeps{" "}
+                        <span style={{ color: "#00acb3" }}>
+                          {props.roomType.sleeps}
+                        </span>
+                      </Typography>
+                    }
+                  />
                 </ListItem>
               </List>
             </Box>
@@ -102,26 +105,28 @@ const TimeshareTitle = (props: Props) => {
                 <ApartmentIcon />
               </Avatar>
               <List sx={{ marginLeft: "20px", gap: "10px" }} disablePadding>
-                {1 && (
+                <ListItemText
+                  primary={
+                    <Typography variant="subtitle1" fontWeight={500}>
+                      Room:{" "}
+                      <span style={{ color: "#00acb3" }}>
+                        {props.roomType.name}
+                      </span>
+                    </Typography>
+                  }
+                />
+
+                <ListItem disablePadding>
                   <ListItemText
                     primary={
                       <Typography variant="subtitle1" fontWeight={500}>
-                        Room:
+                        View:{" "}
+                        <span style={{ color: "#00acb3" }}>
+                          {props.roomType.roomview}
+                        </span>
                       </Typography>
                     }
                   />
-                )}
-
-                <ListItem disablePadding>
-                  {2 && (
-                    <ListItemText
-                      primary={
-                        <Typography variant="subtitle1" fontWeight={500}>
-                          View:
-                        </Typography>
-                      }
-                    />
-                  )}
                 </ListItem>
               </List>
             </Box>
@@ -133,15 +138,16 @@ const TimeshareTitle = (props: Props) => {
               </Avatar>
               <List sx={{ marginLeft: "20px", gap: "10px" }} disablePadding>
                 <ListItem disablePadding>
-                  {1 && (
-                    <ListItemText
-                      primary={
-                        <Typography variant="subtitle1" fontWeight={500}>
-                          Bathrooms
-                        </Typography>
-                      }
-                    />
-                  )}
+                  <ListItemText
+                    primary={
+                      <Typography variant="subtitle1" fontWeight={500}>
+                        Bathrooms{" "}
+                        <span style={{ color: "#00acb3" }}>
+                          {props.roomType.bath}
+                        </span>
+                      </Typography>
+                    }
+                  />
                 </ListItem>
               </List>
             </Box>
@@ -151,15 +157,16 @@ const TimeshareTitle = (props: Props) => {
               </Avatar>
               <List sx={{ marginLeft: "20px", gap: "10px" }} disablePadding>
                 <ListItem disablePadding>
-                  {1 && (
-                    <ListItemText
-                      primary={
-                        <Typography variant="subtitle1" fontWeight={500}>
-                          kitchen
-                        </Typography>
-                      }
-                    />
-                  )}
+                  <ListItemText
+                    primary={
+                      <Typography variant="subtitle1" fontWeight={500}>
+                        Kitchen{" "}
+                        <span style={{ color: "#00acb3" }}>
+                          {props.roomType.kitchen}
+                        </span>
+                      </Typography>
+                    }
+                  />
                 </ListItem>
               </List>
             </Box>

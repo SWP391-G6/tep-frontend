@@ -15,9 +15,8 @@ import TopDestinationCarousel from "../Carousel/topDestinationCarousel";
 import ShowTimeshareGrid from "../Grids/showTimeshareGrid";
 
 
-type Props = {}
 
-const HomeDashboard = (props: Props) => {
+const HomeDashboard = () => {
   return (
     <Box component="main" sx={{ height: "100%" }}>
     <Carousel />

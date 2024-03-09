@@ -1,18 +1,12 @@
-import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import {  useState } from "react";
+import { useForm } from "react-hook-form";
 import {
   Grid,
   Typography,
   Box,
   Button,
-  FormControl,
-  InputLabel,
-  OutlinedInput,
   InputAdornment,
   IconButton,
-  FormControlLabel,
-  Checkbox,
-  FormGroup,
   TextField,
   Stack,
 } from "@mui/material";
@@ -22,10 +16,8 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import PersonIcon from "@mui/icons-material/Person";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import { addErrorIntoField } from "../../utils";
 import ErrorMessage from "../Error/errorMessage";
 import { LoginRequest } from "../../interfaces/login/loginRequest";
 import loginAPI from "../../services/login/loginAPI";
@@ -80,7 +72,6 @@ const LoginForm = () => {
         password: data.password,
       });
       if (response && !isEmpty(response)) {
-        console.log("Role: ", response.user.role)
         localStorage.setItem(USER_TOKEN_KEY, JSON.stringify(response.token));
         localStorage.setItem(USER_ID_KEY, JSON.stringify(response.user.userid));
         localStorage.setItem(USER_ROLE_KEY, JSON.stringify(response.user.role));

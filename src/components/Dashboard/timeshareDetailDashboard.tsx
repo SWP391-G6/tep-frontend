@@ -1,6 +1,6 @@
 import { Container } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import BackButton from "../Button/backButton";
 import TimeshareTitle from "../Timeshare/timeshareTitle";
 import TimesharePriceInformation from "../Timeshare/timesharePriceInformation";
@@ -100,12 +100,12 @@ const TimeshareDetailDashboard = () => {
         <Grid2
           xs={8}
           sx={{
-            padding: "30px",
+            padding: "20px",
             boxShadow: "1px 1px 2px 2px rgba(0, 0, 0, 0.2)",
             backgroundColor: "#ffffff",
           }}
         >
-          <TimeshareTitle timeshare={timeshareDetail} />
+          <TimeshareTitle timeshare={timeshareDetail} roomType={roomType} />
         </Grid2>
         <Grid2
           xs={3.5}
@@ -122,6 +122,7 @@ const TimeshareDetailDashboard = () => {
           <TimesharePriceInformation
             timeshareID={timeshareID}
             timeshare={timeshareDetail}
+            roomType={roomType}
           />
         </Grid2>
         <Grid2

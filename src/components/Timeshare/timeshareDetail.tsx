@@ -44,7 +44,6 @@ type Props = { timeshare: TimeshareDetailResponse; roomType: RoomTypeResponse };
 const TimeshareDetail = (props: Props) => {
   const classes = useStyles();
   const [value, setValue] = useState("1");
-  const [polices, setPolices] = useState<String[]>([]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -59,16 +58,19 @@ const TimeshareDetail = (props: Props) => {
       str = str.substring(index + 2);
     }
 
-    substrings.push(str); // Thêm phần tử cuối cùng
+    substrings.push(str);
 
     return substrings;
   };
-  const inputString: string = props.roomType.policies;
-  const result: string[] = splitString(inputString);
-  // console.log("Result", result);
-  // result.map((item: string) => {
-  //   console.log("Item: ", item);
-  // });
+
+  const inputPolicies: string = props.roomType.policies;
+  const inputKitchen: string = props.roomType.kitchen;
+  const inputEntertainment: string = props.roomType.entertaiment;
+  const inputFeature: string = props.roomType.feature;
+  const policies: string[] = splitString(inputPolicies);
+  const kitchen: string[] = splitString(inputKitchen);
+  const entertainment: string[] = splitString(inputEntertainment);
+  const features: string[] = splitString(inputFeature);
   return (
     <TabContext value={value}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -82,9 +84,6 @@ const TimeshareDetail = (props: Props) => {
             },
           }}
           sx={{
-            "& .MuiTab-root": {
-              color: "#00acb3",
-            },
             "& .Mui-selected": {
               color: "#00acb3",
             },
@@ -114,17 +113,19 @@ const TimeshareDetail = (props: Props) => {
               </Typography>
             </Grid>
 
-            <Grid xs={4}>
-              <ListItem disableGutters>
-                <ListItemText
-                  primary={
-                    <Typography fontWeight={400}>
-                      • {props.roomType.kitchen}
-                    </Typography>
-                  }
-                />
-              </ListItem>
-            </Grid>
+            {kitchen.map((item, index) => {
+              return (
+                <Grid xs={4} key={index}>
+                  <ListItem disableGutters>
+                    <ListItemText
+                      primary={
+                        <Typography fontWeight={400}>• {item}</Typography>
+                      }
+                    />
+                  </ListItem>
+                </Grid>
+              );
+            })}
           </>
           <Divider sx={{ width: "100%" }} />
           <>
@@ -134,17 +135,19 @@ const TimeshareDetail = (props: Props) => {
               </Typography>
             </Grid>
 
-            <Grid xs={4}>
-              <ListItem disableGutters>
-                <ListItemText
-                  primary={
-                    <Typography fontWeight={400}>
-                      • {props.roomType.entertaiment}
-                    </Typography>
-                  }
-                />
-              </ListItem>
-            </Grid>
+            {entertainment.map((item, index) => {
+              return (
+                <Grid xs={4} key={index}>
+                  <ListItem disableGutters>
+                    <ListItemText
+                      primary={
+                        <Typography fontWeight={400}>• {item}</Typography>
+                      }
+                    />
+                  </ListItem>
+                </Grid>
+              );
+            })}
           </>
           <Divider sx={{ width: "100%" }} />
           <>
@@ -154,17 +157,19 @@ const TimeshareDetail = (props: Props) => {
               </Typography>
             </Grid>
 
-            <Grid xs={4}>
-              <ListItem disableGutters>
-                <ListItemText
-                  primary={
-                    <Typography fontWeight={400}>
-                      • {props.roomType.feature}
-                    </Typography>
-                  }
-                />
-              </ListItem>
-            </Grid>
+            {features.map((item, index) => {
+              return (
+                <Grid xs={4} key={index}>
+                  <ListItem disableGutters>
+                    <ListItemText
+                      primary={
+                        <Typography fontWeight={400}>• {item}</Typography>
+                      }
+                    />
+                  </ListItem>
+                </Grid>
+              );
+            })}
           </>
           <Divider sx={{ width: "100%" }} />
           <>
@@ -173,7 +178,7 @@ const TimeshareDetail = (props: Props) => {
                 Policies
               </Typography>
             </Grid>
-            {result.map((item, index) => {
+            {policies.map((item, index) => {
               return (
                 <Grid xs={4} key={index}>
                   <ListItem disableGutters>

@@ -1,4 +1,4 @@
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import ErrorMessage from "../Error/errorMessage";
 import {
   Box,
@@ -34,22 +34,25 @@ import { TimeshareByOwnerResponse } from "../../interfaces/timeshare/timeshareBy
 import dayjs from "dayjs";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { TimeshareResponse } from "../../interfaces/timeshare/timeshareResponse";
 import { CreateExchangeRequest } from "../../interfaces/request/createExchangeRequest";
 import { isEmpty } from "lodash";
 import InstructMessage from "../Instruct/instructMessage";
 import requestAPI from "../../services/request/requestAPI";
 import { ToastContainer, toast } from "react-toastify";
-import moment from "moment";
 import { TimeshareDetailResponse } from "../../interfaces/timeshare/timeshareDetailResponse";
 import { formatNumber } from "../../helpers/numberHelpers";
 import { USER_ID_KEY, USER_TOKEN_KEY } from "../../constant";
+import { RoomTypeResponse } from "../../interfaces/roomtype/roomTypeResponse";
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 
 dayjs.extend(customParseFormat);
 dayjs.locale("en");
-type Props = { timeshareID: any; timeshare: TimeshareDetailResponse };
+type Props = {
+  timeshareID: any;
+  timeshare: TimeshareDetailResponse;
+  roomType: RoomTypeResponse;
+};
 
 const useStyles: any = makeStyles((theme: Theme) => ({
   hoverContainer: {
@@ -263,7 +266,14 @@ const TimesharePriceInformation = (props: Props) => {
               variant="contained"
               onClick={() => {
                 {
-                  token ? navigate("booking_information") : navigate("/login");
+                  token
+                    ? navigate("booking_information", {
+                        state: {
+                          timeshare: props.timeshare,
+                          roomType: props.roomType,
+                        },
+                      })
+                    : navigate("/login");
                 }
               }}
               sx={{
