@@ -8,6 +8,9 @@ import TimeshareDetail from "../Timeshare/timeshareDetail";
 import { TimeshareDetailResponse } from "../../interfaces/timeshare/timeshareDetailResponse";
 import timeshareAPI from "../../services/timeshare/timeshareAPI";
 import { useParams } from "react-router";
+import roomTypeAPI from "../../services/roomtype/roomtypeAPI";
+import { RoomTypeResponse } from "../../interfaces/roomtype/roomTypeResponse";
+import { isEmpty } from "lodash";
 
 const TimeshareDetailDashboard = () => {
   let { timeshareID } = useParams();
@@ -46,19 +49,43 @@ const TimeshareDetailDashboard = () => {
       city: "",
       image_url: "",
     });
+  const [roomType, setRoomType] = useState<RoomTypeResponse>({
+    bath: 0,
+    bed: 0,
+    sleeps: 0,
+    entertaiment: "",
+    feature: "",
+    kitchen: "",
+    name: "",
+    policies: "",
+    roomview: "",
+    timeshareId: "",
+    roomtypeId: "",
+  });
 
   useEffect(() => {
-    const getBillByID = async (timeshareID: string) => {
-      const data: any = await timeshareAPI.getTimeshareByTimeshareID(
+    const getTimeshareDetailByTimeshareID = async (timeshareID: string) => {
+      const data: any = await timeshareAPI.getTimeshareDetailByTimeshareID(
         timeshareID
       );
-      if (data) {
+      if (data && !isEmpty(data)) {
         setTimeshareDetail(data);
       }
     };
+
+    const getRoomTypeByTimeshareID = async (timeshareID: string) => {
+      const data: any = await roomTypeAPI.getRoomTypeByTimeshareID(timeshareID);
+      if (data && !isEmpty(data)) {
+        setRoomType(data);
+      }
+    };
+
     const initUseEffect = async () => {
       if (timeshareID) {
-        await getBillByID(timeshareID);
+        await Promise.all([
+          getTimeshareDetailByTimeshareID(timeshareID),
+          getRoomTypeByTimeshareID(timeshareID),
+        ]);
       }
     };
     initUseEffect();
@@ -104,7 +131,7 @@ const TimeshareDetailDashboard = () => {
             backgroundColor: "#ffffff",
           }}
         >
-          <TimeshareDetail timeshare={timeshareDetail} />
+          <TimeshareDetail timeshare={timeshareDetail} roomType={roomType} />
         </Grid2>
       </Grid2>
     </Container>

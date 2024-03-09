@@ -21,6 +21,8 @@ import { useParams } from "react-router";
 
 import React from "react";
 import { TimeshareDetailResponse } from "../../interfaces/timeshare/timeshareDetailResponse";
+import roomTypeAPI from "../../services/roomtype/roomtypeAPI";
+import { RoomTypeResponse } from "../../interfaces/roomtype/roomTypeResponse";
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -37,28 +39,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TimeshareDetail = () => {
+type Props = { timeshare: TimeshareDetailResponse; roomType: RoomTypeResponse };
+
+const TimeshareDetail = (props: Props) => {
   const classes = useStyles();
-  const timeshareID = useParams();
   const [value, setValue] = useState("1");
+  const [polices, setPolices] = useState<String[]>([]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
-  // useEffect(() => {
-  //   const getRoomTypeByTimeshareID = async (timeshareID) => {
-  //     const data: any = await timeshareAPI.getAllTimeshare();
-  //     if (data && data.length > 0) {
-  //     }
-  //   };
+  const splitString = (str: string): string[] => {
+    const substrings: string[] = [];
 
-  //   const initUseEffect = async () => {
-  //     if (timeshareID) await getRoomTypeByTimeshareID(timeshareID);
-  //   };
-  //   initUseEffect();
-  // }, [timeshareID]);
+    while (str.includes(", ")) {
+      const index = str.indexOf(", ");
+      substrings.push(str.substring(0, index));
+      str = str.substring(index + 2);
+    }
 
+    substrings.push(str); // Thêm phần tử cuối cùng
+
+    return substrings;
+  };
+  const inputString: string = props.roomType.policies;
+  const result: string[] = splitString(inputString);
+  // console.log("Result", result);
+  // result.map((item: string) => {
+  //   console.log("Item: ", item);
+  // });
   return (
     <TabContext value={value}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -104,19 +114,17 @@ const TimeshareDetail = () => {
               </Typography>
             </Grid>
 
-            {/* {timeshare?.room && (
-              <Grid xs={4}>
-                <ListItem disableGutters>
-                  <ListItemText
-                    primary={
-                      <Typography fontWeight={400}>
-                        • {timeshare.room.kitchen}
-                      </Typography>
-                    }
-                  />
-                </ListItem>
-              </Grid>
-            )} */}
+            <Grid xs={4}>
+              <ListItem disableGutters>
+                <ListItemText
+                  primary={
+                    <Typography fontWeight={400}>
+                      • {props.roomType.kitchen}
+                    </Typography>
+                  }
+                />
+              </ListItem>
+            </Grid>
           </>
           <Divider sx={{ width: "100%" }} />
           <>
@@ -125,19 +133,18 @@ const TimeshareDetail = () => {
                 Entertainment
               </Typography>
             </Grid>
-            {/* {timeshare?.room && (
-              <Grid xs={4}>
-                <ListItem disableGutters>
-                  <ListItemText
-                    primary={
-                      <Typography fontWeight={400}>
-                        • {timeshare.room.entertaiment}
-                      </Typography>
-                    }
-                  />
-                </ListItem>
-              </Grid>
-            )} */}
+
+            <Grid xs={4}>
+              <ListItem disableGutters>
+                <ListItemText
+                  primary={
+                    <Typography fontWeight={400}>
+                      • {props.roomType.entertaiment}
+                    </Typography>
+                  }
+                />
+              </ListItem>
+            </Grid>
           </>
           <Divider sx={{ width: "100%" }} />
           <>
@@ -146,19 +153,18 @@ const TimeshareDetail = () => {
                 Features
               </Typography>
             </Grid>
-            {/* {timeshare?.room && (
-              <Grid xs={4}>
-                <ListItem disableGutters>
-                  <ListItemText
-                    primary={
-                      <Typography fontWeight={400}>
-                        • {timeshare.room.feature}
-                      </Typography>
-                    }
-                  />
-                </ListItem>
-              </Grid>
-            )} */}
+
+            <Grid xs={4}>
+              <ListItem disableGutters>
+                <ListItemText
+                  primary={
+                    <Typography fontWeight={400}>
+                      • {props.roomType.feature}
+                    </Typography>
+                  }
+                />
+              </ListItem>
+            </Grid>
           </>
           <Divider sx={{ width: "100%" }} />
           <>
@@ -167,19 +173,19 @@ const TimeshareDetail = () => {
                 Policies
               </Typography>
             </Grid>
-            {/* {timeshare?.room && (
-              <Grid xs={4}>
-                <ListItem disableGutters>
-                  <ListItemText
-                    primary={
-                      <Typography fontWeight={400}>
-                        • {timeshare.room.policies}
-                      </Typography>
-                    }
-                  />
-                </ListItem>
-              </Grid>
-            )} */}
+            {result.map((item, index) => {
+              return (
+                <Grid xs={4} key={index}>
+                  <ListItem disableGutters>
+                    <ListItemText
+                      primary={
+                        <Typography fontWeight={400}>• {item}</Typography>
+                      }
+                    />
+                  </ListItem>
+                </Grid>
+              );
+            })}
           </>
         </Grid>
       </TabPanel>

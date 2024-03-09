@@ -7,7 +7,7 @@ const timeshareAPI = {
     return axiosClient.get<TimeshareResponse[]>("timeshare/showall");
   },
 
-  getTimeshareByTimeshareID: (timeshareID: string) => {
+  getTimeshareDetailByTimeshareID: (timeshareID: string) => {
     return axiosClient.get(`timeshare/details/${timeshareID}`);
   },
 

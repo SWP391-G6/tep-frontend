@@ -156,7 +156,6 @@ const TimesharePriceInformation = (props: Props) => {
       console.log("Error: ", error);
     }
   };
-  console.log(timeshareList);
 
   const handleClick = (index: any) => {
     const newSelectedItems = timeshareList.map((item, idx) => {
