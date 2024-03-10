@@ -117,7 +117,7 @@ const TimesharePriceInformation = (props: Props) => {
   useEffect(() => {
     const getTimeshareByOwner = async () => {
       let temp = [];
-      const data: any = await timeshareAPI.getTimeshareByUserID(userID);
+      const data: any = await timeshareAPI.getTimeshareListByUserID(userID);
       if (data.length > 0) {
         temp = data.map((item: any) => ({ ...item, isSelected: false }));
         setTimeshareList(temp);

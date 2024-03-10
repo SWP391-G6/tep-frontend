@@ -1,18 +1,18 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
-import {
-  DataGrid,
-  GridColDef,
-  GridToolbar,
-  GridValueGetterParams,
-} from "@mui/x-data-grid";
-import { Button, IconButton, Stack, Tooltip, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import { IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
 import ViewIcon from "@mui/icons-material/Visibility";
-import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import { TimeshareByOwnerResponse } from "../../interfaces/timeshare/timeshareByOwnerResponse";
+import { styled } from "@mui/material/styles";
+import { useEffect, useState } from "react";
 import timeshareAPI from "../../services/timeshare/timeshareAPI";
+import { USER_ID_KEY } from "../../constant";
+import { formatNumber } from "../../helpers/numberHelpers";
+import dayjs from "dayjs";
+var customParseFormat = require("dayjs/plugin/customParseFormat");
+dayjs.extend(customParseFormat);
+dayjs.locale("en");
 
 const StyledGridOverlay = styled("div")(({ theme }) => ({
   display: "flex",
@@ -80,62 +80,90 @@ function CustomNoRowsOverlay() {
           </g>
         </g>
       </svg>
-      <Box sx={{ mt: 1 }}>No request yet!</Box>
+      <Box sx={{ mt: 1 }}>No Timeshare Yet!</Box>
     </StyledGridOverlay>
   );
 }
 
-const TimeshareList = () => {
+const TimeshareDataGrid = () => {
   const navigate = useNavigate();
+  const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 90 },
+    { field: "no", headerName: "No", width: 90 },
     {
       field: "timeshareName",
-      headerName: "name",
+      headerName: "Timeshare Name",
       flex: 1,
     },
     {
       field: "dateStart",
-      headerName: "Start Date",
+      headerName: "Check in",
       flex: 1,
-      //valueGetter: (params) => params.row.timeshareId.dateStart,
+      renderCell: (param) => {
+        return (
+          <Typography>
+            {dayjs(param.row.dateStart).format("DD MMM YYYY").toString()}
+          </Typography>
+        );
+      },
     },
     {
       field: "dateEnd",
-      headerName: "End Date",
+      headerName: "Check out",
       flex: 1,
+      renderCell: (param) => {
+        return (
+          <Typography>
+            {dayjs(param.row.dateEnd).format("DD MMM YYYY").toString()}
+          </Typography>
+        );
+      },
     },
+
     {
       field: "price",
-      headerName: "Price",
-      type: "number",
+      headerName: "Price (VNĐ)",
       flex: 1,
+      renderCell: (param) => {
+        return <Typography>{formatNumber(param.row.price)}</Typography>;
+      },
     },
-    {
-      field: "nights",
-      headerName: "Night",
-      type: "number",
-      flex: 1,
-    },
-    {
-      field: "Action",
-      headerName: "Action",
-      flex: 1,
-      type: "number",
-      renderCell: (params) => {
-        const handleButtonClick = () => {
-          console.log("Button clicked for row with ID:", params.id);
-        };
 
+    {
+      field: "status",
+      headerName: "Status",
+      flex: 1,
+      renderCell: (param) => {
+        return (
+          <Typography>
+            {param.row.status === true
+              ? "Accepted"
+              : param.row.status === false
+              ? "Rejected"
+              : param.row.status}
+          </Typography>
+        );
+      },
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      sortable: false,
+      flex: 1,
+      renderCell: (param) => {
         return (
           <Stack direction="row" spacing={1}>
-            <Tooltip title="View detail timeshare">
+            <Tooltip title="View Timeshare Detail">
               <IconButton
-                aria-label="view detail"
-                onClick={() => navigate(`/view_timeshare_detail/${params.id}`)}
+                aria-label="View timeshare detail"
+                onClick={() => {
+                  navigate(
+                    `/member/view_timeshare_detail/${param.row.timeshareId}`
+                  );
+                }}
               >
-                <ViewIcon sx={{ color: "#00acb3" }} />
+                <ViewIcon />
               </IconButton>
             </Tooltip>
           </Stack>
@@ -144,37 +172,23 @@ const TimeshareList = () => {
     },
   ];
 
-  const [timeshare, setTimeshare] = React.useState<TimeshareByOwnerResponse[]>(
-    []
-  );
+  const [timeshareList, setTimeshareList] = useState<
+    TimeshareByOwnerResponse[]
+  >([]);
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response: any = await timeshareAPI.getTimeshareByOwnerId(
-          "6d21c5dc-56a5-4da0-98d5-4b09c31911a7"
-        );
-        if (response && response.length > 0) {
-          setTimeshare(response);
-        }
-        console.log(timeshare, "timeshare");
-      } catch (error) {
-        console.error("Error fetching bookings:", error);
+  useEffect(() => {
+    const getTimeshareListByUserID = async (userID: string) => {
+      const data: any = await timeshareAPI.getTimeshareListByUserID(userID);
+      if (data && data.length > 0) {
+        setTimeshareList(data);
       }
     };
 
     const initUseEffect = async () => {
-      await fetchData();
+      if (userID) await getTimeshareListByUserID(userID);
     };
     initUseEffect();
   }, []);
-
-  const timeshareWithIds = timeshare.map((timeshare, index) => {
-    return {
-      ...timeshare,
-      id: index + 1,
-    };
-  });
 
   return (
     <Box
@@ -190,25 +204,38 @@ const TimeshareList = () => {
         <Typography variant="h5" fontWeight={700}>
           My Timeshares
         </Typography>
-        <DataGrid
-          rows={timeshareWithIds}
-          columns={columns}
-          getRowId={(row) => row.timeshareId}
-          sx={{marginTop: "10px"}}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 10,
+        {timeshareList.length == 0 ? (
+          <DataGrid
+            sx={{ height: "550px", marginTop: "10px" }}
+            columns={columns}
+            slots={{
+              noRowsOverlay: CustomNoRowsOverlay,
+            }}
+            rows={[]}
+          />
+        ) : (
+          <DataGrid
+            rows={timeshareList.map((item, index) => {
+              return { no: index + 1, ...item };
+            })}
+            getRowId={(row) => row.timeshareId}
+            style={{ height: "550px", marginTop: "10px" }}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 10,
+                },
               },
-            },
-          }}
-          slots={{ toolbar: GridToolbar }}
-          pageSizeOptions={[10, 20, 50, 100]}
-          disableRowSelectionOnClick
-        />
+            }}
+            slots={{ toolbar: GridToolbar }}
+            pageSizeOptions={[10, 25]}
+            disableRowSelectionOnClick
+          />
+        )}
       </Box>
     </Box>
   );
 };
 
-export default TimeshareList;
+export default TimeshareDataGrid;

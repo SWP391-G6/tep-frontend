@@ -4,10 +4,10 @@ export interface VNPayRequest {
     city:           string;
     country:        string;
     create_date:    Date;
-    payment_status: number;
+    payment_status: boolean;
     postal_code:    string;
     state:          string;
-    status:         number;
+    status:         boolean;
     street:         string;
     telephone:      string;
     total:          number;

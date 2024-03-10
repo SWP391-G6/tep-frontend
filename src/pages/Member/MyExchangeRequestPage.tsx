@@ -1,15 +1,10 @@
 import { Box, Container, Grid } from "@mui/material"
-
-import Header from "../../components/Header/header";
-import Footer from "../../components/Footer/footer";
 import UserActivityTab from "../../components/User/UserActivityTab";
 import UserCard from "../../components/User/UserCard";
-import UserRequestActivity from "../../components/User/requestExchangeList";
+import UserRequestActivity from "../../components/DataGrid/exchangeRequestDataGrid";
 import BackButton from "../../components/Button/backButton";
 
-type Props = {}
-
-const MyExchangeRequestPage = (props: Props) => {
+const MyExchangeRequestPage = () => {
 
     return (
         <Box sx={{ backgroundColor: "#d6dbdb51" }}>

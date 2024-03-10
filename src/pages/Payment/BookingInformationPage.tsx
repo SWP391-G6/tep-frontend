@@ -140,7 +140,7 @@ const BookingInformationPage = () => {
   var d = new Date(2024, 2, 19);
 
   const onSubmit: SubmitHandler<VNPAYInputFormRequest> = async (data) => {
-    console.log("Data: ", data);
+    console.log("Data: ", data.fullname);
     try {
       const response: any = await vnpayAPI.checkout({
         adults: adults,
@@ -148,10 +148,10 @@ const BookingInformationPage = () => {
         city: data.city,
         country: "Việt Nam",
         create_date: createDay,
-        payment_status: 1,
+        payment_status: true,
         postal_code: data.postal_code,
         state: data.state,
-        status: 1,
+        status: true,
         street: data.street,
         telephone: data.telephone,
         total: state.timeshare.price,
@@ -331,6 +331,7 @@ const BookingInformationPage = () => {
                                 src={
                                   "https://i.ibb.co/xGsBjkY/vietnamflag-removebg-preview.png"
                                 }
+                                alt="Việt Nam flag"
                                 width={30}
                                 height={30}
                               />
@@ -468,6 +469,7 @@ const BookingInformationPage = () => {
                                 src={
                                   "https://i.ibb.co/xGsBjkY/vietnamflag-removebg-preview.png"
                                 }
+                                alt="Việt Nam Flag"
                                 width={30}
                                 height={30}
                               />

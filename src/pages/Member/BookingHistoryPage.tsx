@@ -2,7 +2,7 @@ import { Box, Container, Grid } from "@mui/material"
 import UserActivityTab from "../../components/User/UserActivityTab";
 import UserCard from "../../components/User/UserCard";
 import BackButton from "../../components/Button/backButton";
-import BookingHistoryDataGrid from "../../components/User/bookingHistoryDataGrid";
+import BookingHistoryDataGrid from "../../components/DataGrid/bookingHistoryDataGrid";
 
 
 const BookingHistoryPage = () => {

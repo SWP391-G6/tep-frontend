@@ -1,4 +1,5 @@
 import { TimeshareByOwnerResponse } from "../../interfaces/timeshare/timeshareByOwnerResponse";
+import { TimeshareByUserIDResponse } from "../../interfaces/timeshare/timeshareByUserIDResponse";
 import { TimeshareResponse } from "../../interfaces/timeshare/timeshareResponse";
 import axiosClient from "../axiosClient";
 
@@ -11,8 +12,8 @@ const timeshareAPI = {
     return axiosClient.get(`timeshare/details/${timeshareID}`);
   },
 
-  getTimeshareByUserID: (owner: string) => {
-    return axiosClient.get<TimeshareResponse[]>("timeshare/getTimeshareByOwner", {
+  getTimeshareListByUserID: (owner: string) => {
+    return axiosClient.get<TimeshareByUserIDResponse[]>("timeshare/getTimeshareByOwner", {
       params: { owner: owner },
     });
   },
