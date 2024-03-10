@@ -9,6 +9,7 @@ import { GetExchangeRequestResponse } from "../../interfaces/request/getExchange
 import { USER_ID_KEY } from "../../constant";
 import requestAPI from "../../services/request/requestAPI";
 import dayjs from "dayjs";
+import { green, red, yellow } from "@mui/material/colors";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 dayjs.locale("en");
@@ -129,17 +130,13 @@ const ExchangeRequestDataGrid = () => {
       headerName: "Status",
       flex: 1,
       renderCell: (param) => {
-        return (
-          <Typography>
-            {param.row.status === 0
-              ? "Waiting"
-              : param.row.status === 1
-              ? "Accepted"
-              : param.row.status === 3
-              ? "Rejected"
-              : param.row.status}
-          </Typography>
-        );
+        if (param.row.status === 1) {
+          return <Typography color={green[500]}>Accepted</Typography>;
+        } else if (param.row.status === 2) {
+          return <Typography color={red[500]}>Accepted</Typography>;
+        } else if (param.row.status === 0) {
+          return <Typography color={yellow[500]}>Processing</Typography>;
+        } else return <Typography>param.row.status</Typography>;
       },
     },
     {

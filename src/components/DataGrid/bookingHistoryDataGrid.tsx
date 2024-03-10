@@ -9,6 +9,7 @@ import { USER_ID_KEY } from "../../constant";
 import { BookingHistoryByUserIDResponse } from "../../interfaces/bookinghistory/bookingHistoryByUserIDResponse";
 import bookingHistoryAPI from "../../services/bookinghistory/bookingHistoryAPI";
 import { useEffect, useState } from "react";
+import { green } from "@mui/material/colors";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 dayjs.locale("en");
@@ -84,6 +85,7 @@ function CustomNoRowsOverlay() {
   );
 }
 const BookingHistoryDataGrid = () => {
+  const navigate = useNavigate();
   const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
   const [bookingHistoryList, setBookingHistoryList] = useState<
     BookingHistoryByUserIDResponse[]
@@ -92,59 +94,56 @@ const BookingHistoryDataGrid = () => {
   const columns: GridColDef[] = [
     { field: "no", headerName: "No", width: 90 },
     {
+      field: "bookingCode",
+      headerName: "Code",
+      flex: 2,
+    },
+    {
       field: "timeshareName",
       headerName: "Timeshare Name",
-      flex: 1,
-      // renderCell: (param) => {
-      //   return (
-      //     <Typography noWrap>
-      //       {param.row.timeshare_response_id.timeshareName}
-      //     </Typography>
-      //   );
-      // },
+      flex: 1.5,
+      renderCell: (param) => {
+        return <Typography>{param.row.timeshare_id.timeshareName}</Typography>;
+      },
     },
     {
-      field: "create_date",
-      headerName: "Create Date",
+      field: "success_date",
+      headerName: "Booking Date",
       flex: 1,
-      // renderCell: (param) => {
-      //   return (
-      //     <Typography>
-      //       {dayjs(param.row.create_date).format("DD MMM YYYY").toString()}
-      //     </Typography>
-      //   );
-      // },
+      renderCell: (param) => {
+        return (
+          <Typography>
+            {dayjs(param.row.success_date).format("DD MMM YYYY").toString()}
+          </Typography>
+        );
+      },
     },
     {
-      field: "request_by",
-      headerName: "Request By",
-      flex: 1,
-      // renderCell: (param) => {
-      //   return <Typography noWrap>{param.row.request_by.fullname}</Typography>;
-      // },
+      field: "date",
+      headerName: "Date",
+      flex: 2,
+      headerAlign: "center",
+      align: "center",
+      renderCell: (param) => {
+        return (
+          <Typography>
+            {dayjs(param.row.dateStart).format("DD MMM YYYY").toString()} -{" "}
+            {dayjs(param.row.dateEnd).format("DD MMM YYYY").toString()}
+          </Typography>
+        );
+      },
     },
     {
       field: "status",
       headerName: "Status",
       flex: 1,
-      // renderCell: (param) => {
-      //   return (
-      //     <Typography>
-      //       {param.row.status === 0
-      //         ? "Waiting"
-      //         : param.row.status === 1
-      //         ? "Accepted"
-      //         : param.row.status === 3
-      //         ? "Rejected"
-      //         : param.row.status}
-      //     </Typography>
-      //   );
-      // },
-    },
-    {
-      field: "message",
-      headerName: "Message",
-      flex: 1,
+      renderCell: (param) => {
+        if (param.row.payment_status === true) {
+          return <Typography color={green[500]}>Paid</Typography>;
+        } else {
+          return <Typography>{param.row.payment_status}</Typography>;
+        }
+      },
     },
 
     {
@@ -152,20 +151,24 @@ const BookingHistoryDataGrid = () => {
       headerName: "Action",
       sortable: false,
       flex: 1,
-      // renderCell: (param) => {
-      //   return (
-      //     <Stack direction="row" spacing={1}>
-      //       <Tooltip title="View Detail">
-      //         <IconButton
-      //           aria-label="view detail"
-      //           // onClick={handleOpen}
-      //         >
-      //           <ViewIcon />
-      //         </IconButton>
-      //       </Tooltip>
-      //     </Stack>
-      //   );
-      // },
+      renderCell: (param) => {
+        return (
+          <Stack direction="row" spacing={1}>
+            <Tooltip title="View Timeshare Detail">
+              <IconButton
+                aria-label="View Timeshare Detail"
+                onClick={() => {
+                  navigate(
+                    `/member/view_timeshare_detail/${param.row.timeshare_id.timeshareId}`
+                  );
+                }}
+              >
+                <ViewIcon />
+              </IconButton>
+            </Tooltip>
+          </Stack>
+        );
+      },
     },
   ];
 

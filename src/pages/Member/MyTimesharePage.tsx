@@ -3,8 +3,8 @@ import { Box, Container, Grid } from "@mui/material";
 import UserActivityTab from "../../components/User/UserActivityTab";
 import UserCard from "../../components/User/UserCard";
 import BackButton from "../../components/Button/backButton";
-import TimeshareList from "../../components/User/timeshareDataGrid";
-import TimeshareDataGrid from "../../components/User/timeshareDataGrid";
+import TimeshareDataGrid from "../../components/DataGrid/timeshareDataGrid";
+
 const MyTimesharePage = () => {
   return (
     <Box sx={{ backgroundColor: "#d6dbdb51" }}>
