@@ -151,10 +151,11 @@ const TimesharePriceInformation = (props: Props) => {
           position: "top-center",
         });
         return;
+      } else {
+        toast.error("Exchange failed!", {
+          position: "top-center",
+        });
       }
-      toast.error("Exchange failed!", {
-        position: "top-center",
-      });
     } catch (error) {
       console.log("Error: ", error);
     }

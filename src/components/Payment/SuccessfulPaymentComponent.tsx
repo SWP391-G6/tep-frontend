@@ -44,7 +44,7 @@ const BootstrapButton = styled(Button)({
 const SuccessfulPaymentComponent = () => {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate("/");
+    navigate("/member");
   };
   return (
     <Box

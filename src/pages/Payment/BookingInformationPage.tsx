@@ -2,6 +2,11 @@ import {
   Box,
   Button,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Divider,
   FormControl,
   FormHelperText,
@@ -16,20 +21,24 @@ import {
 import BackButton from "../../components/Button/backButton";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import TimeshareInformationComponent from "../../components/BookingInformation/timeshareInformationComponent";
-import PaymentSummaryComponent from "../../components/BookingInformation/paymentSummaryComponent";
 import { useLocation } from "react-router";
-import { RoomTypeResponse } from "../../interfaces/roomtype/roomTypeResponse";
 import * as yup from "yup";
 import { styled } from "@mui/system";
 import { makeStyles } from "@mui/styles";
-import { VnpayBookingTimeshareRequest } from "../../interfaces/booking/vnpayBookingTimeshareRequest";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import ErrorMessage from "../../components/Error/errorMessage";
-import vnpayAPI from "../../services/payment/vnpayAPI";
 import { USER_ID_KEY } from "../../constant";
 import { formatNumber } from "../../helpers/numberHelpers";
+import { VNPAYInputFormRequest } from "../../interfaces/booking/vnpayInputFormRequest";
+import { isEmpty } from "lodash";
+import dayjs from "dayjs";
+import vnpayAPI from "../../services/payment/vnpayAPI";
+import { ToastContainer, toast } from "react-toastify";
+var customParseFormat = require("dayjs/plugin/customParseFormat");
+dayjs.extend(customParseFormat);
+dayjs.locale("en");
 
 const CustomBorderTextField = styled(TextField)`
   & label.Mui-focused {
@@ -64,14 +73,10 @@ const useStyles: any = makeStyles({
 
 const phoneRegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
 const validationSchema = yup.object({
-  adult: yup.string().trim().required("Please choose the quantity!"),
-  children: yup.string().trim().required("Please choose the quantity!"),
   city: yup.string().trim().required("City can't be blank!"),
   country: yup.string().trim().required("Country can't be blank!"),
-  payment_status: yup.boolean().required("Payment method can't be blank!"),
   postal_code: yup.string().trim().required("Postal code can't be blank!"),
   state: yup.string().trim().required("Status can't be blank!"),
-  status: yup.boolean().required("Status can't be blank!"),
   street: yup.string().trim().required("Street can't be blank!"),
   telephone: yup
     .string()
@@ -90,19 +95,29 @@ const BookingInformationPage = () => {
   const { state } = useLocation();
   const [adults, setAdults] = useState("");
   const [children, setChildren] = useState("");
-  const [title, setTitle] = useState("");
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const classes = useStyles();
   const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
+  var currentDay = dayjs();
+  let createDay = currentDay.toDate();
+
   const handleSelectNumberAdults = (event: SelectChangeEvent) => {
     setAdults(event.target.value as string);
+    setChildren("");
+    reset();
   };
 
   const handleSelectNumberChildren = (event: SelectChangeEvent) => {
     setChildren(event.target.value as string);
+    reset();
   };
 
-  const handleSelectTitle = (event: SelectChangeEvent) => {
-    setTitle(event.target.value as string);
+  const handleClickOpenConfirmDialog = () => {
+    setOpenConfirmDialog(true);
+  };
+
+  const handleClickCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
   };
   const lengthOfArray = state.roomType.sleeps;
   const sleeps = [];
@@ -115,33 +130,46 @@ const BookingInformationPage = () => {
   const {
     register,
     handleSubmit,
+    getValues,
+    reset,
     formState: { errors },
   } = useForm({
+    mode: "onTouched",
     resolver: yupResolver(validationSchema),
   });
   var d = new Date(2024, 2, 19);
 
-  const onSubmit = async (data: VnpayBookingTimeshareRequest) => {
+  const onSubmit: SubmitHandler<VNPAYInputFormRequest> = async (data) => {
+    console.log("Data: ", data);
     try {
-      console.log("Data: ", data);
-      // const data: any = await vnpayAPI.checkout({
-      //   adults: "1",
-      //   children: "1",
-      //   city: "Ho Chi Minh",
-      //   country: "Việt Nam",
-      //   create_date: d,
-      //   payment_status: 1,
-      //   postal_code: "70000",
-      //   state: "Thu Duc",
-      //   status: 1,
-      //   street: "Duong D2",
-      //   telephone: "0979121340",
-      //   total: state.timeshare.price,
-      //   fullname: "Minh Duy",
-      //   payment_method: "1",
-      //   user_id: userID,
-      //   timeshare_id: state.timeshare.timeshareId,
-      // });
+      const response: any = await vnpayAPI.checkout({
+        adults: adults,
+        children: children,
+        city: data.city,
+        country: "Việt Nam",
+        create_date: createDay,
+        payment_status: 1,
+        postal_code: data.postal_code,
+        state: data.state,
+        status: 1,
+        street: data.street,
+        telephone: data.telephone,
+        total: state.timeshare.price,
+        fullname: data.fullname,
+        payment_method: "1",
+        user_id: userID,
+        timeshare_id: state.timeshare.timeshareId,
+      });
+      if (response && response.code === "00") {
+        toast.success("Checkout Successful!", {
+          position: "top-center",
+        });
+        window.open(`${response.data}`);
+      } else {
+        toast.error("Checkout Failed!", {
+          position: "top-center",
+        });
+      }
     } catch (error) {
       console.log("Error at onSubmit function: ", error);
     }
@@ -199,109 +227,144 @@ const BookingInformationPage = () => {
                     </FormHelperText>
                   </FormControl>
 
-                  <FormControl
-                    sx={{
-                      width: "220px",
-                      marginLeft: "20px",
-                      borderBottomColor: "#00acb3",
-                      borderColor: "#00acb3",
-                    }}
-                  >
-                    <InputLabel id="select-children-label">Children</InputLabel>
-                    <Select
-                      labelId="select-children-label"
-                      id="select-children"
-                      value={children}
-                      label="Children"
-                      sx={{ borderColor: "#00acb3" }}
-                      onChange={handleSelectNumberChildren}
+                  {adults ? (
+                    <FormControl
+                      sx={{
+                        width: "220px",
+                        marginLeft: "20px",
+                        borderBottomColor: "#00acb3",
+                        borderColor: "#00acb3",
+                      }}
                     >
-                      <MenuItem value="">Select</MenuItem>
-                      <MenuItem value={1}>1 kid</MenuItem>
-                      <MenuItem value={2}>2 kids</MenuItem>
-                    </Select>
-                    <FormHelperText sx={{ color: "#00acb3" }}>
-                      Number of children (Under 18)!
-                    </FormHelperText>
-                  </FormControl>
+                      <InputLabel id="select-children-label">
+                        Children
+                      </InputLabel>
+                      <Select
+                        labelId="select-children-label"
+                        id="select-children"
+                        value={children}
+                        label="Children"
+                        sx={{ borderColor: "#00acb3" }}
+                        onChange={handleSelectNumberChildren}
+                      >
+                        <MenuItem value="">Select</MenuItem>
+                        <MenuItem value={1}>1 kid</MenuItem>
+                        <MenuItem value={2}>2 kids</MenuItem>
+                      </Select>
+                      <FormHelperText sx={{ color: "#00acb3" }}>
+                        Number of children (Under 18)!
+                      </FormHelperText>
+                    </FormControl>
+                  ) : (
+                    <FormControl
+                      sx={{
+                        width: "220px",
+                        marginLeft: "20px",
+                        borderBottomColor: "#00acb3",
+                        borderColor: "#00acb3",
+                      }}
+                      disabled
+                    >
+                      <InputLabel id="select-children-label">
+                        Children
+                      </InputLabel>
+                      <Select
+                        labelId="select-children-label"
+                        id="select-children"
+                        value={children}
+                        label="Children"
+                        sx={{ borderColor: "#00acb3" }}
+                        onChange={handleSelectNumberChildren}
+                      >
+                        <MenuItem value="">Select</MenuItem>
+                        <MenuItem value={1}>1 kid</MenuItem>
+                        <MenuItem value={2}>2 kids</MenuItem>
+                      </Select>
+                      <FormHelperText sx={{ color: "#00acb3" }}>
+                        Number of children (Under 18)!
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+
                   <Divider sx={{ width: "100%", marginTop: "20px" }} />
                 </Grid2>
 
-                <Grid2 xs={12} mt={1}>
-                  <Typography
-                    variant="subtitle1"
-                    fontSize={22}
-                    fontWeight={900}
-                    color="#00acb3"
-                  >
-                    Primary Guest
-                  </Typography>
-                  <Grid2 mt={1}>
-                    <CustomBorderTextField
-                      label="Full Name"
-                      variant="outlined"
-                      sx={{ width: "100%" }}
-                      {...register("fullname")}
-                    />
-                    {errors["fullname"]?.message ? (
-                      <ErrorMessage message={errors["fullname"].message} />
-                    ) : null}
+                {adults && children ? (
+                  <Grid2 xs={12} mt={1}>
                     <Typography
-                      sx={{ marginTop: "10px" }}
-                      fontSize="0.75rem"
+                      variant="subtitle1"
+                      fontSize={22}
+                      fontWeight={900}
                       color="#00acb3"
                     >
-                      The name you would like the reservation placed under.
-                      Guest must be at least 18 years old.
+                      Primary Guest
                     </Typography>
-                  </Grid2>
-                  <Grid2 xs={12} mt={3}>
-                    <CustomBorderTextField
-                      variant="outlined"
-                      sx={{ width: "300px" }}
-                      label="Phone"
-                      {...register("telephone")}
-                      InputProps={{
-                        startAdornment: (
-                          <>
-                            <img
-                              src={
-                                "https://i.ibb.co/xGsBjkY/vietnamflag-removebg-preview.png"
-                              }
-                              width={30}
-                              height={30}
-                            />
-                            <Typography
-                              fontSize={14}
-                              sx={{ marginLeft: "2px", marginRight: "6px" }}
-                            >
-                              (84+)
-                            </Typography>
-                            <Divider
-                              orientation="vertical"
-                              flexItem
-                              variant="middle"
-                              sx={{ marginRight: "7px" }}
-                            />
-                          </>
-                        ),
-                      }}
-                    />
-                    {errors["telephone"]?.message ? (
-                      <ErrorMessage message={errors["telephone"].message} />
-                    ) : null}
-                    <CustomBorderTextField
-                      variant="outlined"
-                      label="Country"
-                      value="Viet Nam"
-                      sx={{ marginLeft: "20px", width: "577px" }}
-                      {...register("country")}
-                    />
-                    {errors["country"]?.message ? (
-                      <ErrorMessage message={errors["country"].message} />
-                    ) : null}
-                  </Grid2>
-                  {/* <Grid2 xs={12} mt={3}>
+                    <Grid2 mt={1}>
+                      <CustomBorderTextField
+                        label="Full Name"
+                        variant="outlined"
+                        sx={{ width: "100%" }}
+                        {...register("fullname")}
+                      />
+                      {errors["fullname"]?.message ? (
+                        <ErrorMessage message={errors["fullname"].message} />
+                      ) : null}
+                      <Typography
+                        sx={{ marginTop: "10px" }}
+                        fontSize="0.75rem"
+                        color="#00acb3"
+                      >
+                        The name you would like the reservation placed under.
+                        Guest must be at least 18 years old.
+                      </Typography>
+                    </Grid2>
+                    <Grid2 direction="row" xs={12} mt={3}>
+                      <CustomBorderTextField
+                        variant="outlined"
+                        sx={{ width: "288px" }}
+                        label="Phone"
+                        {...register("telephone")}
+                        InputProps={{
+                          startAdornment: (
+                            <>
+                              <img
+                                src={
+                                  "https://i.ibb.co/xGsBjkY/vietnamflag-removebg-preview.png"
+                                }
+                                width={30}
+                                height={30}
+                              />
+                              <Typography
+                                fontSize={14}
+                                sx={{ marginLeft: "2px", marginRight: "6px" }}
+                              >
+                                (84+)
+                              </Typography>
+                              <Divider
+                                orientation="vertical"
+                                flexItem
+                                variant="middle"
+                                sx={{ marginRight: "7px" }}
+                              />
+                            </>
+                          ),
+                        }}
+                      />
+                      {errors["telephone"]?.message ? (
+                        <ErrorMessage message={errors["telephone"].message} />
+                      ) : null}
+                      <CustomBorderTextField
+                        variant="outlined"
+                        label="Country"
+                        value="Viet Nam"
+                        sx={{ width: "100%", marginTop: "24px" }}
+                        {...register("country")}
+                      />
+                      {errors["country"]?.message ? (
+                        <ErrorMessage message={errors["country"].message} />
+                      ) : null}
+                    </Grid2>
+                    {/* <Grid2 xs={12} mt={3}>
                   <CustomBorderTextField
                     variant="outlined"
                     label="Country"
@@ -311,53 +374,198 @@ const BookingInformationPage = () => {
                     }}
                   />
                 </Grid2> */}
-                  <Grid2 xs={12} mt={3}>
-                    <CustomBorderTextField
-                      variant="outlined"
-                      label="Street"
-                      sx={{ width: "100%" }}
-                      {...register("street")}
-                    />
-                    {errors["street"]?.message ? (
-                      <ErrorMessage message={errors["street"].message} />
-                    ) : null}
+                    <Grid2 xs={12} mt={3}>
+                      <CustomBorderTextField
+                        variant="outlined"
+                        label="Street"
+                        sx={{ width: "100%" }}
+                        {...register("street")}
+                      />
+                      {errors["street"]?.message ? (
+                        <ErrorMessage message={errors["street"].message} />
+                      ) : null}
+                    </Grid2>
+                    <Grid2 container xs={12} gap={2}>
+                      <Grid2 xs={5} mt={3} width={288}>
+                        <CustomBorderTextField
+                          variant="outlined"
+                          label="City"
+                          fullWidth
+                          {...register("city")}
+                        />
+                        {errors["city"]?.message ? (
+                          <ErrorMessage message={errors["city"].message} />
+                        ) : null}
+                      </Grid2>
+                      <Grid2 xs={3} mt={3} width={288}>
+                        <CustomBorderTextField
+                          variant="outlined"
+                          label="State/Province"
+                          fullWidth
+                          {...register("state")}
+                        />
+                        {errors["state"]?.message ? (
+                          <ErrorMessage message={errors["state"].message} />
+                        ) : null}
+                      </Grid2>
+                      <Grid2 xs={3} mt={3} width={289}>
+                        <CustomBorderTextField
+                          variant="outlined"
+                          label="Zip/Postal code"
+                          fullWidth
+                          {...register("postal_code")}
+                        />
+                        {errors["postal_code"]?.message ? (
+                          <ErrorMessage
+                            message={errors["postal_code"].message}
+                          />
+                        ) : null}
+                      </Grid2>
+                    </Grid2>
                   </Grid2>
-                  <Grid2 container xs={12} gap={2}>
-                    <Grid2 xs={5} mt={3} width={288}>
+                ) : (
+                  //Check Disable
+                  <Grid2 xs={12} mt={1}>
+                    <Typography
+                      variant="subtitle1"
+                      fontSize={22}
+                      fontWeight={900}
+                      color="#00acb3"
+                    >
+                      Primary Guest
+                    </Typography>
+                    <Grid2 mt={1}>
                       <CustomBorderTextField
+                        disabled
+                        label="Full Name"
                         variant="outlined"
-                        label="City"
-                        fullWidth
-                        {...register("city")}
+                        sx={{ width: "100%" }}
+                        {...register("fullname")}
                       />
-                      {errors["city"]?.message ? (
-                        <ErrorMessage message={errors["city"].message} />
+                      {errors["fullname"]?.message ? (
+                        <ErrorMessage message={errors["fullname"].message} />
+                      ) : null}
+                      <Typography
+                        sx={{ marginTop: "10px" }}
+                        fontSize="0.75rem"
+                        color="#00acb3"
+                      >
+                        The name you would like the reservation placed under.
+                        Guest must be at least 18 years old.
+                      </Typography>
+                    </Grid2>
+                    <Grid2 direction="row" xs={12} mt={3}>
+                      <CustomBorderTextField
+                        disabled
+                        variant="outlined"
+                        sx={{ width: "288px" }}
+                        label="Phone"
+                        {...register("telephone")}
+                        InputProps={{
+                          startAdornment: (
+                            <>
+                              <img
+                                src={
+                                  "https://i.ibb.co/xGsBjkY/vietnamflag-removebg-preview.png"
+                                }
+                                width={30}
+                                height={30}
+                              />
+                              <Typography
+                                fontSize={14}
+                                sx={{ marginLeft: "2px", marginRight: "6px" }}
+                              >
+                                (84+)
+                              </Typography>
+                              <Divider
+                                orientation="vertical"
+                                flexItem
+                                variant="middle"
+                                sx={{ marginRight: "7px" }}
+                              />
+                            </>
+                          ),
+                        }}
+                      />
+                      {errors["telephone"]?.message ? (
+                        <ErrorMessage message={errors["telephone"].message} />
+                      ) : null}
+                      <CustomBorderTextField
+                        disabled
+                        variant="outlined"
+                        label="Country"
+                        value="Viet Nam"
+                        sx={{ width: "100%", marginTop: "24px" }}
+                        {...register("country")}
+                      />
+                      {errors["country"]?.message ? (
+                        <ErrorMessage message={errors["country"].message} />
                       ) : null}
                     </Grid2>
-                    <Grid2 xs={3} mt={3} width={288}>
+                    {/* <Grid2 xs={12} mt={3}>
+                <CustomBorderTextField
+                  variant="outlined"
+                  label="Country"
+                  value="Viet Nam"
+                  sx={{
+                    width: "300px",
+                  }}
+                />
+              </Grid2> */}
+                    <Grid2 xs={12} mt={3}>
                       <CustomBorderTextField
+                        disabled
                         variant="outlined"
-                        label="State/Province"
-                        fullWidth
-                        {...register("state")}
+                        label="Street"
+                        sx={{ width: "100%" }}
+                        {...register("street")}
                       />
-                      {errors["state"]?.message ? (
-                        <ErrorMessage message={errors["state"].message} />
+                      {errors["street"]?.message ? (
+                        <ErrorMessage message={errors["street"].message} />
                       ) : null}
                     </Grid2>
-                    <Grid2 xs={3} mt={3} width={289}>
-                      <CustomBorderTextField
-                        variant="outlined"
-                        label="Zip/Postal code"
-                        fullWidth
-                        {...register("postal_code")}
-                      />
-                      {errors["postal_code"]?.message ? (
-                        <ErrorMessage message={errors["postal_code"].message} />
-                      ) : null}
+                    <Grid2 container xs={12} gap={2}>
+                      <Grid2 xs={5} mt={3} width={288}>
+                        <CustomBorderTextField
+                          disabled
+                          variant="outlined"
+                          label="City"
+                          fullWidth
+                          {...register("city")}
+                        />
+                        {errors["city"]?.message ? (
+                          <ErrorMessage message={errors["city"].message} />
+                        ) : null}
+                      </Grid2>
+                      <Grid2 xs={3} mt={3} width={288}>
+                        <CustomBorderTextField
+                          disabled
+                          variant="outlined"
+                          label="State/Province"
+                          fullWidth
+                          {...register("state")}
+                        />
+                        {errors["state"]?.message ? (
+                          <ErrorMessage message={errors["state"].message} />
+                        ) : null}
+                      </Grid2>
+                      <Grid2 xs={3} mt={3} width={289}>
+                        <CustomBorderTextField
+                          disabled
+                          variant="outlined"
+                          label="Zip/Postal code"
+                          fullWidth
+                          {...register("postal_code")}
+                        />
+                        {errors["postal_code"]?.message ? (
+                          <ErrorMessage
+                            message={errors["postal_code"].message}
+                          />
+                        ) : null}
+                      </Grid2>
                     </Grid2>
                   </Grid2>
-                </Grid2>
+                )}
               </Grid2>
             </Box>
           </Grid2>
@@ -472,20 +680,40 @@ const BookingInformationPage = () => {
                     <Typography fontSize={26} fontWeight={300}>
                       {formatNumber(state.timeshare.price)} VNĐ
                     </Typography>
-                    <Button
-                      variant="contained"
-                      sx={{
-                        marginTop: "10px",
-                        width: "150px",
-                        background: "#00acb3",
-                        "&:hover": {
-                          backgroundColor: "#08b7bd",
-                        },
-                      }}
-                      // onClick={handleCheckOut}
-                    >
-                      Check Out
-                    </Button>
+                    {adults && children ? (
+                      <Button
+                        variant="contained"
+                        type="submit"
+                        sx={{
+                          marginTop: "10px",
+                          width: "150px",
+                          background: "#00acb3",
+                          "&:hover": {
+                            backgroundColor: "#08b7bd",
+                          },
+                        }}
+                        onClick={() => {
+                          handleClickOpenConfirmDialog();
+                        }}
+                      >
+                        Check Out
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        disabled
+                        sx={{
+                          marginTop: "10px",
+                          width: "150px",
+                          background: "#00acb3",
+                          "&:hover": {
+                            backgroundColor: "#08b7bd",
+                          },
+                        }}
+                      >
+                        Check Out
+                      </Button>
+                    )}
                     <Typography fontSize={14} mt={1} fontWeight={300}>
                       Your card will be charged{" "}
                       {formatNumber(state.timeshare.price)} VNĐ once the owner
@@ -497,7 +725,67 @@ const BookingInformationPage = () => {
             </Box>
           </Grid2>
         </Grid2>
+        <Dialog
+          open={openConfirmDialog}
+          onClose={handleClickCloseConfirmDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Confirm to checkout!"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Check the information carefully before booking! Do you want to
+              check out?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              sx={{
+                my: 2,
+                color: "#ffffff",
+                backgroundColor: "#00acb3",
+                display: "block",
+                marginLeft: "10px",
+                "&:hover": {
+                  backgroundColor: "#08b7bd",
+                },
+              }}
+              variant="contained"
+              onClick={() => {
+                handleClickCloseConfirmDialog();
+                let formValue = getValues();
+                if (formValue || !isEmpty(formValue)) {
+                  onSubmit(formValue);
+                }
+              }}
+              autoFocus
+            >
+              Yes
+            </Button>
+            <Button
+              sx={{
+                my: 2,
+                color: "#00acb3",
+                display: "block",
+                marginLeft: "10px",
+                "&:hover": {
+                  borderColor: "#08b7bd",
+                },
+              }}
+              variant="outlined"
+              onClick={handleClickCloseConfirmDialog}
+            >
+              No
+            </Button>
+          </DialogActions>
+        </Dialog>
       </form>
+      <ToastContainer
+        autoClose={2000}
+        style={{ marginTop: "50px", width: "350px" }}
+      />
     </Container>
   );
 };

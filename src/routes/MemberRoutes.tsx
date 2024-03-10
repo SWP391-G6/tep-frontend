@@ -10,6 +10,8 @@ import MyTimesharePage from "../pages/Member/MyTimesharePage";
 import MyExchangeRequestPage from "../pages/Member/MyExchangeRequestPage";
 import ProfileDashboardPage from "../pages/Member/ProfileDashboardPage";
 import BookingHistoryPage from "../pages/Member/BookingHistoryPage";
+import { ROUTE_PATH } from "../configs";
+import SuccessfulPaymentPage from "../pages/Payment/SuccessfulPaymentPage";
 
 type Props = {
   isAllowed: boolean;
@@ -34,11 +36,18 @@ function MemberRoutes(props: Props) {
             element={<BookingInformationPage />}
           />
         </Route>
+        <Route
+          path={ROUTE_PATH.PAYMENT_SUCCESSFUL}
+          element={<SuccessfulPaymentPage />}
+        />
         <Route path="profile">
           <Route index element={<ProfileDashboardPage />} />
           <Route path="my_profile" element={<UserProfilePage />} />
           <Route path="my_timeshare" element={<MyTimesharePage />} />
-          <Route path="my_exchange_request" element={<MyExchangeRequestPage />} />
+          <Route
+            path="my_exchange_request"
+            element={<MyExchangeRequestPage />}
+          />
           <Route path="my_booking_history" element={<BookingHistoryPage />} />
         </Route>
         <Route path="*" element={<NotFoundAuthorizedPage />} />
