@@ -77,12 +77,10 @@ const LoginForm = () => {
         localStorage.setItem(USER_ROLE_KEY, JSON.stringify(response.user.role));
         switch (response.user.role) {
           case "member":
-            console.log(2)
             navigate("/member");
             break;
 
           case "admin":
-            console.log(1)
             navigate("/admin");
             break;
 

@@ -1,6 +1,19 @@
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
-import { IconButton, Stack, Tooltip, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  IconButton,
+  Paper,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import ViewIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router";
@@ -10,6 +23,10 @@ import { USER_ID_KEY } from "../../constant";
 import requestAPI from "../../services/request/requestAPI";
 import dayjs from "dayjs";
 import { green, red, yellow } from "@mui/material/colors";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import SwapVertIcon from "@mui/icons-material/SwapVert";
+import { formatNumber } from "../../helpers/numberHelpers";
+
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 dayjs.locale("en");
@@ -90,6 +107,15 @@ const ExchangeRequestDataGrid = () => {
     []
   );
   const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
+  const [openViewRequestDetail, setOpenViewRequestDetail] = useState(true);
+
+  const handleClickOpenViewRequestDetail = () => {
+    setOpenViewRequestDetail(true);
+  };
+
+  const handleCloseViewRequestDetail = () => {
+    setOpenViewRequestDetail(false);
+  };
 
   const columns: GridColDef[] = [
     { field: "no", headerName: "No", width: 90 },
@@ -153,11 +179,8 @@ const ExchangeRequestDataGrid = () => {
       renderCell: (param) => {
         return (
           <Stack direction="row" spacing={1}>
-            <Tooltip title="View Detail">
-              <IconButton
-                aria-label="view detail"
-                // onClick={handleOpen}
-              >
+            <Tooltip title="View">
+              <IconButton onClick={handleClickOpenViewRequestDetail}>
                 <ViewIcon />
               </IconButton>
             </Tooltip>
@@ -225,6 +248,206 @@ const ExchangeRequestDataGrid = () => {
           />
         )}
       </Box>
+      <Dialog
+        open={openViewRequestDetail}
+        onClose={handleCloseViewRequestDetail}
+        maxWidth="md"
+      >
+        <DialogTitle
+          sx={{ color: "#00acb3", fontSize: "22px", fontWeight: 900 }}
+          id="alert-dialog-title"
+        >
+          {"Request Detail"}
+        </DialogTitle>
+        <DialogContent>
+          <Grid2
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            width={800}
+          >
+            <Grid2 xs={12} height={300} bgcolor={red} p={2}>
+              <Paper
+                elevation={10}
+                sx={{ width: "100%", height: "100%", padding: "10px" }}
+              >
+                <Typography
+                  sx={{ color: "#00acb3", fontWeight: 500 }}
+                  fontSize={16}
+                  variant="overline"
+                >
+                  Your Timeshare - #R130305111695
+                </Typography>
+                <Grid2 container>
+                  <Grid2 xs={4}>
+                    <Card sx={{ height: "150px", width: "240px" }}>
+                      <img
+                        src={
+                          "https://pix8.agoda.net/hotelImages/17242876/-1/77f13db2325ef043d92a740cc551e1f8.jpg?ca=19&ce=1&s=1024x768"
+                        }
+                        style={{ width: "100%", height: "100%" }}
+                      />
+                    </Card>
+                    <Typography mt={1.5}>
+                      <strong>Owner: </strong>{" "}
+                      <span style={{ color: "#00acb3", fontWeight: 500 }}>
+                        Tu Minh Duy
+                      </span>
+                    </Typography>
+                  </Grid2>
+                  <Grid2 xs={6}>
+                    <Typography variant="h5" fontWeight={900}>
+                      Six Senses Côn Đảo
+                    </Typography>
+                    <Typography mt={0.5} variant="subtitle2" fontWeight={300}>
+                      Côn Đảo
+                    </Typography>
+                    <Typography mt={1} color="#00acb3">
+                      {dayjs("2024-05-01").format("DD MMM YYYY").toString()} -{" "}
+                      {dayjs("2024-05-07").format("DD MMM YYYY").toString()}
+                    </Typography>
+                    <Typography mt={0.5} fontWeight={500}>
+                      6 nights
+                    </Typography>
+                    <Typography mt={0.5} fontWeight={500}>
+                      {formatNumber(1800000)} VNĐ
+                    </Typography>
+                  </Grid2>
+                </Grid2>
+                <Grid2 container justifyContent="flex-end">
+                  <Grid2>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{
+                        background: "#00acb3",
+                        "&:hover": {
+                          backgroundColor: "#08b7bd",
+                        },
+                      }}
+                    >
+                      View Detail
+                    </Button>
+                  </Grid2>
+                </Grid2>
+              </Paper>
+            </Grid2>
+            <Grid2
+              sx={{ position: "relative", margin: "15px 0", padding: "0 18px" }}
+              xs={12}
+            >
+              <SwapVertIcon
+                sx={{
+                  position: "absolute",
+                  zIndex: 2,
+                  top: 0,
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: "50px",
+                  height: "50px",
+                  color: "#00acb3",
+                }}
+              />
+              <Divider sx={{ width: "100%", zIndex: 1 }} />
+            </Grid2>
+            <Grid2 xs={12} height={300} bgcolor={red} p={2}>
+              <Paper
+                elevation={10}
+                sx={{ width: "100%", height: "100%", padding: "10px" }}
+              >
+                <Typography
+                  sx={{ color: "#00acb3", fontWeight: 500 }}
+                  fontSize={16}
+                  variant="overline"
+                >
+                  Request's Timeshare - #R130305111688
+                </Typography>
+                <Grid2 container>
+                  <Grid2 xs={4}>
+                    <Card sx={{ height: "150px", width: "240px" }}>
+                      <img
+                        src={
+                          "https://pix8.agoda.net/hotelImages/17242876/-1/77f13db2325ef043d92a740cc551e1f8.jpg?ca=19&ce=1&s=1024x768"
+                        }
+                        style={{ width: "100%", height: "100%" }}
+                      />
+                    </Card>
+                    <Typography mt={1.5}>
+                      <strong>Owner: </strong>{" "}
+                      <span style={{ color: "#00acb3", fontWeight: 500 }}>
+                        Tu Minh Duy
+                      </span>
+                    </Typography>
+                  </Grid2>
+                  <Grid2 xs={6}>
+                    <Typography variant="h5" fontWeight={900}>
+                      Six Senses Côn Đảo
+                    </Typography>
+                    <Typography mt={0.5} variant="subtitle2" fontWeight={300}>
+                      Côn Đảo
+                    </Typography>
+                    <Typography mt={1} color="#00acb3">
+                      {dayjs("2024-05-01").format("DD MMM YYYY").toString()} -{" "}
+                      {dayjs("2024-05-07").format("DD MMM YYYY").toString()}
+                    </Typography>
+                    <Typography mt={0.5} fontWeight={500}>
+                      6 nights
+                    </Typography>
+                    <Typography mt={0.5} fontWeight={500}>
+                      {formatNumber(1800000)} VNĐ
+                    </Typography>
+                  </Grid2>
+                </Grid2>
+                <Grid2 container justifyContent="flex-end">
+                  <Grid2>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      sx={{
+                        background: "#00acb3",
+                        "&:hover": {
+                          backgroundColor: "#08b7bd",
+                        },
+                      }}
+                    >
+                      View Detail
+                    </Button>
+                  </Grid2>
+                </Grid2>
+              </Paper>
+            </Grid2>
+          </Grid2>
+        </DialogContent>
+        <DialogActions sx={{backgroundColor: "#ecf0f1"}}>
+          <Button
+            sx={{
+              background: "#00acb3",
+              "&:hover": {
+                backgroundColor: "#08b7bd",
+              },
+            }}
+            variant="contained"
+            onClick={handleCloseViewRequestDetail}
+          >
+            Accept
+          </Button>
+          <Button
+            sx={{
+              color: "#00acb3",
+              borderColor: "#00acb3",
+              "&:hover": {
+                borderColor: "#08b7bd",
+              },
+            }}
+            variant="outlined"
+            onClick={handleCloseViewRequestDetail}
+            autoFocus
+          >
+            Reject
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
