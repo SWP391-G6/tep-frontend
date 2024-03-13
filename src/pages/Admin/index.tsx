@@ -1,63 +1,35 @@
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import {
   Box,
   Container,
-  Divider,
-  ListItemIcon,
-  ListItemText,
-  MenuItem,
-  MenuList,
-  Stack,
-  Typography,
 } from "@mui/material";
 import AdminHeader from "../../components/Header/admin";
-import ManageAccountPage from "./ManageAccountPage";
-import ManagePlanPage from "./ManagePlanPage";
+import AdminSideBar from "../../components/SideBar";
+import { Outlet } from "react-router";
 
-type Props = {};
-
-function AdminDashboard({}: Props) {
+function AdminDashboard() {
   return (
-    <Box>
+    <Container
+      maxWidth={false}
+      disableGutters={true}
+    >
       <AdminHeader />
-
-      <Stack direction={"row"}>
-        <Box
-          minHeight={"100vh"}
-          minWidth={"15vw"}
-          borderRight={"0.25px solid black"}
-        >
-          <Stack direction={"column"}>
-            <MenuList>
-              <MenuItem>
-                <ListItemIcon>
-                  <AccountCircle />
-                </ListItemIcon>
-
-                <ListItemText>Manage Account</ListItemText>
-              </MenuItem>
-
-              <Divider />
-
-              <MenuItem>
-                <ListItemIcon>
-                  <ShoppingBagIcon />
-                </ListItemIcon>
-
-                <ListItemText>Manage Plan</ListItemText>
-              </MenuItem>
-            </MenuList>
-          </Stack>
-        </Box>
-
-        <Box flex={1}>
-          <Container>
-            <ManagePlanPage />
-          </Container>
-        </Box>
-      </Stack>
-    </Box>
+      <AdminSideBar />
+      <Box
+        sx={{
+          flexGrow: 1,
+          backgroundColor: "#f6f8fa",
+          paddingBottom: "30px",
+          width: { sm: `calc(100% - 300px)` },
+          position: "absolute",
+          zIndex: -1,
+          top: 64,
+          left: 300,
+          height: "100vh"
+        }}
+      >
+        <Outlet />
+      </Box>
+    </Container>
   );
 }
 

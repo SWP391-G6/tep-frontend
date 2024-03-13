@@ -1,7 +1,8 @@
 import { Route, Routes } from "react-router";
 import ProtectedRoute from "./ProtectedRoute";
-import AdminDashboard from "../pages/Admin";
+import AdminPage from "../pages/Admin";
 import NotFoundAuthorizedPage from "../pages/Error/notFoundAuthorizedPage";
+import AdminDashboard from "../components/Dashboard/adminDashboard";
 
 type Props = {
   isAllowed: boolean;
@@ -14,7 +15,7 @@ function AdminRoutes(props: Props) {
       <Route
         element={
           <ProtectedRoute isAllowed={props.isAllowed} token={props.token}>
-            <AdminDashboard />
+            <AdminPage />
           </ProtectedRoute>
         }
       >
