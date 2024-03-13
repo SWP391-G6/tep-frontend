@@ -6,6 +6,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
   Divider,
   IconButton,
@@ -17,15 +18,18 @@ import {
 import { styled } from "@mui/material/styles";
 import ViewIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GetExchangeRequestResponse } from "../../interfaces/request/getExchangeRequestResponse";
 import { USER_ID_KEY } from "../../constant";
 import requestAPI from "../../services/request/requestAPI";
 import dayjs from "dayjs";
-import { green, red, yellow } from "@mui/material/colors";
+import { green, red, orange } from "@mui/material/colors";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import SwapVertIcon from "@mui/icons-material/SwapVert";
 import { formatNumber } from "../../helpers/numberHelpers";
+import CloseIcon from "@mui/icons-material/Close";
+import Textarea from "@mui/joy/Textarea";
+import { ToastContainer, toast } from "react-toastify";
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
@@ -103,18 +107,180 @@ function CustomNoRowsOverlay() {
 }
 
 const ExchangeRequestDataGrid = () => {
+  const navigate = useNavigate();
+  let timeoutRef = useRef<any>();
   const [requestList, setRequestList] = useState<GetExchangeRequestResponse[]>(
     []
   );
-  const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
-  const [openViewRequestDetail, setOpenViewRequestDetail] = useState(true);
+  const [requestDetail, setRequestDetail] =
+    useState<GetExchangeRequestResponse>({
+      create_date: new Date(),
+      status: 0,
+      request_id: "",
+      response_by: {
+        user_id: "",
+        user_name: "",
+        password: "",
+        fullname: "",
+        email: "",
+        phone: "",
+        dob: new Date(),
+        gender: false,
+        status: false,
+        role: "",
+      },
+      request_by: {
+        user_id: "",
+        user_name: "",
+        password: "",
+        fullname: "",
+        email: "",
+        phone: "",
+        dob: new Date(),
+        gender: false,
+        status: false,
+        role: "",
+      },
+      timeshare_request_id: {
+        timeshareId: "",
+        timeshareName: "",
+        description: "",
+        status: false,
+        price: 0,
+        nights: 0,
+        postBy: {
+          user_id: "",
+          user_name: "",
+          password: "",
+          fullname: "",
+          email: "",
+          phone: "",
+          dob: new Date(),
+          gender: false,
+          status: false,
+          role: "",
+        },
+        destinationModel: {
+          destinationId: "",
+          address: "",
+          branch: "",
+          city: "",
+          country: "",
+          description: "",
+          desName: "",
+        },
+        dateStart: new Date(),
+        dateEnd: new Date(),
+        exchange: false,
+        city: "",
+        image_url: "",
+      },
+      timeshare_response_id: {
+        timeshareId: "",
+        timeshareName: "",
+        description: "",
+        status: false,
+        price: 0,
+        nights: 0,
+        postBy: {
+          user_id: "",
+          user_name: "",
+          password: "",
+          fullname: "",
+          email: "",
+          phone: "",
+          dob: new Date(),
+          gender: false,
+          status: false,
+          role: "",
+        },
+        destinationModel: {
+          destinationId: "",
+          address: "",
+          branch: "",
+          city: "",
+          country: "",
+          description: "",
+          desName: "",
+        },
+        dateStart: new Date(),
+        dateEnd: new Date(),
+        exchange: false,
+        city: "",
+        image_url: "",
+      },
+      message: "",
+    });
 
-  const handleClickOpenViewRequestDetail = () => {
+  const [openConfirmAcceptRequest, setOpenConfirmAcceptRequest] =
+    useState(false);
+  const [openConfirmRejectRequest, setOpenConfirmRejectRequest] =
+    useState(false);
+  const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
+  const [openViewRequestDetail, setOpenViewRequestDetail] = useState(false);
+
+  const handleClickOpenViewRequestDetail = (
+    requestDetail: GetExchangeRequestResponse
+  ) => {
+    setRequestDetail(requestDetail);
     setOpenViewRequestDetail(true);
   };
 
   const handleCloseViewRequestDetail = () => {
     setOpenViewRequestDetail(false);
+  };
+
+  // Accept
+  const handleClickOpenConfirmAcceptDialog = () => {
+    setOpenConfirmAcceptRequest(true);
+  };
+
+  const handleClickCloseConfirmAcceptDialog = () => {
+    setOpenConfirmAcceptRequest(false);
+  };
+
+  // Reject
+  const handleClickOpenConfirmRejectDialog = () => {
+    setOpenConfirmRejectRequest(true);
+  };
+
+  const handleClickCloseConfirmRejectDialog = () => {
+    setOpenConfirmRejectRequest(false);
+  };
+
+  const handleRequest = async (requestID: string, status: number) => {
+    try {
+      const response: any = await requestAPI.handleRequest(requestID, status);
+      if (response && response === "Exchange timeshare successfully") {
+        setOpenConfirmRejectRequest(false);
+        setOpenViewRequestDetail(false);
+        toast.success("Exchange Timeshare Successfully!", {
+          position: "top-center",
+        });
+        timeoutRef.current = setTimeout(() => {
+          navigate(0);
+        }, 1700);
+        return;
+      } else if (
+        response &&
+        response === "You have rejected to exchange timeshare"
+      ) {
+        setOpenConfirmRejectRequest(false);
+        setOpenViewRequestDetail(false);
+        toast.success("Reject Exchange Timeshare Successful!!", {
+          position: "top-center",
+        });
+        timeoutRef.current = setTimeout(() => {
+          navigate(0);
+        }, 1700);
+      } else {
+        toast.error("Exchange Timeshare Failed!!", {
+          position: "top-center",
+        });
+      }
+    } catch (error) {
+      console.log("Error at handleRequest()", error);
+    }
   };
 
   const columns: GridColDef[] = [
@@ -159,9 +325,9 @@ const ExchangeRequestDataGrid = () => {
         if (param.row.status === 1) {
           return <Typography color={green[500]}>Accepted</Typography>;
         } else if (param.row.status === 2) {
-          return <Typography color={red[500]}>Accepted</Typography>;
+          return <Typography color={red[500]}>Rejected</Typography>;
         } else if (param.row.status === 0) {
-          return <Typography color={yellow[500]}>Processing</Typography>;
+          return <Typography color={orange[500]}>Processing</Typography>;
         } else return <Typography>param.row.status</Typography>;
       },
     },
@@ -180,7 +346,11 @@ const ExchangeRequestDataGrid = () => {
         return (
           <Stack direction="row" spacing={1}>
             <Tooltip title="View">
-              <IconButton onClick={handleClickOpenViewRequestDetail}>
+              <IconButton
+                onClick={() => {
+                  handleClickOpenViewRequestDetail(param.row);
+                }}
+              >
                 <ViewIcon />
               </IconButton>
             </Tooltip>
@@ -203,6 +373,16 @@ const ExchangeRequestDataGrid = () => {
     };
     initUseEffect();
   }, []);
+
+  const titleStyle = {
+    fontSize: "18px",
+    fontWeight: "bold",
+  };
+
+  const textBodyStyle = {
+    fontSize: "18px",
+    color: "#00acb3",
+  };
 
   return (
     <Box
@@ -259,6 +439,18 @@ const ExchangeRequestDataGrid = () => {
         >
           {"Request Detail"}
         </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleCloseViewRequestDetail}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
         <DialogContent>
           <Grid2
             container
@@ -267,7 +459,90 @@ const ExchangeRequestDataGrid = () => {
             alignItems="center"
             width={800}
           >
-            <Grid2 xs={12} height={300} bgcolor={red} p={2}>
+            <Grid2 xs={12} flexDirection={"row"} p={2}>
+              <Grid2 style={{ display: "flex", alignItems: "center" }}>
+                <Typography
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "18px",
+                  }}
+                  variant="subtitle2"
+                >
+                  Code:
+                </Typography>
+                <Typography
+                  style={{
+                    fontWeight: "bolder",
+                    fontSize: "18px",
+                    color: "#00acb3",
+                  }}
+                  variant="subtitle2"
+                  ml={1}
+                >
+                  RQ123456
+                </Typography>
+              </Grid2>
+              <Card
+                variant="outlined"
+                sx={{ marginTop: "5px", backgroundColor: "#f6f8fa" }}
+              >
+                <Grid2 container p={2}>
+                  <Typography width="100%" variant="overline" color={"#00acb3"}>
+                    Information
+                  </Typography>
+                  <Grid2 xs={6} style={{ display: "flex" }}>
+                    <Typography style={titleStyle}>Create Date: </Typography>
+                    <Typography ml={1} style={textBodyStyle}>
+                      {dayjs(requestDetail.create_date)
+                        .format("DD MMM YYYY")
+                        .toString()}
+                    </Typography>
+                  </Grid2>
+                  <Grid2 xs={6} style={{ display: "flex" }}>
+                    <Typography style={titleStyle}>Status: </Typography>
+                    {requestDetail.status === 0 ? (
+                      <Typography fontSize={18} ml={1} color={orange[500]}>
+                        Processing
+                      </Typography>
+                    ) : requestDetail.status === 1 ? (
+                      <Typography fontSize={18} ml={1} color={green[500]}>
+                        Accepted
+                      </Typography>
+                    ) : requestDetail.status === 2 ? (
+                      <Typography fontSize={18} ml={1} color={red[500]}>
+                        Rejected
+                      </Typography>
+                    ) : (
+                      requestDetail.status
+                    )}
+                  </Grid2>
+                </Grid2>
+                <Divider />
+                <Grid2 container p={2}>
+                  <Typography width="100%" variant="overline" color={"#00acb3"}>
+                    Message
+                  </Typography>
+                  <Grid2 xs={12} style={{ display: "flex" }}>
+                    <Textarea
+                      sx={{ marginBottom: "15px", width: "100%" }}
+                      color="primary"
+                      disabled={false}
+                      minRows={2}
+                      size="lg"
+                      variant="soft"
+                      value={requestDetail.message}
+                    />
+                  </Grid2>
+                </Grid2>
+              </Card>
+            </Grid2>
+            <Grid2 xs={12} p={2} height="50px">
+              <Divider sx={{ width: "100%" }} />
+              <Typography width="100%" variant="overline" color={"#00acb3"}>
+                Exchange Information
+              </Typography>
+            </Grid2>
+            <Grid2 xs={12} height={300} p={2}>
               <Paper
                 elevation={10}
                 sx={{ width: "100%", height: "100%", padding: "10px" }}
@@ -283,35 +558,39 @@ const ExchangeRequestDataGrid = () => {
                   <Grid2 xs={4}>
                     <Card sx={{ height: "150px", width: "240px" }}>
                       <img
-                        src={
-                          "https://pix8.agoda.net/hotelImages/17242876/-1/77f13db2325ef043d92a740cc551e1f8.jpg?ca=19&ce=1&s=1024x768"
-                        }
+                        src={requestDetail.timeshare_response_id.image_url}
                         style={{ width: "100%", height: "100%" }}
                       />
                     </Card>
                     <Typography mt={1.5}>
                       <strong>Owner: </strong>{" "}
                       <span style={{ color: "#00acb3", fontWeight: 500 }}>
-                        Tu Minh Duy
+                        {requestDetail.timeshare_response_id.postBy.fullname}
                       </span>
                     </Typography>
                   </Grid2>
                   <Grid2 xs={6}>
                     <Typography variant="h5" fontWeight={900}>
-                      Six Senses Côn Đảo
+                      {requestDetail.timeshare_response_id.timeshareName}
                     </Typography>
                     <Typography mt={0.5} variant="subtitle2" fontWeight={300}>
-                      Côn Đảo
+                      {requestDetail.timeshare_response_id.city}
                     </Typography>
                     <Typography mt={1} color="#00acb3">
-                      {dayjs("2024-05-01").format("DD MMM YYYY").toString()} -{" "}
-                      {dayjs("2024-05-07").format("DD MMM YYYY").toString()}
+                      {dayjs(requestDetail.timeshare_response_id.dateStart)
+                        .format("DD MMM YYYY")
+                        .toString()}{" "}
+                      -{" "}
+                      {dayjs(requestDetail.timeshare_response_id.dateEnd)
+                        .format("DD MMM YYYY")
+                        .toString()}
                     </Typography>
                     <Typography mt={0.5} fontWeight={500}>
-                      6 nights
+                      {requestDetail.timeshare_response_id.nights} nights
                     </Typography>
                     <Typography mt={0.5} fontWeight={500}>
-                      {formatNumber(1800000)} VNĐ
+                      {formatNumber(requestDetail.timeshare_response_id.price)}{" "}
+                      VNĐ
                     </Typography>
                   </Grid2>
                 </Grid2>
@@ -320,6 +599,11 @@ const ExchangeRequestDataGrid = () => {
                     <Button
                       variant="contained"
                       color="primary"
+                      onClick={() => {
+                        navigate(
+                          `/member/view_timeshare_detail/${requestDetail.timeshare_response_id.timeshareId}`
+                        );
+                      }}
                       sx={{
                         background: "#00acb3",
                         "&:hover": {
@@ -351,7 +635,7 @@ const ExchangeRequestDataGrid = () => {
               />
               <Divider sx={{ width: "100%", zIndex: 1 }} />
             </Grid2>
-            <Grid2 xs={12} height={300} bgcolor={red} p={2}>
+            <Grid2 xs={12} height={300} p={2}>
               <Paper
                 elevation={10}
                 sx={{ width: "100%", height: "100%", padding: "10px" }}
@@ -367,35 +651,39 @@ const ExchangeRequestDataGrid = () => {
                   <Grid2 xs={4}>
                     <Card sx={{ height: "150px", width: "240px" }}>
                       <img
-                        src={
-                          "https://pix8.agoda.net/hotelImages/17242876/-1/77f13db2325ef043d92a740cc551e1f8.jpg?ca=19&ce=1&s=1024x768"
-                        }
+                        src={requestDetail.timeshare_request_id.image_url}
                         style={{ width: "100%", height: "100%" }}
                       />
                     </Card>
                     <Typography mt={1.5}>
                       <strong>Owner: </strong>{" "}
                       <span style={{ color: "#00acb3", fontWeight: 500 }}>
-                        Tu Minh Duy
+                        {requestDetail.timeshare_request_id.postBy.fullname}
                       </span>
                     </Typography>
                   </Grid2>
                   <Grid2 xs={6}>
                     <Typography variant="h5" fontWeight={900}>
-                      Six Senses Côn Đảo
+                      {requestDetail.timeshare_request_id.timeshareName}
                     </Typography>
                     <Typography mt={0.5} variant="subtitle2" fontWeight={300}>
-                      Côn Đảo
+                      {requestDetail.timeshare_request_id.city}
                     </Typography>
                     <Typography mt={1} color="#00acb3">
-                      {dayjs("2024-05-01").format("DD MMM YYYY").toString()} -{" "}
-                      {dayjs("2024-05-07").format("DD MMM YYYY").toString()}
+                      {dayjs(requestDetail.timeshare_request_id.dateStart)
+                        .format("DD MMM YYYY")
+                        .toString()}{" "}
+                      -{" "}
+                      {dayjs(requestDetail.timeshare_request_id.dateEnd)
+                        .format("DD MMM YYYY")
+                        .toString()}
                     </Typography>
                     <Typography mt={0.5} fontWeight={500}>
-                      6 nights
+                      {requestDetail.timeshare_request_id.nights} nights
                     </Typography>
                     <Typography mt={0.5} fontWeight={500}>
-                      {formatNumber(1800000)} VNĐ
+                      {formatNumber(requestDetail.timeshare_request_id.price)}{" "}
+                      VNĐ
                     </Typography>
                   </Grid2>
                 </Grid2>
@@ -404,6 +692,11 @@ const ExchangeRequestDataGrid = () => {
                     <Button
                       variant="contained"
                       color="primary"
+                      onClick={() => {
+                        navigate(
+                          `/member/view_timeshare_detail/${requestDetail.timeshare_request_id.timeshareId}`
+                        );
+                      }}
                       sx={{
                         background: "#00acb3",
                         "&:hover": {
@@ -419,19 +712,68 @@ const ExchangeRequestDataGrid = () => {
             </Grid2>
           </Grid2>
         </DialogContent>
-        <DialogActions sx={{backgroundColor: "#ecf0f1"}}>
-          <Button
-            sx={{
-              background: "#00acb3",
-              "&:hover": {
-                backgroundColor: "#08b7bd",
-              },
-            }}
-            variant="contained"
-            onClick={handleCloseViewRequestDetail}
-          >
-            Accept
-          </Button>
+        <DialogActions sx={{ backgroundColor: "#ecf0f1" }}>
+          {requestDetail.status === 0 ? (
+            <>
+              {" "}
+              <Button
+                sx={{
+                  background: "#00acb3",
+                  "&:hover": {
+                    backgroundColor: "#08b7bd",
+                  },
+                }}
+                variant="contained"
+                onClick={handleClickOpenConfirmAcceptDialog}
+              >
+                Accept
+              </Button>
+              <Button
+                sx={{
+                  background: "#00acb3",
+                  "&:hover": {
+                    backgroundColor: "#08b7bd",
+                  },
+                }}
+                variant="contained"
+                onClick={handleClickOpenConfirmRejectDialog}
+                autoFocus
+              >
+                Reject
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                disabled
+                sx={{
+                  background: "#00acb3",
+                  "&:hover": {
+                    backgroundColor: "#08b7bd",
+                  },
+                }}
+                variant="contained"
+                onClick={handleClickOpenConfirmAcceptDialog}
+              >
+                Accept
+              </Button>
+              <Button
+                disabled
+                sx={{
+                  background: "#00acb3",
+                  "&:hover": {
+                    backgroundColor: "#08b7bd",
+                  },
+                }}
+                variant="contained"
+                onClick={handleClickOpenConfirmRejectDialog}
+                autoFocus
+              >
+                Reject
+              </Button>
+            </>
+          )}
+
           <Button
             sx={{
               color: "#00acb3",
@@ -444,10 +786,123 @@ const ExchangeRequestDataGrid = () => {
             onClick={handleCloseViewRequestDetail}
             autoFocus
           >
-            Reject
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Accept */}
+      <Dialog
+        open={openConfirmAcceptRequest}
+        onClose={handleClickCloseConfirmAcceptDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Confirm To Accept Exchange Request!"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Do you want to accept exchange this timeshare?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            sx={{
+              my: 2,
+              color: "#ffffff",
+              backgroundColor: "#00acb3",
+              display: "block",
+              marginLeft: "10px",
+              "&:hover": {
+                backgroundColor: "#08b7bd",
+              },
+            }}
+            variant="contained"
+            onClick={() => {
+              handleRequest(requestDetail.request_id, 1);
+              handleClickCloseConfirmAcceptDialog();
+            }}
+            autoFocus
+          >
+            Yes
+          </Button>
+          <Button
+            sx={{
+              my: 2,
+              color: "#00acb3",
+              display: "block",
+              marginLeft: "10px",
+              "&:hover": {
+                borderColor: "#08b7bd",
+              },
+            }}
+            variant="outlined"
+            onClick={handleClickCloseConfirmRejectDialog}
+          >
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Reject */}
+
+      <Dialog
+        open={openConfirmRejectRequest}
+        onClose={handleClickCloseConfirmRejectDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Confirm To Reject Exchange Request!"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Do you want to reject exchange this timeshare?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            sx={{
+              my: 2,
+              color: "#ffffff",
+              backgroundColor: "#00acb3",
+              display: "block",
+              marginLeft: "10px",
+              "&:hover": {
+                backgroundColor: "#08b7bd",
+              },
+            }}
+            variant="contained"
+            onClick={() => {
+              handleClickCloseConfirmRejectDialog();
+              handleRequest(requestDetail.request_id, 2);
+            }}
+          >
+            Yes
+          </Button>
+          <Button
+            sx={{
+              my: 2,
+              color: "#00acb3",
+              display: "block",
+              marginLeft: "10px",
+              "&:hover": {
+                borderColor: "#08b7bd",
+              },
+            }}
+            variant="outlined"
+            onClick={handleClickCloseConfirmRejectDialog}
+          >
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <ToastContainer
+        autoClose={2000}
+        style={{ marginTop: "50px", width: "400px" }}
+      />
     </Box>
   );
 };

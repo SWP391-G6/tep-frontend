@@ -20,7 +20,7 @@ import {
   Typography,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
@@ -43,7 +43,6 @@ import { TimeshareDetailResponse } from "../../interfaces/timeshare/timeshareDet
 import { formatNumber } from "../../helpers/numberHelpers";
 import { USER_ID_KEY, USER_TOKEN_KEY } from "../../constant";
 import { RoomTypeResponse } from "../../interfaces/roomtype/roomTypeResponse";
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 
@@ -427,7 +426,7 @@ const TimesharePriceInformation = (props: Props) => {
                             component="img"
                             image={timeshare.image_url}
                             width="320px"
-                            height="100%"
+                            height="165px"
                             alt={`${timeshare.timeshareName}`}
                           />
                           <CardContent>

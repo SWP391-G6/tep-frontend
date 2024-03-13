@@ -2,14 +2,14 @@ export interface GetExchangeRequestResponse {
     create_date:           Date;
     status:                number;
     request_id:            string;
-    response_by:           By;
-    request_by:            By;
+    response_by:           PostBy;
+    request_by:            PostBy;
     timeshare_request_id:  TimeshareReID;
     timeshare_response_id: TimeshareReID;
     message:               string;
 }
 
-export interface By {
+export interface PostBy {
     user_id:   string;
     user_name: string;
     password:  string;
@@ -29,7 +29,7 @@ export interface TimeshareReID {
     status:           boolean;
     price:            number;
     nights:           number;
-    postBy:           By;
+    postBy:           PostBy;
     destinationModel: DestinationModel;
     dateStart:        Date;
     dateEnd:          Date;

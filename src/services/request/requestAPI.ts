@@ -9,8 +9,14 @@ const requestAPI = {
 
   getRequestByUserID: (userID: string) => {
     return axiosClient.get<GetExchangeRequestResponse[]>(
-      "request/getRequestByRequestUser",
-      { params: {resquest_by: userID} }
+      "request/getRequestByReceiver",
+      { params: { response_by: userID } }
+    );
+  },
+
+  handleRequest: (requestID: string, status: number) => {
+    return axiosClient.put(
+      `http://localhost:8088/api/request/handle-request/${status}/${requestID}`
     );
   },
 };
