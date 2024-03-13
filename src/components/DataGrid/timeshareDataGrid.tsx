@@ -156,6 +156,7 @@ const TimeshareDataGrid = () => {
           <Stack direction="row" spacing={1}>
             <Tooltip title="View Timeshare Detail">
               <IconButton
+                sx={{ color: "#00acb3" }}
                 aria-label="View timeshare detail"
                 onClick={() => {
                   navigate(

@@ -345,8 +345,9 @@ const ExchangeRequestDataGrid = () => {
       renderCell: (param) => {
         return (
           <Stack direction="row" spacing={1}>
-            <Tooltip title="View">
+            <Tooltip title="View Request Detail">
               <IconButton
+                sx={{ color: "#00acb3" }}
                 onClick={() => {
                   handleClickOpenViewRequestDetail(param.row);
                 }}
@@ -451,6 +452,7 @@ const ExchangeRequestDataGrid = () => {
         >
           <CloseIcon />
         </IconButton>
+        <Divider sx={{ width: "100%" }} />
         <DialogContent>
           <Grid2
             container

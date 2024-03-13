@@ -157,6 +157,7 @@ const BookingHistoryDataGrid = () => {
             <Tooltip title="View Timeshare Detail">
               <IconButton
                 aria-label="View Timeshare Detail"
+                sx={{ color: "#00acb3" }}
                 onClick={() => {
                   navigate(
                     `/member/view_timeshare_detail/${param.row.timeshare_id.timeshareId}`
