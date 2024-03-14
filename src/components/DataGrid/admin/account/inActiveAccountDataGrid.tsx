@@ -3,13 +3,13 @@ import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
 import ViewIcon from "@mui/icons-material/Visibility";
-import { TimeshareByOwnerResponse } from "../../interfaces/timeshare/timeshareByOwnerResponse";
 import { styled } from "@mui/material/styles";
-import { useEffect, useState } from "react";
-import timeshareAPI from "../../services/timeshare/timeshareAPI";
-import { USER_ID_KEY } from "../../constant";
-import { formatNumber } from "../../helpers/numberHelpers";
 import dayjs from "dayjs";
+import { formatNumber } from "../../../../helpers/numberHelpers";
+import { useEffect, useState } from "react";
+import { green, red } from "@mui/material/colors";
+import { ViewAllAccountResponse } from "../../../../interfaces/user/viewAllAccountResponse";
+import userAPI from "../../../../services/user/userAPI";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 dayjs.locale("en");
@@ -80,54 +80,32 @@ function CustomNoRowsOverlay() {
           </g>
         </g>
       </svg>
-      <Box sx={{ mt: 1 }}>No Timeshare Yet!</Box>
+      <Box sx={{ mt: 1 }}>No InActive Account Yet!</Box>
     </StyledGridOverlay>
   );
 }
 
-const TimeshareDataGrid = () => {
+const InActiveAccountDataGrid = () => {
   const navigate = useNavigate();
-  const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
-
+  const [inActiveAccountList, setInActiveAccountList] = useState<
+    ViewAllAccountResponse[]
+  >([]);
   const columns: GridColDef[] = [
     { field: "no", headerName: "No", width: 90 },
     {
-      field: "timeshareName",
-      headerName: "Timeshare Name",
+      field: "user_name",
+      headerName: "Username",
       flex: 1,
     },
     {
-      field: "dateStart",
-      headerName: "Check in",
+      field: "fullname",
+      headerName: "Full Name",
       flex: 1,
-      renderCell: (param) => {
-        return (
-          <Typography>
-            {dayjs(param.row.dateStart).format("DD MMM YYYY").toString()}
-          </Typography>
-        );
-      },
     },
     {
-      field: "dateEnd",
-      headerName: "Check out",
+      field: "phone",
+      headerName: "Phone",
       flex: 1,
-      renderCell: (param) => {
-        return (
-          <Typography>
-            {dayjs(param.row.dateEnd).format("DD MMM YYYY").toString()}
-          </Typography>
-        );
-      },
-    },
-
-    {
-      field: "price",
-      headerName: "Price (VNĐ)",
-      flex: 1,
-      renderCell: (param) => {
-        return <Typography>{formatNumber(param.row.price)}</Typography>;
-      },
     },
 
     {
@@ -135,15 +113,13 @@ const TimeshareDataGrid = () => {
       headerName: "Status",
       flex: 1,
       renderCell: (param) => {
-        return (
-          <Typography>
-            {param.row.status === true
-              ? "Accepted"
-              : param.row.status === false
-              ? "Rejected"
-              : param.row.status}
-          </Typography>
-        );
+        if (param.row.status === true) {
+          return <Typography color={green[500]}>Active</Typography>;
+        } else if (param.row.status === false) {
+          return <Typography color={red[500]}>Inactive</Typography>;
+        } else {
+          return <Typography>{param.row.status}</Typography>;
+        }
       },
     },
     {
@@ -154,7 +130,7 @@ const TimeshareDataGrid = () => {
       renderCell: (param) => {
         return (
           <Stack direction="row" spacing={1}>
-            <Tooltip title="View Timeshare Detail">
+            <Tooltip title="View Account Detail">
               <IconButton
                 sx={{ color: "#00acb3" }}
                 aria-label="View timeshare detail"
@@ -173,20 +149,22 @@ const TimeshareDataGrid = () => {
     },
   ];
 
-  const [timeshareList, setTimeshareList] = useState<
-    TimeshareByOwnerResponse[]
-  >([]);
-
   useEffect(() => {
-    const getTimeshareListByUserID = async (userID: string) => {
-      const data: any = await timeshareAPI.getTimeshareListByUserID(userID);
+    const getAllUSer = async () => {
+      let temp: ViewAllAccountResponse[] = [];
+      const data: any = await userAPI.getAllUser();
       if (data && data.length > 0) {
-        setTimeshareList(data);
+        data.map((item: any) => {
+          if (item.status === false) {
+            temp.push(item);
+          }
+        });
+        setInActiveAccountList(temp);
       }
     };
 
     const initUseEffect = async () => {
-      if (userID) await getTimeshareListByUserID(userID);
+      await getAllUSer();
     };
     initUseEffect();
   }, []);
@@ -202,10 +180,7 @@ const TimeshareDataGrid = () => {
       }}
     >
       <Box>
-        <Typography variant="h5" fontWeight={700}>
-          My Timeshares
-        </Typography>
-        {timeshareList.length == 0 ? (
+        {inActiveAccountList.length == 0 ? (
           <DataGrid
             sx={{ height: "550px", marginTop: "10px" }}
             columns={columns}
@@ -216,10 +191,10 @@ const TimeshareDataGrid = () => {
           />
         ) : (
           <DataGrid
-            rows={timeshareList.map((item, index) => {
+            rows={inActiveAccountList.map((item, index) => {
               return { no: index + 1, ...item };
             })}
-            getRowId={(row) => row.timeshareId}
+            getRowId={(row) => row.user_id}
             style={{ height: "550px", marginTop: "10px" }}
             columns={columns}
             initialState={{
@@ -239,4 +214,4 @@ const TimeshareDataGrid = () => {
   );
 };
 
-export default TimeshareDataGrid;
+export default InActiveAccountDataGrid;

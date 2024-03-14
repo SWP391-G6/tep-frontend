@@ -3,7 +3,7 @@ import { Box, Container, Grid } from "@mui/material";
 import UserActivityTab from "../../components/User/UserActivityTab";
 import UserCard from "../../components/User/UserCard";
 import BackButton from "../../components/Button/backButton";
-import TimeshareDataGrid from "../../components/DataGrid/timeshareDataGrid";
+import TimeshareDataGrid from "../../components/DataGrid/member/timeshareDataGrid";
 
 const MyTimesharePage = () => {
   return (

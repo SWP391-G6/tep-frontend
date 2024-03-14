@@ -24,7 +24,6 @@ function AdminDashboard() {
           zIndex: -1,
           top: 64,
           left: 300,
-          height: "100vh"
         }}
       >
         <Outlet />

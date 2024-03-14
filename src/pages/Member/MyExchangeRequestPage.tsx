@@ -1,7 +1,7 @@
 import { Box, Container, Grid } from "@mui/material"
 import UserActivityTab from "../../components/User/UserActivityTab";
 import UserCard from "../../components/User/UserCard";
-import UserRequestActivity from "../../components/DataGrid/exchangeRequestDataGrid";
+import UserRequestActivity from "../../components/DataGrid/member/exchangeRequestDataGrid";
 import BackButton from "../../components/Button/backButton";
 
 const MyExchangeRequestPage = () => {

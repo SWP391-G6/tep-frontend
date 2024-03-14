@@ -10,12 +10,11 @@ import {
   // useTheme,
 } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import ListIcon from "@mui/icons-material/List";
 import { NavLink } from "react-router-dom";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import DateRangeIcon from "@mui/icons-material/DateRange";
-import * as colorPalette from "@mui/material/colors";
+import AccountCircleRoundedIcon from "@mui/icons-material/AccountCircleRounded";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 
 const drawerWidth = 300;
 const linkStyle = {
@@ -43,7 +42,7 @@ const AdminSideBar = () => {
             style={({ isActive }) => {
               return {
                 ...linkStyle,
-                background: isActive ? colorPalette.blue[100] : "",
+                background: isActive ? "#00acb3" : "",
               };
             }}
             to=""
@@ -76,38 +75,15 @@ const AdminSideBar = () => {
           </ListItemButton>
         </ListItem>
 
-        {/* <ListItem disablePadding>
-          <NavLink
-            style={({ isActive }) => {
-              return {
-                ...linkStyle,
-                background: isActive ? colorPalette.blue[100] : "",
-              };
-            }}
-            to="/accountant/manage_bill/create_bill"
-            end
-          >
-            <ListItemButton style={childButtonStyle}>
-              <ListItemIcon>
-                <AddCircleOutlineIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary="Tạo hóa đơn"
-                primaryTypographyProps={{ fontSize: "15px" }}
-              />
-            </ListItemButton>
-          </NavLink>
-        </ListItem> */}
-
         <ListItem disablePadding>
           <NavLink
             style={({ isActive }) => {
               return {
                 ...linkStyle,
-                background: isActive ? colorPalette.blue[100] : "",
+                background: isActive ? "#00acb3" : "",
               };
             }}
-            to="/accountant/manage_bill"
+            to="/admin/manage_timeshare"
             end
           >
             <ListItemButton style={childButtonStyle}>
@@ -127,10 +103,10 @@ const AdminSideBar = () => {
             style={({ isActive }) => {
               return {
                 ...linkStyle,
-                background: isActive ? colorPalette.blue[100] : "",
+                background: isActive ? "#00acb3" : "",
               };
             }}
-            to="/accountant/manage_new_bill"
+            to="/admin/manage_timeshare/booked_timeshare_list"
             end
           >
             <ListItemButton style={childButtonStyle}>
@@ -150,10 +126,10 @@ const AdminSideBar = () => {
             style={({ isActive }) => {
               return {
                 ...linkStyle,
-                background: isActive ? colorPalette.blue[100] : "",
+                background: isActive ? "#00acb3" : "",
               };
             }}
-            to="/accountant/manage_approved_bill"
+            to="/admin/manage_timeshare/active_timeshare_list"
             end
           >
             <ListItemButton style={childButtonStyle}>
@@ -162,6 +138,151 @@ const AdminSideBar = () => {
               </ListItemIcon>
               <ListItemText
                 primary="Active Timeshare List"
+                primaryTypographyProps={{ fontSize: "15px" }}
+              />
+            </ListItemButton>
+          </NavLink>
+        </ListItem>
+
+        <ListItem disablePadding divider>
+          <NavLink
+            style={({ isActive }) => {
+              return {
+                ...linkStyle,
+                background: isActive ? "#00acb3" : "",
+              };
+            }}
+            to="/admin/manage_timeshare/expired_timeshare_list"
+            end
+          >
+            <ListItemButton style={childButtonStyle}>
+              <ListItemIcon>
+                <ListIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary="Expired Timeshare List"
+                primaryTypographyProps={{ fontSize: "15px" }}
+              />
+            </ListItemButton>
+          </NavLink>
+        </ListItem>
+
+        <ListItem disablePadding>
+          <ListItemButton
+            style={{ backgroundColor: "transparent", width: "300px" }}
+            disableRipple
+          >
+            <ListItemIcon>
+              <AccountCircleRoundedIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="Manage Account"
+              primaryTypographyProps={{ fontWeight: "700" }}
+            />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem disablePadding>
+          <NavLink
+            style={({ isActive }) => {
+              return {
+                ...linkStyle,
+                background: isActive ? "#00acb3" : "",
+              };
+            }}
+            to="/admin/manage_account"
+            end
+          >
+            <ListItemButton style={childButtonStyle}>
+              <ListItemIcon>
+                <ListIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary="Account List"
+                primaryTypographyProps={{ fontSize: "15px" }}
+              />
+            </ListItemButton>
+          </NavLink>
+        </ListItem>
+
+        <ListItem disablePadding>
+          <NavLink
+            style={({ isActive }) => {
+              return {
+                ...linkStyle,
+                background: isActive ? "#00acb3" : "",
+              };
+            }}
+            to="/admin/manage_account/active_account_list"
+            end
+          >
+            <ListItemButton style={childButtonStyle}>
+              <ListItemIcon>
+                <ListIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary="Active Account List"
+                primaryTypographyProps={{ fontSize: "15px" }}
+              />
+            </ListItemButton>
+          </NavLink>
+        </ListItem>
+
+        <ListItem disablePadding divider>
+          <NavLink
+            style={({ isActive }) => {
+              return {
+                ...linkStyle,
+                background: isActive ? "#00acb3" : "",
+              };
+            }}
+            to="/admin/manage_account/inactive_account_list"
+            end
+          >
+            <ListItemButton style={childButtonStyle}>
+              <ListItemIcon>
+                <ListIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary="InActive Account List"
+                primaryTypographyProps={{ fontSize: "15px" }}
+              />
+            </ListItemButton>
+          </NavLink>
+        </ListItem>
+
+        <ListItem disablePadding>
+          <ListItemButton
+            style={{ backgroundColor: "transparent", width: "300px" }}
+            disableRipple
+          >
+            <ListItemIcon>
+              <AppRegistrationIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="Manage Service Pack"
+              primaryTypographyProps={{ fontWeight: "700" }}
+            />
+          </ListItemButton>
+        </ListItem>
+
+        <ListItem disablePadding>
+          <NavLink
+            style={({ isActive }) => {
+              return {
+                ...linkStyle,
+                background: isActive ? "#00acb3" : "",
+              };
+            }}
+            to="/admin/manage_service_pack"
+            end
+          >
+            <ListItemButton style={childButtonStyle}>
+              <ListItemIcon>
+                <ListIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary="Service Pack List"
                 primaryTypographyProps={{ fontSize: "15px" }}
               />
             </ListItemButton>

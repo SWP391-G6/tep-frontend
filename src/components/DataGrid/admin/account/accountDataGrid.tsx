@@ -1,15 +1,15 @@
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { IconButton, Stack, Tooltip, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import ViewIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router";
+import ViewIcon from "@mui/icons-material/Visibility";
+import { styled } from "@mui/material/styles";
 import dayjs from "dayjs";
-import { USER_ID_KEY } from "../../constant";
-import { BookingHistoryByUserIDResponse } from "../../interfaces/bookinghistory/bookingHistoryByUserIDResponse";
-import bookingHistoryAPI from "../../services/bookinghistory/bookingHistoryAPI";
+import { formatNumber } from "../../../../helpers/numberHelpers";
 import { useEffect, useState } from "react";
-import { green } from "@mui/material/colors";
+import { green, red } from "@mui/material/colors";
+import { ViewAllAccountResponse } from "../../../../interfaces/user/viewAllAccountResponse";
+import userAPI from "../../../../services/user/userAPI";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 dayjs.locale("en");
@@ -80,72 +80,45 @@ function CustomNoRowsOverlay() {
           </g>
         </g>
       </svg>
-      <Box sx={{ mt: 1 }}>No Booking History Yet!</Box>
+      <Box sx={{ mt: 1 }}>No Account Yet!</Box>
     </StyledGridOverlay>
   );
 }
-const BookingHistoryDataGrid = () => {
+const AccountDataGrid = () => {
   const navigate = useNavigate();
-  const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
-  const [bookingHistoryList, setBookingHistoryList] = useState<
-    BookingHistoryByUserIDResponse[]
-  >([]);
-
+  const [accountList, setAccountList] = useState<ViewAllAccountResponse[]>([]);
   const columns: GridColDef[] = [
     { field: "no", headerName: "No", width: 90 },
     {
-      field: "bookingCode",
-      headerName: "Code",
-      flex: 2,
-    },
-    {
-      field: "timeshareName",
-      headerName: "Timeshare Name",
-      flex: 1.5,
-      renderCell: (param) => {
-        return <Typography>{param.row.timeshare_id.timeshareName}</Typography>;
-      },
-    },
-    {
-      field: "success_date",
-      headerName: "Booking Date",
+      field: "user_name",
+      headerName: "Username",
       flex: 1,
-      renderCell: (param) => {
-        return (
-          <Typography>
-            {dayjs(param.row.success_date).format("DD MMM YYYY").toString()}
-          </Typography>
-        );
-      },
     },
     {
-      field: "date",
-      headerName: "Date",
-      flex: 2,
-      headerAlign: "center",
-      align: "center",
-      renderCell: (param) => {
-        return (
-          <Typography>
-            {dayjs(param.row.dateStart).format("DD MMM YYYY").toString()} -{" "}
-            {dayjs(param.row.dateEnd).format("DD MMM YYYY").toString()}
-          </Typography>
-        );
-      },
+      field: "fullname",
+      headerName: "Full Name",
+      flex: 1,
     },
+    {
+      field: "phone",
+      headerName: "Phone",
+      flex: 1,
+    },
+
     {
       field: "status",
       headerName: "Status",
       flex: 1,
       renderCell: (param) => {
-        if (param.row.payment_status === true) {
-          return <Typography color={green[500]}>Paid</Typography>;
+        if (param.row.status === true) {
+          return <Typography color={green[500]}>Active</Typography>;
+        } else if (param.row.status === false) {
+          return <Typography color={red[500]}>Inactive</Typography>;
         } else {
-          return <Typography>{param.row.payment_status}</Typography>;
+          return <Typography>{param.row.status}</Typography>;
         }
       },
     },
-
     {
       field: "action",
       headerName: "Action",
@@ -154,13 +127,13 @@ const BookingHistoryDataGrid = () => {
       renderCell: (param) => {
         return (
           <Stack direction="row" spacing={1}>
-            <Tooltip title="View Timeshare Detail">
+            <Tooltip title="View Account Detail">
               <IconButton
-                aria-label="View Timeshare Detail"
                 sx={{ color: "#00acb3" }}
+                aria-label="View timeshare detail"
                 onClick={() => {
                   navigate(
-                    `/member/view_timeshare_detail/${param.row.timeshare_id.timeshareId}`
+                    `/member/view_timeshare_detail/${param.row.timeshareId}`
                   );
                 }}
               >
@@ -174,17 +147,15 @@ const BookingHistoryDataGrid = () => {
   ];
 
   useEffect(() => {
-    const getBookingHistoryListByUserID = async (userID: string) => {
-      const data: any = await bookingHistoryAPI.getBookingHistoryListByUserID(
-        userID
-      );
+    const getAllUSer = async () => {
+      const data: any = await userAPI.getAllUser();
       if (data && data.length > 0) {
-        setBookingHistoryList(data);
+        setAccountList(data);
       }
     };
 
     const initUseEffect = async () => {
-      if (userID) await getBookingHistoryListByUserID(userID);
+      await getAllUSer();
     };
     initUseEffect();
   }, []);
@@ -200,10 +171,7 @@ const BookingHistoryDataGrid = () => {
       }}
     >
       <Box>
-        <Typography variant="h5" fontWeight={700}>
-          My Booking History
-        </Typography>
-        {bookingHistoryList.length == 0 ? (
+        {accountList.length == 0 ? (
           <DataGrid
             sx={{ height: "550px", marginTop: "10px" }}
             columns={columns}
@@ -214,10 +182,10 @@ const BookingHistoryDataGrid = () => {
           />
         ) : (
           <DataGrid
-            rows={bookingHistoryList.map((item, index) => {
+            rows={accountList.map((item, index) => {
               return { no: index + 1, ...item };
             })}
-            getRowId={(row) => row.booking_id}
+            getRowId={(row) => row.user_id}
             style={{ height: "550px", marginTop: "10px" }}
             columns={columns}
             initialState={{
@@ -237,4 +205,4 @@ const BookingHistoryDataGrid = () => {
   );
 };
 
-export default BookingHistoryDataGrid;
+export default AccountDataGrid;
