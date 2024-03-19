@@ -90,6 +90,13 @@ const Header = () => {
                   display: "block",
                   marginLeft: "10px",
                 }}
+                onClick={() => {
+                  {
+                    token
+                      ? navigate("/member/create_timeshare")
+                      : navigate("/login");
+                  }
+                }}
               >
                 Post Your timeshare
               </Button>
