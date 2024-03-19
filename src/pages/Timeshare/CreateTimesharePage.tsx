@@ -1,4 +1,4 @@
-import { Card, Container, Typography } from "@mui/material";
+import { Box, Button, Card, Container, Typography } from "@mui/material";
 
 import BackButton from "../../components/Button/backButton";
 import { useState } from "react";
@@ -18,6 +18,7 @@ import StepConnector, {
   stepConnectorClasses,
 } from "@mui/material/StepConnector";
 import { StepIconProps } from "@mui/material/StepIcon";
+import { blue } from "@mui/material/colors";
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -59,12 +60,12 @@ const ColorlibStepIconRoot = styled("div")<{
   alignItems: "center",
   ...(ownerState.active && {
     backgroundImage:
-      "linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)",
+      "linear-gradient(136deg, rgb(0, 172, 179) 0%, rgb(135, 206, 235) 50%, rgb(127, 255, 212) 100%)",
     boxShadow: "0 4px 10px 0 rgba(0,0,0,.25)",
   }),
   ...(ownerState.completed && {
     backgroundImage:
-      "linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)",
+      "linear-gradient(136deg, rgb(0, 172, 179) 0%, rgb(135, 206, 235) 50%, rgb(127, 255, 212) 100%)",
   }),
 }));
 
@@ -154,14 +155,62 @@ const CreateTimesharePage = () => {
           sx={{ mt: 2 }}
         >
           {steps.map((label) => (
-            <Step key={label} >
+            <Step key={label}>
               <StepLabel StepIconComponent={ColorlibStepIcon}>
                 {label}
               </StepLabel>
             </Step>
           ))}
         </Stepper>
-        <Card sx={{ marginTop: "20px" }}></Card>
+        {/* <Card
+          sx={{ marginTop: "30px", width: "100%", height: "800px" }}
+          elevation={10}
+        ></Card> */}
+        <Box sx={{ position: "relative", marginTop: "30px" }}>
+          <Card sx={{ width: "100%", height: "800px" }} elevation={10}>
+            {/* Nội dung của Card */}
+          </Card>
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              width: "100%",
+              backgroundColor: "#b2e2e4",
+              padding: "10px",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Button
+              variant="outlined"
+              sx={{
+                color: "#00acb3",
+                borderColor: "#00acb3",
+                backgroundColor: "#fff",
+                "&:hover": {
+                  backgroundColor: "#00acb3",
+                  borderColor: "#00acb3",
+                  color: "#fff",
+                },
+              }}
+            >
+              Back
+            </Button>
+            <Button
+              variant="contained"
+              sx={{
+                color: "#fff",
+                backgroundColor: "#00acb3",
+                "&:hover": {
+                  backgroundColor: "#08b7bd",
+                },
+              }}
+            >
+              Next
+            </Button>
+          </Box>
+        </Box>
       </Container>
     </Container>
   );

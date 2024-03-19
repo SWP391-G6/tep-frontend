@@ -76,9 +76,9 @@ const ShowTimeshareGrid = () => {
           return (
             <Grid2
               onClick={() => {
-                navigate(`view_timeshare_detail/${timeshare.timeshare_id}`);
+                navigate(`view_timeshare_detail/${timeshare.timeshareId}`);
               }}
-              key={timeshare.timeshare_id}
+              key={timeshare.timeshareId}
               xs={3.75}
               height="100%"
             >
@@ -92,7 +92,7 @@ const ShowTimeshareGrid = () => {
                   image={`${timeshare.image_url}`}
                   width="320px"
                   height="200px"
-                  alt={timeshare.name}
+                  alt={timeshare.timeshareName}
                 />
                 <CardContent>
                   <Stack
@@ -104,7 +104,7 @@ const ShowTimeshareGrid = () => {
                   >
                     <LocationOnIcon sx={{ color: "#00acb3" }} />
                     <Typography fontSize="16px" fontWeight={900}>
-                      {timeshare.name}, <span style={{fontWeight: 500, color: "#00acb3"}}>{timeshare.city}</span>
+                      {timeshare.timeshareName}, <span style={{fontWeight: 500, color: "#00acb3"}}>{timeshare.city}</span>
                     </Typography>
                   </Stack>
                   <List>
@@ -124,7 +124,7 @@ const ShowTimeshareGrid = () => {
                         secondary={
                           <Box>
                             <Typography color="#00acb3" fontWeight={500}>
-                            {dayjs(timeshare.date_start).format("DD MMM YYYY").toString()} - {dayjs(timeshare.date_end).format("DD MMM YYYY").toString()}
+                            {dayjs(timeshare.dateStart).format("DD MMM YYYY").toString()} - {dayjs(timeshare.dateEnd).format("DD MMM YYYY").toString()}
                             </Typography>
                           </Box>
                         }

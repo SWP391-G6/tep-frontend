@@ -92,7 +92,7 @@ const BookedTimeshareDataGrid = () => {
   const columns: GridColDef[] = [
     { field: "no", headerName: "No", width: 90 },
     {
-      field: "name",
+      field: "timeshareName",
       headerName: "Timeshare Name",
       flex: 1,
     },

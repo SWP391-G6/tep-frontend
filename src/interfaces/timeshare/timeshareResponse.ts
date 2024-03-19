@@ -1,40 +1,40 @@
 export interface TimeshareResponse {
-    timeshare_id:   string;
-    date_start:     Date;
-    date_end:       Date;
-    nights:         number;
-    price:          number;
-    status:         boolean;
-    name:           string;
-    post_by:        string;
-    destination_id: Destination;
-    description:    string;
-    image_url:      string;
-    city:           string;
-    room:           RoomType;
+    timeshareId:      string;
+    timeshareCode:    null;
+    timeshareName:    string;
+    description:      string;
+    status:           boolean;
+    price:            number;
+    nights:           number;
+    postBy:           PostBy;
+    destinationModel: DestinationModel;
+    dateStart:        Date;
+    dateEnd:          Date;
+    exchange:         boolean;
+    city:             string;
+    image_url:        string;
+    create_date:      null;
 }
 
-export interface Destination {
-    destinationId:  string;
-    address:        string;
-    branch:         string;
-    city:           string;
-    description:    string;
-    name:           string;
-    country:        string;
+export interface DestinationModel {
+    destinationId: string;
+    address:       string;
+    branch:        string;
+    city:          string;
+    country:       string;
+    description:   string;
+    desName:       string;
 }
 
-export interface RoomType {
-    roomtypeId:     string;
-    roomview:       string;
-    policies:       string;
-    name:           string;
-    kitchen:        string;
-    feature:        string;
-    entertaiment:   string;
-    bath:           number,
-    bed:            number,
-    sleeps:         number,
-    
+export interface PostBy {
+    user_id:    string;
+    user_name:  string;
+    fullname:   string;
+    email:      string;
+    createDate: null;
+    phone:      string;
+    dob:        Date;
+    gender:     boolean;
+    status:     boolean;
+    role:       string;
 }
-
