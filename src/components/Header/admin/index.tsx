@@ -52,7 +52,7 @@ const AdminHeader = () => {
     <AppBar position="static" sx={{ backgroundColor: "#ffffff" }}>
       <Container maxWidth={false}>
         <Toolbar disableGutters>
-          <Link to={token ? "/member" : "/"}>
+          <Link to={token ? "/admin" : "/"}>
             <img
               src={"https://i.ibb.co/995RZ07/logo.png"}
               width="50px"

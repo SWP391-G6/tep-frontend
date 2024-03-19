@@ -409,8 +409,8 @@ const UserCard = () => {
                   }}
                   onClick={() => {
                     handleRegisterPack(
-                      basicPack.service_id,
-                      basicPack.service_price
+                      premiumPack.service_id,
+                      premiumPack.service_price
                     );
                     handleClose();
                   }}

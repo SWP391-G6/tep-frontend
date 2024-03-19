@@ -178,7 +178,7 @@ const ExpiredTimeshareDataGrid = () => {
       const data: any = await timeshareAPI.getAllTimeshare();
       if (data && data.length > 0) {
         data.map((item: any) => {
-          if (item.status === false) {
+          if (item.status === 0) {
             temp.push(item);
           }
         });

@@ -12,6 +12,7 @@ import ProfileDashboardPage from "../pages/Member/ProfileDashboardPage";
 import BookingHistoryPage from "../pages/Member/BookingHistoryPage";
 import { ROUTE_PATH } from "../configs";
 import SuccessfulPaymentPage from "../pages/Payment/SuccessfulPaymentPage";
+import CreateTimesharePage from "../pages/Timeshare/CreateTimesharePage";
 
 type Props = {
   isAllowed: boolean;
@@ -40,6 +41,7 @@ function MemberRoutes(props: Props) {
           path={ROUTE_PATH.PAYMENT_SUCCESSFUL}
           element={<SuccessfulPaymentPage />}
         />
+        <Route path="create_timeshare" element={<CreateTimesharePage />} />
         <Route path="profile">
           <Route index element={<ProfileDashboardPage />} />
           <Route path="my_profile" element={<UserProfilePage />} />
