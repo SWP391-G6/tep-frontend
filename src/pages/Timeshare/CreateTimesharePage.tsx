@@ -107,7 +107,6 @@ const ColorlibStepIcon = (props: StepIconProps) => {
 
 const CreateTimesharePage = () => {
   const [activeStep, setActiveStep] = useState(0);
-
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };
@@ -174,22 +173,42 @@ const CreateTimesharePage = () => {
                   justifyContent: "space-between",
                 }}
               >
-                <Button
-                  variant="outlined"
-                  onClick={handleBack}
-                  sx={{
-                    color: "#00acb3",
-                    borderColor: "#00acb3",
-                    backgroundColor: "#fff",
-                    "&:hover": {
-                      backgroundColor: "#00acb3",
+                {activeStep !== 0 ? (
+                  <Button
+                    variant="outlined"
+                    onClick={handleBack}
+                    sx={{
+                      color: "#00acb3",
                       borderColor: "#00acb3",
-                      color: "#fff",
-                    },
-                  }}
-                >
-                  Back
-                </Button>
+                      backgroundColor: "#fff",
+                      "&:hover": {
+                        backgroundColor: "#00acb3",
+                        borderColor: "#00acb3",
+                        color: "#fff",
+                      },
+                    }}
+                  >
+                    Back
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outlined"
+                    disabled
+                    onClick={handleBack}
+                    sx={{
+                      color: "#00acb3",
+                      borderColor: "#00acb3",
+                      backgroundColor: "#fff",
+                      "&:hover": {
+                        backgroundColor: "#00acb3",
+                        borderColor: "#00acb3",
+                        color: "#fff",
+                      },
+                    }}
+                  >
+                    Back
+                  </Button>
+                )}
                 <Button
                   variant="contained"
                   sx={{
@@ -202,7 +221,6 @@ const CreateTimesharePage = () => {
                   onClick={handleNext}
                 >
                   {activeStep === steps.length - 1 ? "Place order" : "Next"}
-                  Next
                 </Button>
               </Box>
             </Box>
