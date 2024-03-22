@@ -17,6 +17,7 @@ import StepConnector, {
 } from "@mui/material/StepConnector";
 import { StepIconProps } from "@mui/material/StepIcon";
 import CreateTimeshareForm from "../../components/Form/CreateTimeshareForm";
+import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -158,10 +159,19 @@ const CreateTimesharePage = () => {
             </Typography>
           </React.Fragment>
         ) : (
-          <React.Fragment>
-            <Box sx={{ position: "relative", marginTop: "30px" }}>
+          <Grid2
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+          >
+            {" "}
+            <Grid2
+              xs={12}
+              sx={{ position: "relative", marginTop: "30px", width: "800px" }}
+            >
               {getStepContent(activeStep)}
-              <Box
+              <Grid2
                 sx={{
                   position: "absolute",
                   bottom: 0,
@@ -222,9 +232,9 @@ const CreateTimesharePage = () => {
                 >
                   {activeStep === steps.length - 1 ? "Place order" : "Next"}
                 </Button>
-              </Box>
-            </Box>
-          </React.Fragment>
+              </Grid2>
+            </Grid2>
+          </Grid2>
         )}
       </Container>
     </Container>

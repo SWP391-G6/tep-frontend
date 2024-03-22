@@ -1,12 +1,10 @@
 import {
-  Box,
   Button,
   Card,
   FormControl,
   InputAdornment,
   InputLabel,
   MenuItem,
-  Paper,
   Select,
   SelectChangeEvent,
   TextField,
@@ -17,14 +15,12 @@ import { styled } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { cityList } from "../../utils/cities";
-import { useEffect, useState } from "react";
-import { formatNumber } from "../../helpers/numberHelpers";
+import { useState } from "react";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import Textarea from "@mui/joy/Textarea";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import ChangeCircleOutlinedIcon from "@mui/icons-material/ChangeCircleOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import { red } from "@mui/material/colors";
 var now = dayjs();
 const currenttDate = dayjs(now, "DD-MM-YYYY", "vn");
 
@@ -65,8 +61,8 @@ const CreateTimeshareForm = () => {
     <Card
       sx={{
         width: "100%",
-        height: "800px",
-        padding: 3,
+        height: "100%",
+        padding: "20px 20px 70px 20px",
       }}
       elevation={10}
     >
@@ -206,51 +202,103 @@ const CreateTimeshareForm = () => {
             }) => (
               // write your building UI
               <div className="upload__image-wrapper">
-                <Button
-                  startIcon={<CloudUploadOutlinedIcon />}
-                  variant="contained"
-                  style={isDragging ? { color: "red" } : undefined}
-                  onClick={onImageUpload}
-                  {...dragProps}
+                <Grid2
+                  container
+                  direction="column"
+                  justifyContent="center"
+                  alignItems="center"
                 >
-                  Add Image
-                </Button>
-                <Grid2 xs={12}>
-                  <Paper elevation={10}></Paper>
+                  <Grid2>
+                    {imageList.length <= 0 ? (
+                      <Button
+                        startIcon={<CloudUploadOutlinedIcon />}
+                        variant="contained"
+                        style={isDragging ? { color: "red" } : undefined}
+                        onClick={onImageUpload}
+                        {...dragProps}
+                        sx={{
+                          bgcolor: "#00acb3",
+                          "&:hover": {
+                            bgcolor: "#08b7bd",
+                          },
+                        }}
+                      >
+                        Add Image
+                      </Button>
+                    ) : (
+                      <Button
+                        startIcon={<CloudUploadOutlinedIcon />}
+                        disabled
+                        variant="contained"
+                        style={isDragging ? { color: "red" } : undefined}
+                        onClick={onImageUpload}
+                        {...dragProps}
+                        sx={{
+                          bgcolor: "#00acb3",
+                          "&:hover": {
+                            bgcolor: "#08b7bd",
+                          },
+                        }}
+                      >
+                        Add Image
+                      </Button>
+                    )}
+                  </Grid2>
+                  <Grid2>
+                    {imageList.map((image, index) => (
+                      <div
+                        key={index}
+                        className="image-item"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          marginBottom: "16px",
+                          marginTop: "16px",
+                          border: "2px solid #00acb3",
+                          padding: "16px",
+                          borderRadius: "8px",
+                          boxShadow: "2px 2px 3px 3px rgba(0, 0, 0, 0.2)",
+                        }}
+                      >
+                        <img
+                          src={image.dataURL}
+                          alt=""
+                          width={320}
+                          height={250}
+                        />
+                        <div className="image-item__btn-wrapper">
+                          <Button
+                            variant="outlined"
+                            startIcon={<ChangeCircleOutlinedIcon />}
+                            onClick={() => onImageUpdate(index)}
+                            sx={{
+                              color: "#00acb3",
+                              "&:hover": {
+                                borderColor: "#08b7bd",
+                              },
+                            }}
+                          >
+                            Change
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            startIcon={<DeleteOutlineOutlinedIcon />}
+                            sx={{
+                              ml: 2,
+                              color: "#00acb3",
+                              "&:hover": {
+                                borderColor: "#08b7bd",
+                              },
+                            }}
+                            onClick={() => onImageRemove(index)}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </Grid2>
                 </Grid2>
-                {imageList.map((image, index) => (
-                  <div
-                    key={index}
-                    className="image-item"
-                    style={{
-                      width: "30vw",
-                      marginBottom: "16px",
-                      marginTop: "16px",
-                      border: "1px solid",
-                      padding: "16px",
-                      borderRadius: "8px",
-                    }}
-                  >
-                    <img src={image.dataURL} alt="" width="100%" />
-                    <div className="image-item__btn-wrapper">
-                      <Button
-                        variant="outlined"
-                        startIcon={<ChangeCircleOutlinedIcon />}
-                        onClick={() => onImageUpdate(index)}
-                      >
-                        Thay đổi
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        startIcon={<DeleteOutlineOutlinedIcon />}
-                        sx={{ ml: 2 }}
-                        onClick={() => onImageRemove(index)}
-                      >
-                        Xóa
-                      </Button>
-                    </div>
-                  </div>
-                ))}
               </div>
             )}
           </ImageUploading>
