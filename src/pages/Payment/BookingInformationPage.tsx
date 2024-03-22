@@ -85,6 +85,7 @@ const validationSchema = yup.object({
     .matches(phoneRegExp, "Phone number is not valid!"),
   total: yup
     .number()
+    .typeError('Total must be a number')
     .integer("Total must be integer!")
     .min(0)
     .required("Total can't be blank!"),
