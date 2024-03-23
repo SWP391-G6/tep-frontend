@@ -1,24 +1,42 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../configStore";
 interface State {
+  date_start: Date;
+  date_end: Date;
+  price: number;
+  status: boolean;
   name: string;
-  age: number;
+  owner: string;
+  destination_id: string;
+  description: string;
+  image_url: string;
+  city: string;
+  exchange: boolean;
 }
 
 const initialState: State = {
-  name: "Tu Minh Duy",
-  age: 12,
+  date_start: new Date(),
+  date_end: new Date(),
+  price: 0,
+  status: false,
+  name: "",
+  owner: "",
+  destination_id: "",
+  description: "",
+  image_url: "",
+  city: "",
+  exchange: false,
 };
 
-const userSlice = createSlice({
-  name: "user",
+const timeshareSlice = createSlice({
+  name: "timeshare",
   initialState,
   reducers: {},
 });
 
-const getUser = (state: RootState) => {
+const getTimeshare = (state: RootState) => {
   return state.timeshare;
 };
 
-export const userActions = { getUser };
-export default userSlice.reducer;
+export const userActions = { getTimeshare };
+export default timeshareSlice.reducer;
