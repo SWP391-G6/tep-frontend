@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Card,
   Dialog,
@@ -7,6 +8,7 @@ import {
   DialogContentText,
   DialogTitle,
   FormControl,
+  Grid,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -20,7 +22,7 @@ import { styled } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { cityList } from "../../utils/cities";
-import { useState } from "react";
+import React, { useState } from "react";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import Textarea from "@mui/joy/Textarea";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
@@ -33,7 +35,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { CreateTimeshareRequest } from "../../interfaces/timeshare/createTimeshareRequest";
 import { isEmpty } from "lodash";
 import ErrorMessage from "../Error/errorMessage";
-import moment from "moment";
+import {
+  isEndDateValid,
+  isStartingFromTomorrow,
+} from "../../helpers/dateHelpers";
+var customParseFormat = require("dayjs/plugin/customParseFormat");
+dayjs.extend(customParseFormat);
+dayjs.locale("vn");
 
 var now = dayjs();
 const currenttDate = dayjs(now, "DD-MM-YYYY", "vn");
@@ -53,33 +61,30 @@ type Inputs = {
   name: string;
   price: number;
   description: string;
-  startDate: string;
 };
 
-const validationSchema = yup.object({
-  name: yup.string().required("Name can't be empty!"),
-  price: yup
-    .number()
-    .typeError("Price must be a number")
-    .integer("Price must be integer!")
-    .min(0)
-    .required("Price can't be blank!"),
-  description: yup.string().required("Name can't be empty!"),
-  startDate: yup
-  .string()
-  .nullable()
-  .test("startDate", "Start date must be selected from the current date", (value) => {return})
-  .required("Please choose start date!"),
-});
-
 const CreateTimeshareForm = () => {
-  const [dateEnd, setDateEnd] = useState<dayjs.Dayjs>(dayjs());
-  const [dateStart, setDateStart] = useState<dayjs.Dayjs>(dayjs());
+  const [dateEnd, setDateEnd] = useState<dayjs.Dayjs>();
+  const [dateStart, setDateStart] = useState<dayjs.Dayjs>();
+  const [startDayError, setStartDayError] = useState(false);
+  const [endDayError, setEndDayError] = useState(false);
+  const [citySelectError, setCitySelectError] = useState(false);
   const [city, setCity] = useState("");
   const [images, setImages] = useState<any[]>([]);
   const maxNumber = 69;
   const [errorImage, setErrorImage] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+
+  const validationSchema = yup.object({
+    name: yup.string().required("Name can't be empty!"),
+    price: yup
+      .number()
+      .typeError("Price must be a number")
+      .integer("Price must be integer!")
+      .min(0)
+      .required("Price can't be blank!"),
+    description: yup.string().required("Description can't be empty!"),
+  });
 
   const handleChange = (event: SelectChangeEvent) => {
     setCity(event.target.value as string);
@@ -154,99 +159,162 @@ const CreateTimeshareForm = () => {
               <ErrorMessage message={errors["name"].message} />
             ) : null}
           </Grid2>
-          <Grid2 xs={5}>
-            <Typography
-              sx={{ marginTop: "10px", marginLeft: "5px" }}
-              fontSize="0.75rem"
-              color="#00acb3"
-            >
-              Check In Date
-            </Typography>
-            <DatePicker
-              sx={{ width: "100%" }}
-              views={["day", "month", "year"]}
-              value={currenttDate}
-              disablePast
-              format="DD/MM/YYYY"
-              {...register("startDate")}
-              onChange={(dateStart: any) => {
-                setDateStart(dateStart);
-              }}
-            />
-            {errors["startDate"]?.message ? (
-              <ErrorMessage message={errors["startDate"].message} />
-            ) : null}
-          </Grid2>
-          <Grid2 mt={3}>
-            <Typography fontWeight={900} color={"#00acb3"} fontSize={18}>
-              To
-            </Typography>
-          </Grid2>
-          <Grid2 xs={5}>
-            <Typography
-              sx={{ marginTop: "10px", marginLeft: "5px" }}
-              fontSize="0.75rem"
-              color="#00acb3"
-            >
-              Check Out Date
-            </Typography>
-            <DatePicker
-              sx={{ width: "100%" }}
-              minDate={dateStart}
-              value={dateStart}
-              views={["day", "month", "year"]}
-              disablePast
-              onChange={(dateEnd: any) => {
-                setDateEnd(dateEnd);
-              }}
-              format="DD/MM/YYYY"
-            />
-          </Grid2>
-          <Grid2 xs={6} mt={1}>
-            <FormControl sx={{ marginTop: "10px" }} fullWidth>
-              <InputLabel id="cities-select-label">City</InputLabel>
-              <Select
-                labelId="cities-select-label"
-                id="cities-select"
-                value={city}
-                label="City"
-                onChange={handleChange}
-                sx={{ mb: 2 }}
-                MenuProps={{ PaperProps: { sx: { maxHeight: 250 } } }}
+          <Grid2
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            width={"100%"}
+            mt={1}
+          >
+            <Grid2 xs={5}>
+              <Typography
+                sx={{ marginTop: "10px", marginLeft: "5px" }}
+                fontSize="0.75rem"
+                color="#00acb3"
               >
-                {cityList.map((city) => {
-                  return (
-                    <MenuItem key={city.code} value={city.name}>
-                      {city.name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
+                Check In Date
+              </Typography>
+              <DatePicker
+                sx={{ width: "100%" }}
+                views={["day", "month", "year"]}
+                disablePast
+                format="DD/MM/YYYY"
+                onChange={(dateStart: any) => {
+                  if (isStartingFromTomorrow(dayjs(dateStart))) {
+                    setStartDayError(false);
+                    setDateStart(dateStart);
+                  } else {
+                    setStartDayError(true);
+                  }
+                }}
+              />
+              {startDayError === true ? (
+                <React.Fragment>
+                  <Box sx={{ height: "5px" }} />
+                  <ErrorMessage message={"Check in day start from tomorrow!"} />
+                </React.Fragment>
+              ) : null}
+            </Grid2>
+            <Grid2>
+              <Typography
+                fontWeight={900}
+                color={"#00acb3"}
+                fontSize={18}
+                mt={4}
+              >
+                To
+              </Typography>
+            </Grid2>
+            <Grid2 xs={5}>
+              <Typography
+                sx={{ marginTop: "10px", marginLeft: "5px" }}
+                fontSize="0.75rem"
+                color="#00acb3"
+              >
+                Check Out Date
+              </Typography>
+              {dateStart ? (
+                <DatePicker
+                  sx={{ width: "100%" }}
+                  minDate={dateStart}
+                  views={["day", "month", "year"]}
+                  disablePast
+                  onChange={(dateEnd: any) => {
+                    if (isEndDateValid(dateStart, dateEnd)) {
+                      setEndDayError(false);
+                      setDateEnd(dateEnd);
+                    } else {
+                      setEndDayError(true);
+                    }
+                  }}
+                  format="DD/MM/YYYY"
+                />
+              ) : (
+                <DatePicker
+                  disabled
+                  sx={{ width: "100%" }}
+                  minDate={dateStart}
+                  value={dateStart}
+                  views={["day", "month", "year"]}
+                  disablePast
+                  onChange={(dateEnd: any) => {
+                    setDateEnd(dateEnd);
+                  }}
+                  format="DD/MM/YYYY"
+                />
+              )}
+              {endDayError === true ? (
+                <React.Fragment>
+                  <Box sx={{ height: "5px" }} />
+                  <ErrorMessage
+                    message={"Checkout date at least 3 days after checkin!"}
+                  />
+                </React.Fragment>
+              ) : null}
+            </Grid2>
           </Grid2>
 
-          <Grid2 xs={5} mt={1}>
-            <CustomBorderTextField
-              sx={{ width: "100%" }}
-              type="number"
-              label="Price"
-              {...register("price")}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Typography fontWeight={900} color={"#00acb3"}>
-                      VNĐ
-                    </Typography>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            {errors["price"]?.message ? (
-              <ErrorMessage message={errors["price"].message} />
-            ) : null}
+          <Grid2
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            width={"100%"}
+            mt={2}
+          >
+            <Grid2 xs={6}>
+              <FormControl sx={{ marginTop: "10px" }} fullWidth>
+                <InputLabel id="cities-select-label">City</InputLabel>
+                <Select
+                  labelId="cities-select-label"
+                  id="cities-select"
+                  value={city}
+                  label="City"
+                  onChange={handleChange}
+                  sx={{ mb: 2 }}
+                  MenuProps={{ PaperProps: { sx: { maxHeight: 250 } } }}
+                >
+                  {cityList.map((city) => {
+                    return (
+                      <MenuItem key={city.code} value={city.name}>
+                        {city.name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+              {citySelectError === true ? (
+                <React.Fragment>
+                  <Box sx={{ height: "5px" }} />
+                  <ErrorMessage message={"Please select the city!"} />
+                </React.Fragment>
+              ) : null}
+            </Grid2>
+
+            <Grid2 xs={5}>
+              <CustomBorderTextField
+                sx={{ width: "100%" }}
+                type="number"
+                label="Price"
+                {...register("price")}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Typography fontWeight={900} color={"#00acb3"}>
+                        VNĐ
+                      </Typography>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              {errors["price"]?.message ? (
+                <ErrorMessage message={errors["price"].message} />
+              ) : null}
+            </Grid2>
           </Grid2>
 
-          <Grid2 xs={12} mt={1}>
+          <Grid2 xs={12} mt={2}>
             <Textarea
               sx={{ marginBottom: "15px" }}
               color="primary"
@@ -321,10 +389,16 @@ const CreateTimeshareForm = () => {
                         </Button>
                       )}
                     </Grid2>
+                    {errorImage === true ? (
+                      <React.Fragment>
+                        <Box sx={{ height: "5px" }} />
+                        <ErrorMessage message={"Please upload timeshare image!"} />
+                      </React.Fragment>
+                    ) : null}
                     <Grid2>
                       {imageList.map((image, index) => (
                         <div
-                          key={index}
+                          key={0}
                           className="image-item"
                           style={{
                             width: "100%",
@@ -387,7 +461,33 @@ const CreateTimeshareForm = () => {
               startIcon={<SaveAsIcon />}
               type="submit"
               onClick={() => {
-                if (!errors && isEmpty(errors)) {
+                if (isEmpty(dateStart)) {
+                  setEndDayError(true);
+                  setStartDayError(true);
+                } else {
+                  setEndDayError(false);
+                  setStartDayError(false);
+                }
+                if (isEmpty(images)) {
+                  setErrorImage(true);
+                  return;
+                }
+                if (isEmpty(city)) {
+                  setCitySelectError(true);
+                  return;
+                }
+                if (
+                  !errors &&
+                  isEmpty(errors) &&
+                  dateEnd &&
+                  dateStart &&
+                  images &&
+                  city &&
+                  !endDayError &&
+                  !startDayError &&
+                  !errorImage &&
+                  !citySelectError
+                ) {
                   handleClickOpenConfirmDialog();
                 }
               }}
@@ -417,7 +517,7 @@ const CreateTimeshareForm = () => {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Do you want to exchange this timeshare?
+              Please check information carefully before save!
             </DialogContentText>
           </DialogContent>
           <DialogActions>

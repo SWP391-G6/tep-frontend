@@ -82,10 +82,10 @@ const validationSchema = yup.object({
     .string()
     .trim()
     .required("Phone number can't be blank!")
-    .matches(phoneRegExp, "Phone number is not valid!"),
+    .matches(phoneRegExp, "Phone number contain 10 number!"),
   total: yup
     .number()
-    .typeError('Total must be a number')
+    .typeError("Total must be a number")
     .integer("Total must be integer!")
     .min(0)
     .required("Total can't be blank!"),
@@ -161,6 +161,7 @@ const BookingInformationPage = () => {
         user_id: userID,
         timeshare_id: state.timeshare.timeshareId,
       });
+      console.log("response: ", response);
       if (response && response.code === "00") {
         toast.success("Checkout Successful!", {
           position: "top-center",
@@ -340,7 +341,7 @@ const BookingInformationPage = () => {
                                 fontSize={14}
                                 sx={{ marginLeft: "2px", marginRight: "6px" }}
                               >
-                                (84+)
+                                (+84)
                               </Typography>
                               <Divider
                                 orientation="vertical"
@@ -478,7 +479,7 @@ const BookingInformationPage = () => {
                                 fontSize={14}
                                 sx={{ marginLeft: "2px", marginRight: "6px" }}
                               >
-                                (84+)
+                                (+84)
                               </Typography>
                               <Divider
                                 orientation="vertical"
