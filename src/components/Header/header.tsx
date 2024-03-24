@@ -36,6 +36,8 @@ const Header = () => {
     localStorage.removeItem(USER_ID_KEY);
     localStorage.removeItem(USER_TOKEN_KEY);
     localStorage.removeItem(USER_ROLE_KEY);
+    localStorage.removeItem("persist:root");
+    navigate("/");
     setAnchorEl(null);
   };
 

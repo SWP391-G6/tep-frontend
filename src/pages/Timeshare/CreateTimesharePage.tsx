@@ -1,7 +1,7 @@
 import { Box, Button, Card, Container, Typography } from "@mui/material";
 
 import BackButton from "../../components/Button/backButton";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import CreateRoomTypeForm from "../../components/Form/CreateRoomTypeForm";
 import CreateDestinationForm from "../../components/Form/CreateDestinationForm";
@@ -18,6 +18,8 @@ import StepConnector, {
 import { StepIconProps } from "@mui/material/StepIcon";
 import CreateTimeshareForm from "../../components/Form/CreateTimeshareForm";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import { useAppDispatch } from "../../configStore";
+import { timeshareActions } from "../../slices/timeshare/timeshare";
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -108,6 +110,7 @@ const ColorlibStepIcon = (props: StepIconProps) => {
 
 const CreateTimesharePage = () => {
   const [activeStep, setActiveStep] = useState(0);
+  const dispatch = useAppDispatch();
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };
@@ -115,6 +118,13 @@ const CreateTimesharePage = () => {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(timeshareActions.resetState());
+    };
+  }, []);
+
   return (
     <Container
       disableGutters={true}

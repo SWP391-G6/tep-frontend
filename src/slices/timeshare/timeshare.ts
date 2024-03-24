@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../configStore";
+import type { PayloadAction } from "@reduxjs/toolkit";
 interface State {
   date_start: Date;
   date_end: Date;
@@ -7,7 +8,6 @@ interface State {
   status: boolean;
   name: string;
   owner: string;
-  destination_id: string;
   description: string;
   image_url: string;
   city: string;
@@ -15,13 +15,12 @@ interface State {
 }
 
 const initialState: State = {
+  name: "",
   date_start: new Date(),
   date_end: new Date(),
   price: 0,
   status: false,
-  name: "",
   owner: "",
-  destination_id: "",
   description: "",
   image_url: "",
   city: "",
@@ -31,12 +30,32 @@ const initialState: State = {
 const timeshareSlice = createSlice({
   name: "timeshare",
   initialState,
-  reducers: {},
+  reducers: {
+    setState: (state, action: PayloadAction<any>) => {
+      state.name = action.payload.name;
+      state.date_start = action.payload.date_start;
+      state.date_end = action.payload.date_end;
+      state.price = action.payload.price;
+      state.status = action.payload.status;
+      state.description = action.payload.description;
+      state.image_url = action.payload.image_url;
+      state.city = action.payload.city;
+      state.exchange = action.payload.exchange;
+    },
+    resetState() {
+      return initialState;
+    },
+  },
 });
 
 const getTimeshare = (state: RootState) => {
   return state.timeshare;
 };
+export const timeshareSelector = {
+  getTimeshare,
+};
 
-export const userActions = { getTimeshare };
+export const timeshareActions = {
+  ...timeshareSlice.actions,
+};
 export default timeshareSlice.reducer;

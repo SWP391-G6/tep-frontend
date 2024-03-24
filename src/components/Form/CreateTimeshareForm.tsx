@@ -37,6 +37,15 @@ import {
   isEndDateValid,
   isStartingFromTomorrow,
 } from "../../helpers/dateHelpers";
+// Redux
+
+import { useAppDispatch, useAppSelector } from "../../configStore";
+import {
+  timeshareActions,
+  timeshareSelector,
+} from "../../slices/timeshare/timeshare";
+import axios from "axios";
+
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 dayjs.locale("vn");
@@ -66,9 +75,11 @@ const CreateTimeshareForm = () => {
   const [citySelectError, setCitySelectError] = useState(false);
   const [city, setCity] = useState("");
   const [images, setImages] = useState<any[]>([]);
+  const [image, setImage] = useState("");
   const maxNumber = 69;
   const [errorImage, setErrorImage] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const dispatch = useAppDispatch();
 
   const validationSchema = yup.object({
     name: yup.string().required("Name can't be empty!"),
@@ -86,13 +97,28 @@ const CreateTimeshareForm = () => {
     setCity(event.target.value as string);
   };
 
-  const onChangeImage = (
+  const onChangeImage = async (
     imageList: ImageListType,
     addUpdateIndex: number[] | undefined
   ) => {
     // data for submit
     // console.log(imageList, addUpdateIndex);
     setImages(imageList as any);
+    if (imageList.length > 0 && !isEmpty(imageList)) {
+      let body = new FormData();
+      body.set("key", "b38ea87fcf9472d58c07aaa731f9925f");
+      body.append("image", imageList[0].file!);
+
+      const responseImage = await axios({
+        method: "post",
+        url: "https://api.imgbb.com/1/upload",
+        data: body,
+      });
+      if (responseImage.status === 200) {
+        setImage(responseImage.data.data.url);
+      }
+    }
+
     setErrorImage(false);
   };
 
@@ -115,7 +141,17 @@ const CreateTimeshareForm = () => {
   });
 
   const onSubmit = async (data: Inputs) => {
-    console.log("Data: ", data);
+    dispatch(
+      timeshareActions.setState({
+        ...data,
+        city: city,
+        date_end: dateEnd,
+        date_start: dateStart,
+        exchange: true,
+        image_url: image,
+        status: true,
+      })
+    );
   };
 
   return (
@@ -457,6 +493,7 @@ const CreateTimeshareForm = () => {
               startIcon={<SaveAsIcon />}
               type="submit"
               onClick={() => {
+                console.log("Image: ", image);
                 if (isEmpty(dateStart)) {
                   setEndDayError(true);
                   setStartDayError(true);
@@ -464,7 +501,7 @@ const CreateTimeshareForm = () => {
                   setEndDayError(false);
                   setStartDayError(false);
                 }
-                if (isEmpty(images)) {
+                if (isEmpty(images) || isEmpty(image)) {
                   setErrorImage(true);
                 }
                 if (isEmpty(city) || city === "") {
@@ -478,6 +515,8 @@ const CreateTimeshareForm = () => {
                   dateStart &&
                   images &&
                   city &&
+                  image &&
+                  !isEmpty(image) &&
                   !endDayError &&
                   !startDayError &&
                   !errorImage &&
