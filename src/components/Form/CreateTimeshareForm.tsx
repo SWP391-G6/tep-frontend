@@ -8,7 +8,6 @@ import {
   DialogContentText,
   DialogTitle,
   FormControl,
-  Grid,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -32,7 +31,6 @@ import SaveAsIcon from "@mui/icons-material/SaveAs";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CreateTimeshareRequest } from "../../interfaces/timeshare/createTimeshareRequest";
 import { isEmpty } from "lodash";
 import ErrorMessage from "../Error/errorMessage";
 import {
@@ -42,9 +40,6 @@ import {
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 dayjs.locale("vn");
-
-var now = dayjs();
-const currenttDate = dayjs(now, "DD-MM-YYYY", "vn");
 
 const CustomBorderTextField = styled(TextField)`
   & label.Mui-focused {
@@ -87,6 +82,7 @@ const CreateTimeshareForm = () => {
   });
 
   const handleChange = (event: SelectChangeEvent) => {
+    setCitySelectError(false);
     setCity(event.target.value as string);
   };
 
@@ -264,7 +260,7 @@ const CreateTimeshareForm = () => {
             mt={2}
           >
             <Grid2 xs={6}>
-              <FormControl sx={{ marginTop: "10px" }} fullWidth>
+              <FormControl fullWidth>
                 <InputLabel id="cities-select-label">City</InputLabel>
                 <Select
                   labelId="cities-select-label"
@@ -272,7 +268,6 @@ const CreateTimeshareForm = () => {
                   value={city}
                   label="City"
                   onChange={handleChange}
-                  sx={{ mb: 2 }}
                   MenuProps={{ PaperProps: { sx: { maxHeight: 250 } } }}
                 >
                   {cityList.map((city) => {
@@ -286,7 +281,6 @@ const CreateTimeshareForm = () => {
               </FormControl>
               {citySelectError === true ? (
                 <React.Fragment>
-                  <Box sx={{ height: "5px" }} />
                   <ErrorMessage message={"Please select the city!"} />
                 </React.Fragment>
               ) : null}
@@ -320,7 +314,7 @@ const CreateTimeshareForm = () => {
               color="primary"
               disabled={false}
               minRows={2}
-              placeholder="Type the description...."
+              placeholder="Type the description timeshare...."
               size="lg"
               variant="soft"
               {...register("description")}
@@ -392,7 +386,9 @@ const CreateTimeshareForm = () => {
                     {errorImage === true ? (
                       <React.Fragment>
                         <Box sx={{ height: "5px" }} />
-                        <ErrorMessage message={"Please upload timeshare image!"} />
+                        <ErrorMessage
+                          message={"Please upload timeshare image!"}
+                        />
                       </React.Fragment>
                     ) : null}
                     <Grid2>
@@ -470,12 +466,11 @@ const CreateTimeshareForm = () => {
                 }
                 if (isEmpty(images)) {
                   setErrorImage(true);
-                  return;
                 }
-                if (isEmpty(city)) {
+                if (isEmpty(city) || city === "") {
                   setCitySelectError(true);
                   return;
-                }
+                } else setCitySelectError(false);
                 if (
                   !errors &&
                   isEmpty(errors) &&
