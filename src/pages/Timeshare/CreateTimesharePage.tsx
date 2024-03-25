@@ -329,7 +329,7 @@ const CreateTimesharePage = () => {
                         backgroundColor: "#08b7bd",
                       },
                     }}
-                    onClick={handleCreateTimeshare}
+                    onClick={handleClickOpenConfirmDialog}
                   >
                     Create
                   </Button>
