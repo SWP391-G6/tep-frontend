@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 
 import BackButton from "../../components/Button/backButton";
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import CreateRoomTypeForm from "../../components/Form/CreateRoomTypeForm";
 import CreateDestinationForm from "../../components/Form/CreateDestinationForm";
 import { styled } from "@mui/material/styles";
@@ -128,14 +128,15 @@ const ColorlibStepIcon = (props: StepIconProps) => {
 };
 
 const CreateTimesharePage = () => {
+  let timeoutRef = useRef<any>();
   const response = useSelector((state: any) => state);
+  const navigate = useNavigate();
   const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
   const [activeStep, setActiveStep] = useState(0);
   const [isNext, setIsNext] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const dispatch = useAppDispatch();
 
-  
   const handleClickOpenConfirmDialog = () => {
     setOpenConfirmDialog(true);
   };
@@ -175,7 +176,6 @@ const CreateTimesharePage = () => {
           });
 
         if (
-          response.timeshare &&
           createDestinationResponse &&
           createDestinationResponse.destinationId
         ) {
@@ -194,22 +194,34 @@ const CreateTimesharePage = () => {
               exchange: true,
             });
 
-          if (response.roomType && createTimeshareResponse) {
+          console.log("TS", createTimeshareResponse);
+          if (createTimeshareResponse) {
+            console.log("123");
+            console.log(createDestinationResponse.timeshareId)
+            
             const createRoomType: any = await roomTypeAPI.createRoomType({
-              name: response.roomType.name,
-              sleeps: response.roomType.sleeps,
-              room_view: response.roomType.room_view,
-              bed: response.roomType.bed,
-              bath: response.roomType.bath,
-              kitchen: response.roomType.kitchen,
-              entertainment: response.roomType.entertainment,
-              features: response.roomType.features,
-              policies: response.roomType.policies,
-              timeshare_id: createDestinationResponse.timeshareId,
+              name: response.roomtype.name,
+              sleeps: response.roomtype.sleeps,
+              room_view: response.roomtype.room_view,
+              bed: response.roomtype.bed,
+              bath: response.roomtype.bath,
+              kitchen: response.roomtype.kitchen,
+              entertainment: response.roomtype.entertainment,
+              features: response.roomtype.features,
+              policies: response.roomtype.policies,
+              timeshareId: createTimeshareResponse.timeshareId,
             });
-
+            console.log("RoomType: ", createRoomType);
             if (createRoomType) {
               toast.success("Create Timeshare Successfully!", {
+                position: "top-center",
+              });
+              timeoutRef.current = setTimeout(() => {
+                navigate("/member/profile/my_timeshare");
+              }, 1700);
+              return;
+            } else {
+              toast.error("Create Timeshare Failed!", {
                 position: "top-center",
               });
             }
@@ -381,9 +393,8 @@ const CreateTimesharePage = () => {
             }}
             variant="contained"
             onClick={() => {
-              handleClickCloseConfirmDialog();
-
               handleCreateTimeshare();
+              handleClickCloseConfirmDialog();
             }}
             autoFocus
           >

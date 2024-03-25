@@ -16,7 +16,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import { makeStyles } from "@mui/styles";
 import { useEffect, useState } from "react";
-import { TimeshareResponse } from "../../interfaces/timeshare/timeshareResponse";
+import { AllTimeshare } from "../../interfaces/timeshare/timeshareResponse";
 import timeshareAPI from "../../services/timeshare/timeshareAPI";
 import { useNavigate } from "react-router-dom";
 import { formatNumber } from "../../helpers/numberHelpers";
@@ -51,7 +51,7 @@ const useStyles: any = makeStyles({
 });
 
 const ShowTimeshareGrid = () => {
-  const [timeshareList, setTimeShareList] = useState<TimeshareResponse[]>([]);
+  const [timeshareList, setTimeShareList] = useState<AllTimeshare[]>([]);
   const classes = useStyles();
   const navigate = useNavigate();
 
@@ -59,6 +59,9 @@ const ShowTimeshareGrid = () => {
     const getTimeshareList = async () => {
       const data: any = await timeshareAPI.getAllTimeshare();
       if (data && data.length > 0) {
+        // data.map((item) => {
+
+        // });
         setTimeShareList(data);
       }
     };
@@ -104,27 +107,37 @@ const ShowTimeshareGrid = () => {
                   >
                     <LocationOnIcon sx={{ color: "#00acb3" }} />
                     <Typography fontSize="16px" fontWeight={900}>
-                      {timeshare.timeshareName}, <span style={{fontWeight: 500, color: "#00acb3"}}>{timeshare.city}</span>
+                      {timeshare.timeshareName},{" "}
+                      <span style={{ fontWeight: 500, color: "#00acb3" }}>
+                        {timeshare.city}
+                      </span>
                     </Typography>
                   </Stack>
                   <List>
                     <ListItem disablePadding>
                       <ListItemAvatar>
-                        <Avatar  sx={{ backgroundColor: "#00acb3" }}>
-                          <VpnKeyIcon sx={{fontSize: "15px"}} />
+                        <Avatar sx={{ backgroundColor: "#00acb3" }}>
+                          <VpnKeyIcon sx={{ fontSize: "15px" }} />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
                         primary={
                           <Typography fontWeight={700}>
                             {formatNumber(timeshare.price)} VNĐ (
-                            {formatNumber(timeshare.price / timeshare.nights)}/night)
+                            {formatNumber(timeshare.price / timeshare.nights)}
+                            /night)
                           </Typography>
                         }
                         secondary={
                           <Box>
                             <Typography color="#00acb3" fontWeight={500}>
-                            {dayjs(timeshare.dateStart).format("DD MMM YYYY").toString()} - {dayjs(timeshare.dateEnd).format("DD MMM YYYY").toString()}
+                              {dayjs(timeshare.dateStart)
+                                .format("DD MMM YYYY")
+                                .toString()}{" "}
+                              -{" "}
+                              {dayjs(timeshare.dateEnd)
+                                .format("DD MMM YYYY")
+                                .toString()}
                             </Typography>
                           </Box>
                         }

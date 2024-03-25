@@ -33,7 +33,6 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { isEmpty } from "lodash";
 import ErrorMessage from "../Error/errorMessage";
-import { ToastContainer, toast } from "react-toastify";
 import {
   isEndDateValid,
   isStartingFromTomorrow,
@@ -156,9 +155,6 @@ const CreateTimeshareForm = () => {
       })
     );
     setIsSuccess(true);
-    toast.success("Create Timeshare Successfully!", {
-      position: "top-center",
-    });
   };
 
   return (
@@ -674,10 +670,6 @@ const CreateTimeshareForm = () => {
           </DialogActions>
         </Dialog>
       </form>
-      <ToastContainer
-        autoClose={2000}
-        style={{ marginTop: "50px", width: "400px" }}
-      />
     </Card>
   );
 };

@@ -8,5 +8,5 @@ export interface CreateRoomTypeRequest {
     entertainment: string;
     features:      string;
     policies:      string;
-    timeshare_id:  string;
+    timeshareId:  string;
 }

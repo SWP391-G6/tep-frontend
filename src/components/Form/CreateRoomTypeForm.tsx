@@ -19,7 +19,6 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ErrorMessage from "../Error/errorMessage";
 import { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
 import { useAppDispatch } from "../../configStore";
 import { roomTypeActions } from "../../slices/roomtype/roomtype";
 
@@ -103,9 +102,6 @@ const CreateRoomTypeForm = () => {
       })
     );
     setIsSuccess(true);
-    toast.success("Create Destination Successfully!", {
-      position: "top-center",
-    });
   };
 
   return (
@@ -365,10 +361,6 @@ const CreateRoomTypeForm = () => {
           </DialogActions>
         </Dialog>
       </form>
-      <ToastContainer
-        autoClose={2000}
-        style={{ marginTop: "50px", width: "400px" }}
-      />
     </Card>
   );
 };

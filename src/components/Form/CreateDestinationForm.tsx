@@ -28,7 +28,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import ErrorMessage from "../Error/errorMessage";
 import { useAppDispatch } from "../../configStore";
 import { destinationActions } from "../../slices/destination/destination";
-import { ToastContainer, toast } from "react-toastify";
 
 const CustomBorderTextField = styled(TextField)`
   & label.Mui-focused {
@@ -93,9 +92,6 @@ const CreateDestinationForm = () => {
       })
     );
     setIsSuccess(true);
-    toast.success("Create Destination Successfully!", {
-      position: "top-center",
-    });
   };
 
   return (
@@ -348,10 +344,6 @@ const CreateDestinationForm = () => {
           </DialogActions>
         </Dialog>
       </form>
-      <ToastContainer
-        autoClose={2000}
-        style={{ marginTop: "50px", width: "400px" }}
-      />
     </Card>
   );
 };
