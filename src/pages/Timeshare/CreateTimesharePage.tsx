@@ -1,4 +1,15 @@
-import { Box, Button, Card, Container, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
 
 import BackButton from "../../components/Button/backButton";
 import React, { useEffect, useState } from "react";
@@ -20,6 +31,14 @@ import CreateTimeshareForm from "../../components/Form/CreateTimeshareForm";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { useAppDispatch } from "../../configStore";
 import { timeshareActions } from "../../slices/timeshare/timeshare";
+import { destinationActions } from "../../slices/destination/destination";
+import { roomTypeActions } from "../../slices/roomtype/roomtype";
+import { useSelector } from "react-redux";
+import { USER_ID_KEY } from "../../constant";
+import destinationAPI from "../../services/destination/destinationAPI";
+import timeshareAPI from "../../services/timeshare/timeshareAPI";
+import roomTypeAPI from "../../services/roomtype/roomtypeAPI";
+import { ToastContainer, toast } from "react-toastify";
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -109,8 +128,22 @@ const ColorlibStepIcon = (props: StepIconProps) => {
 };
 
 const CreateTimesharePage = () => {
+  const response = useSelector((state: any) => state);
+  const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
   const [activeStep, setActiveStep] = useState(0);
+  const [isNext, setIsNext] = useState(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const dispatch = useAppDispatch();
+
+  
+  const handleClickOpenConfirmDialog = () => {
+    setOpenConfirmDialog(true);
+  };
+
+  const handleClickCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
+  };
+
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };
@@ -120,10 +153,73 @@ const CreateTimesharePage = () => {
   };
 
   useEffect(() => {
+    setIsNext(response.timeshare.isNext);
     return () => {
       dispatch(timeshareActions.resetState());
+      dispatch(destinationActions.resetState());
+      dispatch(roomTypeActions.resetState());
     };
   }, []);
+
+  const handleCreateTimeshare = async () => {
+    try {
+      if (response && response.destination) {
+        const createDestinationResponse: any =
+          await destinationAPI.createDestination({
+            desName: response.destination.desName,
+            branch: response.destination.branch,
+            city: response.destination.city,
+            country: "Việt Nam",
+            address: response.destination.address,
+            description: response.destination.description,
+          });
+
+        if (
+          response.timeshare &&
+          createDestinationResponse &&
+          createDestinationResponse.destinationId
+        ) {
+          const createTimeshareResponse: any =
+            await timeshareAPI.createTimeshare({
+              date_start: response.timeshare.date_start,
+              date_end: response.timeshare.date_end,
+              price: response.timeshare.price,
+              status: true,
+              name: response.timeshare.name,
+              owner: userID,
+              destination_id: createDestinationResponse.destinationId,
+              description: response.timeshare.description,
+              image_url: response.timeshare.image_url,
+              city: response.timeshare.city,
+              exchange: true,
+            });
+
+          if (response.roomType && createTimeshareResponse) {
+            const createRoomType: any = await roomTypeAPI.createRoomType({
+              name: response.roomType.name,
+              sleeps: response.roomType.sleeps,
+              room_view: response.roomType.room_view,
+              bed: response.roomType.bed,
+              bath: response.roomType.bath,
+              kitchen: response.roomType.kitchen,
+              entertainment: response.roomType.entertainment,
+              features: response.roomType.features,
+              policies: response.roomType.policies,
+              timeshare_id: createDestinationResponse.timeshareId,
+            });
+
+            if (createRoomType) {
+              toast.success("Create Timeshare Successfully!", {
+                position: "top-center",
+              });
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.log("Error at handleCreateTimeshare! ", error);
+    }
+  };
 
   return (
     <Container
@@ -160,12 +256,7 @@ const CreateTimesharePage = () => {
         {activeStep === steps.length ? (
           <React.Fragment>
             <Typography variant="h5" gutterBottom>
-              Thank you for your order.
-            </Typography>
-            <Typography variant="subtitle1">
-              Your order number is #2001539. We have emailed your order
-              confirmation, and will send you an update when your order has
-              shipped.
+              Create Timeshare Successfully!
             </Typography>
           </React.Fragment>
         ) : (
@@ -175,7 +266,6 @@ const CreateTimesharePage = () => {
             justifyContent="center"
             alignItems="center"
           >
-            {" "}
             <Grid2
               xs={12}
               sx={{ position: "relative", marginTop: "30px", width: "800px" }}
@@ -229,24 +319,97 @@ const CreateTimesharePage = () => {
                     Back
                   </Button>
                 )}
-                <Button
-                  variant="contained"
-                  sx={{
-                    color: "#fff",
-                    backgroundColor: "#00acb3",
-                    "&:hover": {
-                      backgroundColor: "#08b7bd",
-                    },
-                  }}
-                  onClick={handleNext}
-                >
-                  {activeStep === steps.length - 1 ? "Place order" : "Next"}
-                </Button>
+                {activeStep === steps.length - 1 ? (
+                  <Button
+                    variant="contained"
+                    sx={{
+                      color: "#fff",
+                      backgroundColor: "#00acb3",
+                      "&:hover": {
+                        backgroundColor: "#08b7bd",
+                      },
+                    }}
+                    onClick={handleCreateTimeshare}
+                  >
+                    Create
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    sx={{
+                      color: "#fff",
+                      backgroundColor: "#00acb3",
+                      "&:hover": {
+                        backgroundColor: "#08b7bd",
+                      },
+                    }}
+                    onClick={handleNext}
+                  >
+                    Next
+                  </Button>
+                )}
               </Grid2>
             </Grid2>
           </Grid2>
         )}
       </Container>
+      <Dialog
+        open={openConfirmDialog}
+        onClose={handleClickCloseConfirmDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Confirm to create timeshare!"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Please check information carefully before save!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            sx={{
+              my: 2,
+              color: "#ffffff",
+              backgroundColor: "#00acb3",
+              display: "block",
+              marginLeft: "10px",
+              "&:hover": {
+                backgroundColor: "#08b7bd",
+              },
+            }}
+            variant="contained"
+            onClick={() => {
+              handleClickCloseConfirmDialog();
+
+              handleCreateTimeshare();
+            }}
+            autoFocus
+          >
+            Yes
+          </Button>
+          <Button
+            sx={{
+              my: 2,
+              color: "#00acb3",
+              display: "block",
+              marginLeft: "10px",
+              "&:hover": {
+                borderColor: "#08b7bd",
+              },
+            }}
+            variant="outlined"
+            onClick={handleClickCloseConfirmDialog}
+          >
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <ToastContainer
+        autoClose={2000}
+        style={{ marginTop: "50px", width: "400px" }}
+      />
     </Container>
   );
 };

@@ -43,7 +43,7 @@ const roomTypeSlice = createSlice({
       state.policies = action.payload.policies;
       state.isNext = action.payload.isNext;
     },
-    resetStateRoomType() {
+    resetState() {
       return initialState;
     },
   },

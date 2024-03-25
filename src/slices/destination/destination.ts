@@ -33,7 +33,7 @@ const destinationSlice = createSlice({
       state.description = action.payload.description;
       state.isNext = action.payload.isNext;
     },
-    resetStateDestination() {
+    resetState() {
       return initialState;
     },
   },

@@ -160,10 +160,6 @@ const CreateTimeshareForm = () => {
       position: "top-center",
     });
   };
-  // const response = useSelector((state: any) => console.log(state.timeshare));
-  // useEffect(() => {
-  //   if (response)
-  // }, [response])
 
   return (
     <Card
@@ -516,9 +512,9 @@ const CreateTimeshareForm = () => {
                     setStartDayError(false);
                   }
 
-                  // if (isEmpty(images)) {
-                  //   setErrorImage(true);
-                  // }
+                  if (isEmpty(images)) {
+                    setErrorImage(true);
+                  }
 
                   if (isEmpty(image) || image === "") {
                     setErrorImage(true);
@@ -573,9 +569,9 @@ const CreateTimeshareForm = () => {
                     setStartDayError(false);
                   }
 
-                  // if (isEmpty(images)) {
-                  //   setErrorImage(true);
-                  // }
+                  if (isEmpty(images)) {
+                    setErrorImage(true);
+                  }
 
                   if (isEmpty(image) || image === "") {
                     setErrorImage(true);
@@ -594,6 +590,7 @@ const CreateTimeshareForm = () => {
                     isEmpty(errors) &&
                     dateEnd &&
                     dateStart &&
+                    images &&
                     errorImage !== true &&
                     city &&
                     !endDayError &&

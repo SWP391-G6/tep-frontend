@@ -1,3 +1,4 @@
+import { CreateTimeshareRequest } from "../../interfaces/timeshare/createTimeshareRequest";
 import { TimeshareByOwnerResponse } from "../../interfaces/timeshare/timeshareByOwnerResponse";
 import { TimeshareByUserIDResponse } from "../../interfaces/timeshare/timeshareByUserIDResponse";
 import { TimeshareResponse } from "../../interfaces/timeshare/timeshareResponse";
@@ -22,6 +23,9 @@ const timeshareAPI = {
     return axiosClient.get<TimeshareByOwnerResponse>(`timeshare/getTimeshareByOwner?owner=${owner}`);
   },
 
+  createTimeshare: (param: CreateTimeshareRequest) => {
+    return axiosClient.post("timeshare/createTimeshare", param)
+  }
 };
 
 export default timeshareAPI;
