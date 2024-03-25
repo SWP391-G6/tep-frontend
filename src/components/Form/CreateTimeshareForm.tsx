@@ -21,7 +21,7 @@ import { styled } from "@mui/system";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import { cityList } from "../../utils/cities";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import Textarea from "@mui/joy/Textarea";
 import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
@@ -33,13 +33,14 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { isEmpty } from "lodash";
 import ErrorMessage from "../Error/errorMessage";
+import { ToastContainer, toast } from "react-toastify";
 import {
   isEndDateValid,
   isStartingFromTomorrow,
 } from "../../helpers/dateHelpers";
 // Redux
 
-import { useAppDispatch, useAppSelector } from "../../configStore";
+import { useAppDispatch } from "../../configStore";
 import {
   timeshareActions,
   timeshareSelector,
@@ -69,6 +70,7 @@ type Inputs = {
 
 const CreateTimeshareForm = () => {
   const [dateEnd, setDateEnd] = useState<dayjs.Dayjs>();
+  const [isSuccess, setIsSuccess] = useState(false);
   const [dateStart, setDateStart] = useState<dayjs.Dayjs>();
   const [startDayError, setStartDayError] = useState(false);
   const [endDayError, setEndDayError] = useState(false);
@@ -116,10 +118,10 @@ const CreateTimeshareForm = () => {
       });
       if (responseImage.status === 200) {
         setImage(responseImage.data.data.url);
+      } else {
+        setErrorImage(true);
       }
     }
-
-    setErrorImage(false);
   };
 
   const handleClickOpenConfirmDialog = () => {
@@ -150,9 +152,18 @@ const CreateTimeshareForm = () => {
         exchange: true,
         image_url: image,
         status: true,
+        isNext: true,
       })
     );
+    setIsSuccess(true);
+    toast.success("Create Timeshare Successfully!", {
+      position: "top-center",
+    });
   };
+  // const response = useSelector((state: any) => console.log(state.timeshare));
+  // useEffect(() => {
+  //   if (response)
+  // }, [response])
 
   return (
     <Card
@@ -473,7 +484,10 @@ const CreateTimeshareForm = () => {
                                   borderColor: "#08b7bd",
                                 },
                               }}
-                              onClick={() => onImageRemove(index)}
+                              onClick={() => {
+                                onImageRemove(index);
+                                setErrorImage(true);
+                              }}
                             >
                               Remove
                             </Button>
@@ -488,56 +502,122 @@ const CreateTimeshareForm = () => {
           </Grid2>
 
           <Grid2 container xs={12} mt={1} justifyContent="flex-end">
-            <Button
-              variant="outlined"
-              startIcon={<SaveAsIcon />}
-              type="submit"
-              onClick={() => {
-                console.log("Image: ", image);
-                if (isEmpty(dateStart)) {
-                  setEndDayError(true);
-                  setStartDayError(true);
-                } else {
-                  setEndDayError(false);
-                  setStartDayError(false);
-                }
-                if (isEmpty(images) || isEmpty(image)) {
-                  setErrorImage(true);
-                }
-                if (isEmpty(city) || city === "") {
-                  setCitySelectError(true);
-                  return;
-                } else setCitySelectError(false);
-                if (
-                  !errors &&
-                  isEmpty(errors) &&
-                  dateEnd &&
-                  dateStart &&
-                  images &&
-                  city &&
-                  image &&
-                  !isEmpty(image) &&
-                  !endDayError &&
-                  !startDayError &&
-                  !errorImage &&
-                  !citySelectError
-                ) {
-                  handleClickOpenConfirmDialog();
-                }
-              }}
-              sx={{
-                color: "#00acb3",
-                borderColor: "#00acb3",
-                backgroundColor: "#fff",
-                "&:hover": {
-                  backgroundColor: "#00acb3",
+            {isSuccess === false ? (
+              <Button
+                variant="outlined"
+                startIcon={<SaveAsIcon />}
+                type="submit"
+                onClick={() => {
+                  if (isEmpty(dateStart)) {
+                    setEndDayError(true);
+                    setStartDayError(true);
+                  } else {
+                    setEndDayError(false);
+                    setStartDayError(false);
+                  }
+
+                  // if (isEmpty(images)) {
+                  //   setErrorImage(true);
+                  // }
+
+                  if (isEmpty(image) || image === "") {
+                    setErrorImage(true);
+                  } else {
+                    setErrorImage(false);
+                  }
+
+                  if (isEmpty(city) || city === "") {
+                    setCitySelectError(true);
+                  } else {
+                    setCitySelectError(false);
+                  }
+
+                  if (
+                    !errors &&
+                    isEmpty(errors) &&
+                    dateEnd &&
+                    dateStart &&
+                    errorImage !== true &&
+                    city &&
+                    !endDayError &&
+                    !startDayError &&
+                    !citySelectError
+                  ) {
+                    handleClickOpenConfirmDialog();
+                  }
+                }}
+                sx={{
+                  color: "#00acb3",
                   borderColor: "#00acb3",
-                  color: "#fff",
-                },
-              }}
-            >
-              Draft
-            </Button>
+                  backgroundColor: "#fff",
+                  "&:hover": {
+                    backgroundColor: "#00acb3",
+                    borderColor: "#00acb3",
+                    color: "#fff",
+                  },
+                }}
+              >
+                Draft
+              </Button>
+            ) : (
+              <Button
+                variant="outlined"
+                startIcon={<SaveAsIcon />}
+                type="submit"
+                onClick={() => {
+                  if (isEmpty(dateStart)) {
+                    setEndDayError(true);
+                    setStartDayError(true);
+                  } else {
+                    setEndDayError(false);
+                    setStartDayError(false);
+                  }
+
+                  // if (isEmpty(images)) {
+                  //   setErrorImage(true);
+                  // }
+
+                  if (isEmpty(image) || image === "") {
+                    setErrorImage(true);
+                  } else {
+                    setErrorImage(false);
+                  }
+
+                  if (isEmpty(city) || city === "") {
+                    setCitySelectError(true);
+                  } else {
+                    setCitySelectError(false);
+                  }
+
+                  if (
+                    !errors &&
+                    isEmpty(errors) &&
+                    dateEnd &&
+                    dateStart &&
+                    errorImage !== true &&
+                    city &&
+                    !endDayError &&
+                    !startDayError &&
+                    !citySelectError
+                  ) {
+                    handleClickOpenConfirmDialog();
+                  }
+                }}
+                disabled
+                sx={{
+                  color: "#00acb3",
+                  borderColor: "#00acb3",
+                  backgroundColor: "#fff",
+                  "&:hover": {
+                    backgroundColor: "#00acb3",
+                    borderColor: "#00acb3",
+                    color: "#fff",
+                  },
+                }}
+              >
+                Draft
+              </Button>
+            )}
           </Grid2>
         </Grid2>
         <Dialog
@@ -597,6 +677,10 @@ const CreateTimeshareForm = () => {
           </DialogActions>
         </Dialog>
       </form>
+      <ToastContainer
+        autoClose={2000}
+        style={{ marginTop: "50px", width: "400px" }}
+      />
     </Card>
   );
 };

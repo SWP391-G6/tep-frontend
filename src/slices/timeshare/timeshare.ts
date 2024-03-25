@@ -12,6 +12,7 @@ interface State {
   image_url: string;
   city: string;
   exchange: boolean;
+  isNext: boolean;
 }
 
 const initialState: State = {
@@ -25,6 +26,7 @@ const initialState: State = {
   image_url: "",
   city: "",
   exchange: false,
+  isNext: false,
 };
 
 const timeshareSlice = createSlice({
@@ -41,6 +43,7 @@ const timeshareSlice = createSlice({
       state.image_url = action.payload.image_url;
       state.city = action.payload.city;
       state.exchange = action.payload.exchange;
+      state.isNext = action.payload.isNext;
     },
     resetState() {
       return initialState;

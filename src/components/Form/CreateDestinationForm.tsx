@@ -26,6 +26,9 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ErrorMessage from "../Error/errorMessage";
+import { useAppDispatch } from "../../configStore";
+import { destinationActions } from "../../slices/destination/destination";
+import { ToastContainer, toast } from "react-toastify";
 
 const CustomBorderTextField = styled(TextField)`
   & label.Mui-focused {
@@ -53,6 +56,8 @@ const validationSchema = yup.object({
 
 const CreateDestinationForm = () => {
   const [city, setCity] = useState("");
+  const dispatch = useAppDispatch();
+  const [isSuccess, setIsSuccess] = useState(false);
   const [citySelectError, setCitySelectError] = useState(false);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const handleChange = (event: SelectChangeEvent) => {
@@ -79,7 +84,18 @@ const CreateDestinationForm = () => {
   });
 
   const onSubmit = async (data: Inputs) => {
-    console.log("Data: ", data);
+    dispatch(
+      destinationActions.setState({
+        ...data,
+        city: city,
+        country: "Việt Nam",
+        isNext: true,
+      })
+    );
+    setIsSuccess(true);
+    toast.success("Create Destination Successfully!", {
+      position: "top-center",
+    });
   };
 
   return (
@@ -215,32 +231,62 @@ const CreateDestinationForm = () => {
             </Grid2>
 
             <Grid2 container xs={12} mt={1} justifyContent="flex-end">
-              <Button
-                variant="outlined"
-                startIcon={<SaveAsIcon />}
-                type="submit"
-                onClick={() => {
-                  if (isEmpty(city) || city === "") {
-                    setCitySelectError(true);
-                    return;
-                  } else setCitySelectError(false);
-                  if (!errors && isEmpty(errors) && !citySelectError) {
-                    handleClickOpenConfirmDialog();
-                  }
-                }}
-                sx={{
-                  color: "#00acb3",
-                  borderColor: "#00acb3",
-                  backgroundColor: "#fff",
-                  "&:hover": {
-                    backgroundColor: "#00acb3",
+              {isSuccess === false ? (
+                <Button
+                  variant="outlined"
+                  startIcon={<SaveAsIcon />}
+                  type="submit"
+                  onClick={() => {
+                    if (isEmpty(city) || city === "") {
+                      setCitySelectError(true);
+                      return;
+                    } else setCitySelectError(false);
+                    if (!errors && isEmpty(errors) && !citySelectError) {
+                      handleClickOpenConfirmDialog();
+                    }
+                  }}
+                  sx={{
+                    color: "#00acb3",
                     borderColor: "#00acb3",
-                    color: "#fff",
-                  },
-                }}
-              >
-                Draft
-              </Button>
+                    backgroundColor: "#fff",
+                    "&:hover": {
+                      backgroundColor: "#00acb3",
+                      borderColor: "#00acb3",
+                      color: "#fff",
+                    },
+                  }}
+                >
+                  Draft
+                </Button>
+              ) : (
+                <Button
+                  variant="outlined"
+                  startIcon={<SaveAsIcon />}
+                  type="submit"
+                  onClick={() => {
+                    if (isEmpty(city) || city === "") {
+                      setCitySelectError(true);
+                      return;
+                    } else setCitySelectError(false);
+                    if (!errors && isEmpty(errors) && !citySelectError) {
+                      handleClickOpenConfirmDialog();
+                    }
+                  }}
+                  disabled
+                  sx={{
+                    color: "#00acb3",
+                    borderColor: "#00acb3",
+                    backgroundColor: "#fff",
+                    "&:hover": {
+                      backgroundColor: "#00acb3",
+                      borderColor: "#00acb3",
+                      color: "#fff",
+                    },
+                  }}
+                >
+                  Draft
+                </Button>
+              )}
             </Grid2>
           </Grid2>
         </Grid2>
@@ -302,6 +348,10 @@ const CreateDestinationForm = () => {
           </DialogActions>
         </Dialog>
       </form>
+      <ToastContainer
+        autoClose={2000}
+        style={{ marginTop: "50px", width: "400px" }}
+      />
     </Card>
   );
 };

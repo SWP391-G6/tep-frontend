@@ -19,6 +19,9 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import ErrorMessage from "../Error/errorMessage";
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import { useAppDispatch } from "../../configStore";
+import { roomTypeActions } from "../../slices/roomtype/roomtype";
 
 const CustomBorderTextField = styled(TextField)`
   & label.Mui-focused {
@@ -52,26 +55,28 @@ const validationSchema = yup.object({
   policies: yup.string().required("Policies can't be empty!"),
   sleeps: yup
     .number()
-    .min(1, "Minimum is 1")
+    .min(1, "Minimum is 1!")
     .max(10, "Maximum is 10!")
     .typeError("Amount of people is number!")
     .required("Amount of people can't be empty!"),
   bed: yup
     .number()
-    .min(1, "Minimum is 1")
+    .min(1, "Minimum is 1!")
     .max(10, "Maximum is 10!")
     .typeError("Amount of bed is number!")
     .required("Bed can't be empty!"),
   bath: yup
     .number()
-    .min(1, "Minimum is 1")
+    .min(1, "Minimum is 1!")
     .max(10, "Maximum is 10!")
-    .typeError("Amount of bath is number")
+    .typeError("Amount of bath is number!")
     .required(" Bath can't be empty!"),
 });
 
 const CreateRoomTypeForm = () => {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const dispatch = useAppDispatch();
+  const [isSuccess, setIsSuccess] = useState(false);
   const {
     register,
     handleSubmit,
@@ -91,7 +96,16 @@ const CreateRoomTypeForm = () => {
   };
 
   const onSubmit = async (data: Inputs) => {
-    console.log("Data: ", data);
+    dispatch(
+      roomTypeActions.setState({
+        ...data,
+        isNext: true,
+      })
+    );
+    setIsSuccess(true);
+    toast.success("Create Destination Successfully!", {
+      position: "top-center",
+    });
   };
 
   return (
@@ -243,88 +257,118 @@ const CreateRoomTypeForm = () => {
             </Grid2>
 
             <Grid2 container xs={12} mt={1} justifyContent="flex-end">
-              <Button
-                variant="outlined"
-                startIcon={<SaveAsIcon />}
-                type="submit"
-                onClick={() => {
-                  if (!errors && isEmpty(errors)) {
-                    handleClickOpenConfirmDialog();
-                  }
-                }}
-                sx={{
-                  color: "#00acb3",
-                  borderColor: "#00acb3",
-                  backgroundColor: "#fff",
-                  "&:hover": {
-                    backgroundColor: "#00acb3",
+              {isSuccess === false ? (
+                <Button
+                  variant="outlined"
+                  startIcon={<SaveAsIcon />}
+                  type="submit"
+                  onClick={() => {
+                    if (!errors && isEmpty(errors)) {
+                      handleClickOpenConfirmDialog();
+                    }
+                  }}
+                  sx={{
+                    color: "#00acb3",
                     borderColor: "#00acb3",
-                    color: "#fff",
-                  },
-                }}
-              >
-                Draft
-              </Button>
+                    backgroundColor: "#fff",
+                    "&:hover": {
+                      backgroundColor: "#00acb3",
+                      borderColor: "#00acb3",
+                      color: "#fff",
+                    },
+                  }}
+                >
+                  Draft
+                </Button>
+              ) : (
+                <Button
+                  variant="outlined"
+                  startIcon={<SaveAsIcon />}
+                  type="submit"
+                  disabled
+                  onClick={() => {
+                    if (!errors && isEmpty(errors)) {
+                      handleClickOpenConfirmDialog();
+                    }
+                  }}
+                  sx={{
+                    color: "#00acb3",
+                    borderColor: "#00acb3",
+                    backgroundColor: "#fff",
+                    "&:hover": {
+                      backgroundColor: "#00acb3",
+                      borderColor: "#00acb3",
+                      color: "#fff",
+                    },
+                  }}
+                >
+                  Draft
+                </Button>
+              )}
             </Grid2>
           </Grid2>
         </Grid2>
-      </form>
-      <Dialog
-        open={openConfirmDialog}
-        onClose={handleClickCloseConfirmDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Confirm to create room type!"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Please check information carefully before save!
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            sx={{
-              my: 2,
-              color: "#ffffff",
-              backgroundColor: "#00acb3",
-              display: "block",
-              marginLeft: "10px",
-              "&:hover": {
-                backgroundColor: "#08b7bd",
-              },
-            }}
-            variant="contained"
-            onClick={() => {
-              handleClickCloseConfirmDialog();
+        <Dialog
+          open={openConfirmDialog}
+          onClose={handleClickCloseConfirmDialog}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Confirm to create room type!"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Please check information carefully before save!
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              sx={{
+                my: 2,
+                color: "#ffffff",
+                backgroundColor: "#00acb3",
+                display: "block",
+                marginLeft: "10px",
+                "&:hover": {
+                  backgroundColor: "#08b7bd",
+                },
+              }}
+              variant="contained"
+              onClick={() => {
+                handleClickCloseConfirmDialog();
 
-              let formValue = getValues();
-              if (formValue || !isEmpty(formValue)) {
-                onSubmit(formValue);
-              }
-            }}
-            autoFocus
-          >
-            Yes
-          </Button>
-          <Button
-            sx={{
-              my: 2,
-              color: "#00acb3",
-              display: "block",
-              marginLeft: "10px",
-              "&:hover": {
-                borderColor: "#08b7bd",
-              },
-            }}
-            variant="outlined"
-            onClick={handleClickCloseConfirmDialog}
-          >
-            No
-          </Button>
-        </DialogActions>
-      </Dialog>
+                let formValue = getValues();
+                if (formValue || !isEmpty(formValue)) {
+                  onSubmit(formValue);
+                }
+              }}
+              autoFocus
+            >
+              Yes
+            </Button>
+            <Button
+              sx={{
+                my: 2,
+                color: "#00acb3",
+                display: "block",
+                marginLeft: "10px",
+                "&:hover": {
+                  borderColor: "#08b7bd",
+                },
+              }}
+              variant="outlined"
+              onClick={handleClickCloseConfirmDialog}
+            >
+              No
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </form>
+      <ToastContainer
+        autoClose={2000}
+        style={{ marginTop: "50px", width: "400px" }}
+      />
     </Card>
   );
 };

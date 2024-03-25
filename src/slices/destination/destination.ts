@@ -7,6 +7,7 @@ interface State {
   country: string;
   description: string;
   desName: string;
+  isNext: boolean;
 }
 
 const initialState: State = {
@@ -16,6 +17,7 @@ const initialState: State = {
   country: "",
   description: "",
   desName: "",
+  isNext: false,
 };
 
 const destinationSlice = createSlice({
@@ -29,8 +31,9 @@ const destinationSlice = createSlice({
       state.city = action.payload.city;
       state.country = action.payload.country;
       state.description = action.payload.description;
+      state.isNext = action.payload.isNext;
     },
-    resetState() {
+    resetStateDestination() {
       return initialState;
     },
   },
