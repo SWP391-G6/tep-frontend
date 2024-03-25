@@ -99,10 +99,11 @@ const UserCard = () => {
       const data: any = await servicePackAPI.getAllServicePack();
       if (data && data.length > 0) {
         data.map((item: ServicePackResponse) => {
-          if (item.service_code === "SP00B") {
+          console.log(item);
+          if (item.service_code === "00") {
             setBasicPack(item);
           }
-          if (item.service_code === "SP00PM") {
+          if (item.service_code === "01") {
             setPremiumPack(item);
           }
         });

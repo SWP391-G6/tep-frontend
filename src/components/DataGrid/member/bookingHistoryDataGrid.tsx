@@ -217,7 +217,7 @@ const BookingHistoryDataGrid = () => {
             rows={bookingHistoryList.map((item, index) => {
               return { no: index + 1, ...item };
             })}
-            getRowId={(row) => row.booking_id}
+            getRowId={(row) => row.transaction_id}
             style={{ height: "550px", marginTop: "10px" }}
             columns={columns}
             initialState={{
