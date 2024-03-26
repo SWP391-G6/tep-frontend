@@ -254,7 +254,7 @@ const ServicePackDataGrid = () => {
       renderCell: (param) => {
         return (
           <Stack direction="row" spacing={1}>
-            <Tooltip title="View Account Detail">
+            <Tooltip title="View Service Pack">
               <IconButton
                 sx={{ color: "#00acb3" }}
                 aria-label="View timeshare detail"

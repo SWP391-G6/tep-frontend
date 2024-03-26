@@ -3,7 +3,7 @@ import axiosClient from "../axiosClient";
 
 const bookingHistoryAPI = {
     getBookingHistoryListByUserID: (userID: string) => {
-        return axiosClient.get<BookingHistoryByUserIDResponse[]>(`service-payment/getTransactionByUserId/${userID}`);
+        return axiosClient.get<BookingHistoryByUserIDResponse[]>(`booking/getBookingByUserId/${userID}`);
       },
   };
   
