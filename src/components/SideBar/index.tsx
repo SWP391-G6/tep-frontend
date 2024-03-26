@@ -98,7 +98,7 @@ const AdminSideBar = () => {
           </NavLink>
         </ListItem>
 
-        <ListItem disablePadding>
+        {/* <ListItem disablePadding>
           <NavLink
             style={({ isActive }) => {
               return {
@@ -119,7 +119,7 @@ const AdminSideBar = () => {
               />
             </ListItemButton>
           </NavLink>
-        </ListItem>
+        </ListItem> */}
 
         <ListItem disablePadding>
           <NavLink

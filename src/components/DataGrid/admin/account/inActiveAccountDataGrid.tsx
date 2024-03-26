@@ -5,7 +5,6 @@ import { useNavigate } from "react-router";
 import ViewIcon from "@mui/icons-material/Visibility";
 import { styled } from "@mui/material/styles";
 import dayjs from "dayjs";
-import { formatNumber } from "../../../../helpers/numberHelpers";
 import { useEffect, useState } from "react";
 import { green, red } from "@mui/material/colors";
 import { ViewAllAccountResponse } from "../../../../interfaces/user/viewAllAccountResponse";
@@ -150,21 +149,15 @@ const InActiveAccountDataGrid = () => {
   ];
 
   useEffect(() => {
-    const getAllUSer = async () => {
-      let temp: ViewAllAccountResponse[] = [];
-      const data: any = await userAPI.getAllUser();
-      if (data && data.length > 0) {
-        data.map((item: any) => {
-          if (item.status === false) {
-            temp.push(item);
-          }
-        });
-        setInActiveAccountList(temp);
+    const getInActiveUser = async () => {
+      const data: any = await userAPI.getInActiveUser();
+      if (data.length > 0) {
+        setInActiveAccountList(data);
       }
     };
 
     const initUseEffect = async () => {
-      await getAllUSer();
+      await getInActiveUser();
     };
     initUseEffect();
   }, []);

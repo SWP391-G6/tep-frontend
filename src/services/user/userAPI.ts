@@ -9,6 +9,9 @@ const userAPI = {
     return axiosClient.get<ViewAllAccountResponse[]>("user/view-all-account");
   },
 
+  getInActiveUser: () => {
+    return axiosClient.get("user/showAllUserBanned");
+  },
 };
 
 export default userAPI;

@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import { formatNumber } from "../../../../helpers/numberHelpers";
 import { useEffect, useState } from "react";
 import timeshareAPI from "../../../../services/timeshare/timeshareAPI";
-import { TimeshareResponse } from "../../../../interfaces/timeshare/timeshareResponse";
+import { AllTimeshare } from "../../../../interfaces/timeshare/timeshareResponse";
 import { green, red } from "@mui/material/colors";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
@@ -87,7 +87,7 @@ function CustomNoRowsOverlay() {
 
 const TimeshareDataGrid = () => {
   const navigate = useNavigate();
-  const [timeshareList, setTimeshareList] = useState<TimeshareResponse[]>([]);
+  const [timeshareList, setTimeshareList] = useState<AllTimeshare[]>([]);
   const columns: GridColDef[] = [
     { field: "no", headerName: "No", width: 90 },
     {

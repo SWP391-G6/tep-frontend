@@ -8,8 +8,8 @@ import dayjs from "dayjs";
 import { formatNumber } from "../../../../helpers/numberHelpers";
 import { useEffect, useState } from "react";
 import timeshareAPI from "../../../../services/timeshare/timeshareAPI";
-import { TimeshareResponse } from "../../../../interfaces/timeshare/timeshareResponse";
 import { green, red } from "@mui/material/colors";
+import { AllTimeshare } from "../../../../interfaces/timeshare/timeshareResponse";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 dayjs.locale("en");
@@ -88,7 +88,7 @@ function CustomNoRowsOverlay() {
 const ActiveTimeshareDataGrid = () => {
   const navigate = useNavigate();
   const [activeTimeshareList, setActiveTimeshareList] = useState<
-    TimeshareResponse[]
+    AllTimeshare[]
   >([]);
   const columns: GridColDef[] = [
     { field: "no", headerName: "No", width: 90 },
@@ -174,7 +174,7 @@ const ActiveTimeshareDataGrid = () => {
 
   useEffect(() => {
     const getTimeshareListByUserID = async () => {
-      let temp: TimeshareResponse[] = [];
+      let temp: AllTimeshare[] = [];
       const data: any = await timeshareAPI.getAllTimeshare();
       if (data && data.length > 0) {
         data.map((item: any) => {
@@ -217,7 +217,7 @@ const ActiveTimeshareDataGrid = () => {
             rows={activeTimeshareList.map((item, index) => {
               return { no: index + 1, ...item };
             })}
-            getRowId={(row) => row.timeshare_id}
+            getRowId={(row) => row.timeshareId}
             style={{ height: "550px", marginTop: "10px" }}
             columns={columns}
             initialState={{

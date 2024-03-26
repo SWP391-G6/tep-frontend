@@ -1,19 +1,47 @@
 import Box from "@mui/material/Box";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
-import { IconButton, Stack, Tooltip, Typography } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  Stack,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { useNavigate } from "react-router";
 import ViewIcon from "@mui/icons-material/Visibility";
 import { styled } from "@mui/material/styles";
 import dayjs from "dayjs";
 import { formatNumber } from "../../../../helpers/numberHelpers";
 import { useEffect, useState } from "react";
-import { green, red } from "@mui/material/colors";
-import userAPI from "../../../../services/user/userAPI";
+import CloseIcon from "@mui/icons-material/Close";
 import { ServicePackResponse } from "../../../../interfaces/servicepack/ServivePackResponse";
 import servicePackAPI from "../../../../services/servicepack/servicePackAPI";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import ErrorMessage from "../../../Error/errorMessage";
+import { isEmpty } from "lodash";
+import { ToastContainer, toast } from "react-toastify";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 dayjs.locale("en");
+
+const CustomBorderTextField = styled(TextField)`
+  & label.Mui-focused {
+    color: #00acb3;
+  }
+  & .MuiOutlinedInput-root {
+    &.Mui-focused fieldset {
+      border-color: #00acb3;
+    }
+  }
+`;
 
 const StyledGridOverlay = styled("div")(({ theme }) => ({
   display: "flex",
@@ -86,11 +114,97 @@ function CustomNoRowsOverlay() {
   );
 }
 
+type Inputs = {
+  ad_duration: number;
+  service_price: number;
+};
+
+const validationSchema = yup.object({
+  ad_duration: yup
+    .number()
+    .typeError("Duration must be a number")
+    .integer("Duration must be integer!")
+    .min(0)
+    .required("Duration can't be blank!"),
+  service_price: yup
+    .number()
+    .typeError("Price must be a number")
+    .integer("Price must be integer!")
+    .min(0)
+    .required("Price can't be blank!"),
+});
+
 const ServicePackDataGrid = () => {
   const navigate = useNavigate();
   const [servicePackList, setServicePackList] = useState<ServicePackResponse[]>(
     []
   );
+  const [servicePack, setServicePack] = useState<ServicePackResponse>({
+    service_id: "",
+    ad_duration: 0,
+    allow_post: false,
+    flag: false,
+    name: "",
+    priority: false,
+    service_code: "",
+    service_price: 0,
+  });
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+
+  const handleClickOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleClickOpenConfirmDialog = () => {
+    setOpenConfirmDialog(true);
+  };
+
+  const handleClickCloseConfirmDialog = () => {
+    setOpenConfirmDialog(false);
+  };
+
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: { errors },
+  } = useForm<Inputs>({
+    resolver: yupResolver(validationSchema),
+    mode: "onTouched",
+  });
+
+  const onSubmit = async (data: Inputs) => {
+    try {
+      const response: any = await servicePackAPI.updateServicePack({
+        service_id: servicePack.service_id,
+        ad_duration: data.ad_duration,
+        allow_post: servicePack.allow_post,
+        flag: servicePack.allow_post,
+        name: servicePack.name,
+        priority: servicePack.priority,
+        service_code: servicePack.service_code,
+        service_price: data.service_price,
+      });
+      if (response === "Update Successfully") {
+        toast.success("Update Service Pack Successfully!", {
+          position: "top-center",
+        });
+        navigate(0);
+      } else {
+        toast.error("Update Service Pack Failed!", {
+          position: "top-center",
+        });
+      }
+    } catch (error) {
+      console.log("Error at onSubmit ServicePackDataGrid.tsx ", error);
+    }
+  };
+
   const columns: GridColDef[] = [
     { field: "no", headerName: "No", width: 90 },
     {
@@ -145,9 +259,8 @@ const ServicePackDataGrid = () => {
                 sx={{ color: "#00acb3" }}
                 aria-label="View timeshare detail"
                 onClick={() => {
-                  navigate(
-                    `/member/view_timeshare_detail/${param.row.timeshareId}`
-                  );
+                  setServicePack(param.row);
+                  handleClickOpenDialog();
                 }}
               >
                 <ViewIcon />
@@ -213,6 +326,170 @@ const ServicePackDataGrid = () => {
           />
         )}
       </Box>
+
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle
+          sx={{ m: 0, p: 2, color: "#00acb3", fontWeight: 900 }}
+          id="customized-dialog-title"
+        >
+          Update Service Pack
+        </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleCloseDialog}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent dividers>
+          <Typography
+            variant="caption"
+            fontSize={18}
+            fontWeight={500}
+            gutterBottom
+            mt={1}
+          >
+            Pack Information
+          </Typography>
+          <form onSubmit={handleSubmit(handleClickOpenConfirmDialog)}>
+            <CustomBorderTextField
+              label="Pack Name"
+              variant="outlined"
+              disabled
+              value={servicePack.name}
+              sx={{ width: "100%", mt: 1 }}
+            />
+
+            <CustomBorderTextField
+              label="Duration"
+              variant="outlined"
+              defaultValue={servicePack.ad_duration}
+              {...register("ad_duration")}
+              sx={{ width: "100%", mt: 1.5 }}
+            />
+            {errors["ad_duration"]?.message ? (
+              <ErrorMessage message={errors["ad_duration"].message} />
+            ) : null}
+
+            <CustomBorderTextField
+              label="Allow posting"
+              variant="outlined"
+              disabled
+              value={servicePack.allow_post ? "Yes" : "No"}
+              sx={{ width: "100%", mt: 1.5 }}
+            />
+            <CustomBorderTextField
+              label="Flag"
+              variant="outlined"
+              disabled
+              value={servicePack.flag ? "Yes" : "No"}
+              sx={{ width: "100%", mt: 1.5 }}
+            />
+            <CustomBorderTextField
+              label="Priority"
+              variant="outlined"
+              disabled
+              value={servicePack.priority ? "Yes" : "No"}
+              sx={{ width: "100%", mt: 1.5 }}
+            />
+            <CustomBorderTextField
+              label="Price"
+              variant="outlined"
+              defaultValue={servicePack.service_price}
+              {...register("service_price")}
+              sx={{ width: "100%", mt: 1.5 }}
+            />
+            {errors["service_price"]?.message ? (
+              <ErrorMessage message={errors["service_price"].message} />
+            ) : null}
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            sx={{ color: "#00acb3" }}
+            onClick={() => {
+              handleClickOpenConfirmDialog();
+            }}
+            type="submit"
+          >
+            Edit
+          </Button>
+          <Button sx={{ color: "#00acb3" }} onClick={handleCloseDialog}>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openConfirmDialog}
+        onClose={handleClickCloseConfirmDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Confirm to exchange!"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Do you want to update this pack?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            sx={{
+              my: 2,
+              color: "#ffffff",
+              backgroundColor: "#00acb3",
+              display: "block",
+              marginLeft: "10px",
+              "&:hover": {
+                backgroundColor: "#08b7bd",
+              },
+            }}
+            variant="contained"
+            onClick={() => {
+              handleClickCloseConfirmDialog();
+              handleCloseDialog();
+              let formValue = getValues();
+              if (formValue || !isEmpty(formValue)) {
+                onSubmit(formValue);
+              }
+            }}
+            autoFocus
+          >
+            Yes
+          </Button>
+          <Button
+            sx={{
+              my: 2,
+              color: "#00acb3",
+              display: "block",
+              marginLeft: "10px",
+              "&:hover": {
+                borderColor: "#08b7bd",
+              },
+            }}
+            variant="outlined"
+            onClick={handleClickCloseConfirmDialog}
+          >
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <ToastContainer
+        autoClose={2000}
+        style={{ marginTop: "50px", width: "400px" }}
+      />
     </Box>
   );
 };
