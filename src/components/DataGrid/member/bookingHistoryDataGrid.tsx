@@ -179,7 +179,7 @@ const BookingHistoryDataGrid = () => {
         userID
       );
       if (data && data.length > 0) {
-        setBookingHistoryList(data);
+        setBookingHistoryList([]);
       }
     };
 
