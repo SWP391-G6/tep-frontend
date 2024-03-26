@@ -6,6 +6,15 @@ const color = red[700];
 
 const theme = createTheme(
   {
+    palette: {
+      primary: {
+        main: "#00689B",
+        light: blue[500],
+      },
+      success: {
+        main: green[500],
+      },
+    },
     typography: {
       poster: {
         fontSize: "4rem",
