@@ -133,7 +133,7 @@ const AccountDataGrid = () => {
                 aria-label="View timeshare detail"
                 onClick={() => {
                   navigate(
-                    `/member/view_timeshare_detail/${param.row.timeshareId}`
+                    `/admin/view_timeshare_detail/${param.row.timeshareId}`
                   );
                 }}
               >

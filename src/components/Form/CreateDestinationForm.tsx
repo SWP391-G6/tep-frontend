@@ -28,6 +28,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import ErrorMessage from "../Error/errorMessage";
 import { useAppDispatch } from "../../configStore";
 import { destinationActions } from "../../slices/destination/destination";
+import { useNavigate } from "react-router";
 
 const CustomBorderTextField = styled(TextField)`
   & label.Mui-focused {
@@ -55,6 +56,7 @@ const validationSchema = yup.object({
 
 const CreateDestinationForm = () => {
   const [city, setCity] = useState("");
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [isSuccess, setIsSuccess] = useState(false);
   const [citySelectError, setCitySelectError] = useState(false);
@@ -319,6 +321,7 @@ const CreateDestinationForm = () => {
 
                 let formValue = getValues();
                 if (formValue || !isEmpty(formValue)) {
+                  navigate("member/create_roomtype");
                   onSubmit(formValue);
                 }
               }}

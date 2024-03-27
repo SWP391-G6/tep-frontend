@@ -21,7 +21,7 @@ import { UserResponse } from "../../interfaces/user/userResponse";
 import userAPI from "../../services/user/userAPI";
 import { USER_ID_KEY } from "../../constant";
 import { isEmpty } from "lodash";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { TransitionProps } from "@mui/material/transitions";
 import CloseIcon from "@mui/icons-material/Close";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
@@ -43,6 +43,7 @@ const Transition = React.forwardRef(function Transition(
 });
 
 const UserCard = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -127,6 +128,7 @@ const UserCard = () => {
         toast.success("Register Pack Successful!", {
           position: "top-center",
         });
+        navigate(0);
         window.open(`${response.data}`);
       } else {
         toast.error("Register Pack!", {

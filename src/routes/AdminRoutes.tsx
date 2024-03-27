@@ -11,6 +11,8 @@ import ManageBookedTimesharePage from "../pages/Admin/Timeshare/manageBookedTime
 import ManageActiveTimesharePage from "../pages/Admin/Timeshare/manageActiveTimesharePage";
 import ManageExpireTimesharePage from "../pages/Admin/Timeshare/manageExpireTimesharePage";
 import ManageServicePackPage from "../pages/Admin/ServicePack/manageServicePackPage";
+import TimeshareDetailDashboard from "../components/Dashboard/timeshareDetailDashboard";
+import BookingInformationPage from "../pages/Payment/BookingInformationPage";
 
 type Props = {
   isAllowed: boolean;
@@ -27,6 +29,13 @@ function AdminRoutes(props: Props) {
           </ProtectedRoute>
         }
       >
+        <Route path="view_timeshare_detail/:timeshareID">
+          <Route index element={<TimeshareDetailDashboard />} />
+          <Route
+            path="booking_information"
+            element={<BookingInformationPage />}
+          />
+        </Route>
         <Route index element={<AdminDashboard />} />
 
         <Route path="manage_account">

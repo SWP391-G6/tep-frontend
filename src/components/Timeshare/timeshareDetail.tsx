@@ -16,7 +16,7 @@ import { makeStyles } from "@mui/styles";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import CheckIcon from "@mui/icons-material/Check";
 import timeshareAPI from "../../services/timeshare/timeshareAPI";
-import { TimeshareResponse } from "../../interfaces/timeshare/timeshareResponse";
+import { AllTimeshare } from "../../interfaces/timeshare/timeshareResponse";
 import { useParams } from "react-router";
 
 import React from "react";
@@ -135,19 +135,29 @@ const TimeshareDetail = (props: Props) => {
               </Typography>
             </Grid>
 
-            {entertainment.map((item, index) => {
-              return (
-                <Grid xs={4} key={index}>
-                  <ListItem disableGutters>
-                    <ListItemText
-                      primary={
-                        <Typography fontWeight={400}>• {item}</Typography>
-                      }
-                    />
-                  </ListItem>
-                </Grid>
-              );
-            })}
+            {entertainment ? (
+              entertainment.map((item, index) => {
+                return (
+                  <Grid xs={4} key={index}>
+                    <ListItem disableGutters>
+                      <ListItemText
+                        primary={
+                          <Typography fontWeight={400}>• {item}</Typography>
+                        }
+                      />
+                    </ListItem>
+                  </Grid>
+                );
+              })
+            ) : (
+              <Grid xs={4}>
+                <ListItem disableGutters>
+                  <ListItemText
+                    primary={<Typography fontWeight={400}></Typography>}
+                  />
+                </ListItem>
+              </Grid>
+            )}
           </>
           <Divider sx={{ width: "100%" }} />
           <>

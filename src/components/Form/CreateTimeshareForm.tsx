@@ -45,6 +45,7 @@ import {
   timeshareSelector,
 } from "../../slices/timeshare/timeshare";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
@@ -69,6 +70,7 @@ type Inputs = {
 
 const CreateTimeshareForm = () => {
   const [dateEnd, setDateEnd] = useState<dayjs.Dayjs>();
+  const navigate = useNavigate();
   const [isSuccess, setIsSuccess] = useState(false);
   const [dateStart, setDateStart] = useState<dayjs.Dayjs>();
   const [startDayError, setStartDayError] = useState(false);
@@ -646,6 +648,7 @@ const CreateTimeshareForm = () => {
                 let formValue = getValues();
                 if (formValue || !isEmpty(formValue)) {
                   onSubmit(formValue);
+                  navigate("/member/create_destination");
                 }
               }}
               autoFocus

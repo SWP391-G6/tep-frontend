@@ -18,6 +18,7 @@ import Logout from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router";
 import { USER_ID_KEY, USER_ROLE_KEY, USER_TOKEN_KEY } from "../../constant";
 import { Link } from "react-router-dom";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -114,6 +115,8 @@ const Header = () => {
               </Button>
             </Box>
 
+
+
             <Box
               sx={{
                 flexGrow: 1,
@@ -136,6 +139,17 @@ const Header = () => {
                 </Tooltip>
               ) : (
                 <Stack direction={"row"}>
+                              <Tooltip title="Làm mới trang">
+              <IconButton
+                size="large"
+                color="inherit"
+                onClick={() => {
+                  navigate(0);
+                }}
+              >
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
                   <Button
                     sx={{
                       my: 2,
