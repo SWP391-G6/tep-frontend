@@ -559,13 +559,7 @@ const CreateTimeshareForm = () => {
                 startIcon={<SaveAsIcon />}
                 type="submit"
                 onClick={() => {
-                  if (isEmpty(dateStart)) {
-                    setEndDayError(true);
-                    setStartDayError(true);
-                  } else {
-                    setEndDayError(false);
-                    setStartDayError(false);
-                  }
+  
 
                   if (isEmpty(images)) {
                     setErrorImage(true);
