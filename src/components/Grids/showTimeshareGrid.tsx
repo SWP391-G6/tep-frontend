@@ -22,8 +22,8 @@ import timeshareAPI from "../../services/timeshare/timeshareAPI";
 import { useNavigate } from "react-router-dom";
 import { formatNumber } from "../../helpers/numberHelpers";
 import dayjs from "dayjs";
-import { TimeshareResponse } from "../../interfaces/timeshare/timeshare";
-import bookingHistoryAPI from "../../services/bookinghistory/bookingHistoryAPI";
+import transactionHistoryAPI from "../../services/transactionHistory/transactionHistoryAPI";
+import { isTransactionValid } from "../../helpers/dateHelpers";
 require("dayjs/locale/vi");
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
@@ -66,7 +66,6 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const ShowTimeshareGrid = () => {
-  const [timeshareList, setTimeShareList] = useState<TimeshareResponse[]>([]);
   const [listTemp, setListTemp] = useState<AllTimeshare[]>([]);
   const classes = useStyles();
   const navigate = useNavigate();
@@ -78,11 +77,13 @@ const ShowTimeshareGrid = () => {
         if (timeshareData && timeshareData.length > 0) {
           const promises = timeshareData.map(async (item: any) => {
             const transactionResponse: any =
-              await bookingHistoryAPI.getBookingHistoryListByUserID(
+              await transactionHistoryAPI.getTransactionHistoryByUserID(
                 item.postBy.user_id
               );
             if (transactionResponse.length > 0) {
-              return { ...item, isNew: true };
+              if (isTransactionValid(transactionResponse[0].expireDate))
+                return { ...item, isNew: true };
+              else return { ...item, isNew: false };
             } else {
               return { ...item, isNew: false };
             }
@@ -99,8 +100,6 @@ const ShowTimeshareGrid = () => {
     };
     fetchData();
   }, []);
-
-  console.log("Length: ", listTemp);
 
   return (
     <Grid2 container direction="row" justifyContent="space-between" rowGap={2}>

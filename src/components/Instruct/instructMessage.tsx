@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
+import InputIcon from '@mui/icons-material/Input';
 type Props = { message: string };
 
 const InstructMessage = (props: Props) => {
@@ -13,7 +13,7 @@ const InstructMessage = (props: Props) => {
         ml: "5px",
       }}
     >
-      <ArrowCircleDownIcon sx={{ width: "20px", color: "#00acb3" }} />
+      <InputIcon sx={{ width: "20px", color: "#00acb3" }} />
       <Typography color="#00acb3" fontSize="14px">
         {props.message!}
       </Typography>

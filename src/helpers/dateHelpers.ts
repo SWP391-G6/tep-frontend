@@ -13,7 +13,14 @@ const isStartingFromTomorrow = (date: dayjs.Dayjs) => {
 const isEndDateValid = (startDate: dayjs.Dayjs, endDate: dayjs.Dayjs) => {
   const start = dayjs(startDate);
   const end = dayjs(endDate);
-  return end.isAfter(start, 'day') && end.diff(start, 'day') >= 3;
+  return end.isAfter(start, "day") && end.diff(start, "day") >= 3;
 };
 
-export { isStartingFromTomorrow, isEndDateValid };
+const isTransactionValid = (expireDate: dayjs.Dayjs): boolean => {
+  const currentDate = dayjs(); // Lấy ngày hiện tại
+  const expirationDate = dayjs(expireDate); // Chuyển chuỗi expireDate thành đối tượng dayjs
+
+  return expirationDate.isAfter(currentDate); // Kiểm tra xem ngày hết hạn có sau ngày hiện tại không
+};
+
+export { isStartingFromTomorrow, isEndDateValid, isTransactionValid };

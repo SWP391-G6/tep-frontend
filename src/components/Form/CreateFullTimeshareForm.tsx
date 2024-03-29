@@ -44,6 +44,7 @@ import { USER_ID_KEY } from "../../constant";
 import destinationAPI from "../../services/destination/destinationAPI";
 import timeshareAPI from "../../services/timeshare/timeshareAPI";
 import roomTypeAPI from "../../services/roomtype/roomtypeAPI";
+import InstructMessage from "../Instruct/instructMessage";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 dayjs.locale("vn");
@@ -352,7 +353,7 @@ const CreateFullTimeshareForm = () => {
                   {dateStartError === true ? (
                     <React.Fragment>
                       <Box sx={{ height: "5px" }} />
-                      <ErrorMessage
+                      <InstructMessage
                         message={"Check in day start from tomorrow!"}
                       />
                     </React.Fragment>
@@ -409,7 +410,7 @@ const CreateFullTimeshareForm = () => {
                   {dateEndError === true ? (
                     <React.Fragment>
                       <Box sx={{ height: "5px" }} />
-                      <ErrorMessage
+                      <InstructMessage
                         message={"Checkout date at least 3 days after checkin!"}
                       />
                     </React.Fragment>
@@ -447,7 +448,7 @@ const CreateFullTimeshareForm = () => {
                   </FormControl>
                   {citySelectError === true ? (
                     <React.Fragment>
-                      <ErrorMessage message={"Please select the city!"} />
+                      <InstructMessage message={"Please select the city!"} />
                     </React.Fragment>
                   ) : null}
                 </Grid2>
@@ -554,7 +555,7 @@ const CreateFullTimeshareForm = () => {
                         {errorImage === true ? (
                           <React.Fragment>
                             <Box sx={{ height: "5px" }} />
-                            <ErrorMessage
+                            <InstructMessage
                               message={"Please upload timeshare image!"}
                             />
                           </React.Fragment>
