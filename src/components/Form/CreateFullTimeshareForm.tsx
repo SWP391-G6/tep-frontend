@@ -120,17 +120,17 @@ const validationSchema = yup.object({
 const CreateFullTimeshareForm = () => {
   let timeoutRef = useRef<any>();
   const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
-  const [dateEnd, setDateEnd] = useState<dayjs.Dayjs>(dayjs());
+  const [dateEnd, setDateEnd] = useState<dayjs.Dayjs>();
   const navigate = useNavigate();
-  const [dateStart, setDateStart] = useState<dayjs.Dayjs>(dayjs());
-  const [startDayError, setStartDayError] = useState(false);
-  const [endDayError, setEndDayError] = useState(false);
-  const [citySelectError, setCitySelectError] = useState(false);
+  const [dateStart, setDateStart] = useState<dayjs.Dayjs>();
+  const [dateStartError, setDateStartError] = useState(true);
+  const [dateEndError, setDateEndError] = useState(true);
+  const [citySelectError, setCitySelectError] = useState(true);
   const [city, setCity] = useState("");
   const [images, setImages] = useState<any[]>([]);
   const [image, setImage] = useState("");
   const maxNumber = 69;
-  const [errorImage, setErrorImage] = useState(false);
+  const [errorImage, setErrorImage] = useState(true);
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
 
   const handleClickOpenConfirmDialog = () => {
@@ -164,6 +164,7 @@ const CreateFullTimeshareForm = () => {
         url: "https://api.imgbb.com/1/upload",
         data: body,
       });
+
       if (responseImage.status === 200) {
         setImage(responseImage.data.data.url);
       } else {
@@ -184,6 +185,7 @@ const CreateFullTimeshareForm = () => {
 
   const onSubmit = async (data: Inputs) => {
     try {
+      console.log("Data: ", data.entertainment);
       const createDestinationResponse: any =
         await destinationAPI.createDestination({
           desName: data.desName,
@@ -195,7 +197,9 @@ const CreateFullTimeshareForm = () => {
         });
       if (
         createDestinationResponse &&
-        createDestinationResponse.destinationId
+        createDestinationResponse.destinationId &&
+        dateStart &&
+        dateEnd
       ) {
         const createTimeshareResponse: any = await timeshareAPI.createTimeshare(
           {
@@ -220,7 +224,7 @@ const CreateFullTimeshareForm = () => {
             bed: data.bed,
             bath: data.bath,
             kitchen: data.kitchen,
-            entertainment: data.entertainment,
+            entertaiment: data.entertainment,
             features: data.features,
             policies: data.policies,
             timeshareId: createTimeshareResponse.timeshareId,
@@ -251,8 +255,31 @@ const CreateFullTimeshareForm = () => {
     }
   };
 
+  console.log("Date start 1:", dateStart);
   return (
-    <form onSubmit={handleSubmit(handleClickOpenConfirmDialog)}>
+    <form
+      onSubmit={handleSubmit(() => {
+        // if (isEmpty(dateStart)) {
+        //   setDateEndError(true);
+        //   setDateStartError(true);
+        // } else {
+        //   setDateEndError(false);
+        //   setDateStartError(false);
+        // }
+        if (
+          errorImage === true ||
+          dateEndError === true ||
+          dateStartError === true ||
+          citySelectError === true
+        ) {
+          return;
+        }
+
+        if (errors && isEmpty(errors)) {
+          handleClickOpenConfirmDialog();
+        }
+      })}
+    >
       <Grid2
         container
         p={2}
@@ -315,14 +342,14 @@ const CreateFullTimeshareForm = () => {
                     format="DD/MM/YYYY"
                     onChange={(dateStart: any) => {
                       if (isStartingFromTomorrow(dayjs(dateStart))) {
-                        setStartDayError(false);
+                        setDateStartError(false);
                         setDateStart(dateStart);
                       } else {
-                        setStartDayError(true);
+                        setDateStartError(true);
                       }
                     }}
                   />
-                  {startDayError === true ? (
+                  {dateStartError === true ? (
                     <React.Fragment>
                       <Box sx={{ height: "5px" }} />
                       <ErrorMessage
@@ -357,10 +384,10 @@ const CreateFullTimeshareForm = () => {
                       disablePast
                       onChange={(dateEnd: any) => {
                         if (isEndDateValid(dateStart, dateEnd)) {
-                          setEndDayError(false);
+                          setDateEndError(false);
                           setDateEnd(dateEnd);
                         } else {
-                          setEndDayError(true);
+                          setDateEndError(true);
                         }
                       }}
                       format="DD/MM/YYYY"
@@ -379,7 +406,7 @@ const CreateFullTimeshareForm = () => {
                       format="DD/MM/YYYY"
                     />
                   )}
-                  {endDayError === true ? (
+                  {dateEndError === true ? (
                     <React.Fragment>
                       <Box sx={{ height: "5px" }} />
                       <ErrorMessage
@@ -899,27 +926,6 @@ const CreateFullTimeshareForm = () => {
           <Button
             variant="contained"
             type="submit"
-            onClick={() => {
-              if (isEmpty(dateStart)) {
-                setEndDayError(true);
-                setStartDayError(true);
-              } else {
-                setEndDayError(false);
-                setStartDayError(false);
-              }
-              console.log("1");
-              // if (images.length < 0 || isEmpty(images)) {
-              //   console.log("in");
-              //   setErrorImage(true);
-              // } else {
-              //   console.log("Here");
-              //   setErrorImage(false);
-              // }
-              console.log("Error: ", errorImage);
-              if (!errors && isEmpty(errors)) {
-                handleClickOpenConfirmDialog();
-              }
-            }}
             sx={{
               color: "#fff",
               backgroundColor: "#00acb3",

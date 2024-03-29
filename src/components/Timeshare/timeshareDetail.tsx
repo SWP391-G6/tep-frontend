@@ -23,6 +23,7 @@ import React from "react";
 import { TimeshareDetailResponse } from "../../interfaces/timeshare/timeshareDetailResponse";
 import roomTypeAPI from "../../services/roomtype/roomtypeAPI";
 import { RoomTypeResponse } from "../../interfaces/roomtype/roomTypeResponse";
+import { isEmpty } from "lodash";
 
 const useStyles = makeStyles((theme) => ({
   listItem: {
@@ -51,14 +52,15 @@ const TimeshareDetail = (props: Props) => {
 
   const splitString = (str: string): string[] => {
     const substrings: string[] = [];
+    if (str && !isEmpty(str)) {
+      while (str.includes(", ")) {
+        const index = str.indexOf(", ");
+        substrings.push(str.substring(0, index));
+        str = str.substring(index + 2);
+      }
 
-    while (str.includes(", ")) {
-      const index = str.indexOf(", ");
-      substrings.push(str.substring(0, index));
-      str = str.substring(index + 2);
+      substrings.push(str);
     }
-
-    substrings.push(str);
 
     return substrings;
   };

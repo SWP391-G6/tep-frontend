@@ -5,7 +5,7 @@ export interface CreateRoomTypeRequest {
     bed:           number;
     bath:          number;
     kitchen:       string;
-    entertainment: string;
+    entertaiment: string;
     features:      string;
     policies:      string;
     timeshareId:  string;

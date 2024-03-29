@@ -8,7 +8,6 @@ const roomTypeAPI = {
   },
 
   createRoomType: (param: CreateRoomTypeRequest) => {
-    console.log("Param: ", param);
     return axiosClient.post("roomtype/createRoomtype", param);
   },
 };
