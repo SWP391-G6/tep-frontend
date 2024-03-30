@@ -11,9 +11,13 @@ import { useParams } from "react-router";
 import roomTypeAPI from "../../services/roomtype/roomtypeAPI";
 import { RoomTypeResponse } from "../../interfaces/roomtype/roomTypeResponse";
 import { isEmpty } from "lodash";
+import { USER_ID_KEY } from "../../constant";
+import timeshare from "../../slices/timeshare/timeshare";
 
 const TimeshareDetailDashboard = () => {
+  const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
   let { timeshareID } = useParams();
+  const [isValidTimeshare, setIsValidTimeshare] = useState(false);
   const [timeshareDetail, setTimeshareDetail] =
     useState<TimeshareDetailResponse>({
       timeshareId: "",
@@ -70,6 +74,9 @@ const TimeshareDetailDashboard = () => {
       );
       if (data && !isEmpty(data)) {
         setTimeshareDetail(data);
+        if (data.exchange === true && data.postBy.user_id !== userID) {
+          setIsValidTimeshare(true);
+        }
       }
     };
 
@@ -123,6 +130,7 @@ const TimeshareDetailDashboard = () => {
             timeshareID={timeshareID}
             timeshare={timeshareDetail}
             roomType={roomType}
+            isAllowExchange={isValidTimeshare}
           />
         </Grid2>
         <Grid2

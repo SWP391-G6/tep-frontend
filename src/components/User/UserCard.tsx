@@ -12,6 +12,7 @@ import {
   Divider,
   Grid,
   IconButton,
+  Paper,
   Slide,
   Stack,
   Typography,
@@ -32,6 +33,7 @@ import { formatNumber } from "../../helpers/numberHelpers";
 import { ServicePackResponse } from "../../interfaces/servicepack/ServivePackResponse";
 import servicePackAPI from "../../services/servicepack/servicePackAPI";
 import { ToastContainer, toast } from "react-toastify";
+import transactionHistoryAPI from "../../services/transactionHistory/transactionHistoryAPI";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -55,6 +57,16 @@ const UserCard = () => {
   };
 
   const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
+  const [servicePack, setServicePack] = useState<ServicePackResponse>({
+    service_id: "",
+    ad_duration: 0,
+    allow_post: false,
+    flag: false,
+    name: "",
+    priority: false,
+    service_code: "",
+    service_price: 0,
+  });
   const [basicPack, setBasicPack] = useState<ServicePackResponse>({
     service_id: "",
     ad_duration: 0,
@@ -96,11 +108,17 @@ const UserCard = () => {
         setUserProfile(data);
       }
     };
+    const getTransactionHistoryByUserID = async () => {
+      const data: any =
+        await transactionHistoryAPI.getTransactionHistoryByUserID(userID);
+      if (data.length > 0) {
+        setServicePack(data[0].service_id);
+      }
+    };
     const getAllServicePack = async () => {
       const data: any = await servicePackAPI.getAllServicePack();
       if (data && data.length > 0) {
         data.map((item: ServicePackResponse) => {
-          console.log(item);
           if (item.service_code === "00") {
             setBasicPack(item);
           }
@@ -112,7 +130,11 @@ const UserCard = () => {
     };
 
     const initUseEffect = async () => {
-      Promise.all([getUserByUserID(), getAllServicePack()]);
+      Promise.all([
+        getUserByUserID(),
+        getAllServicePack(),
+        getTransactionHistoryByUserID(),
+      ]);
     };
     initUseEffect();
   }, []);
@@ -128,7 +150,6 @@ const UserCard = () => {
         toast.success("Register Pack Successful!", {
           position: "top-center",
         });
-        navigate(0);
         window.open(`${response.data}`);
       } else {
         toast.error("Register Pack!", {
@@ -209,21 +230,49 @@ const UserCard = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <Button
-            sx={{
-              width: "90%",
-              height: "47px",
-              backgroundColor: "#00acb3",
-              "&:hover": {
-                backgroundColor: "#08b7bd",
-              },
-            }}
-            color="primary"
-            variant="contained"
-            onClick={handleClickOpen}
-          >
-            Register Pack
-          </Button>
+          {servicePack.service_code === "01" ? (
+            <Paper
+              elevation={10}
+              sx={{
+                p: 2,
+                border: "2px solid #00acb3",
+                textAlign: "center",
+              }}
+            >
+              <Typography fontWeight={900} fontSize={16} color={"#00acb3"}>
+                {servicePack.name}
+              </Typography>
+            </Paper>
+          ) : servicePack.service_code === "02" ? (
+            <Paper
+              elevation={10}
+              sx={{
+                p: 2,
+                border: "2px solid #00acb3",
+                textAlign: "center",
+              }}
+            >
+              <Typography fontWeight={900} fontSize={16} color={"#00acb3"}>
+                {servicePack.name}
+              </Typography>
+            </Paper>
+          ) : (
+            <Button
+              sx={{
+                width: "90%",
+                height: "47px",
+                backgroundColor: "#00acb3",
+                "&:hover": {
+                  backgroundColor: "#08b7bd",
+                },
+              }}
+              color="primary"
+              variant="contained"
+              onClick={handleClickOpen}
+            >
+              Register Pack
+            </Button>
+          )}
         </Grid>
       </CardActions>
 

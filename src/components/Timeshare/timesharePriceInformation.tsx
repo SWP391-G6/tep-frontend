@@ -52,6 +52,7 @@ type Props = {
   timeshareID: any;
   timeshare: TimeshareDetailResponse;
   roomType: RoomTypeResponse;
+  isAllowExchange: boolean;
 };
 
 const useStyles: any = makeStyles((theme: Theme) => ({
@@ -113,16 +114,21 @@ const TimesharePriceInformation = (props: Props) => {
   const handleClickCloseConfirmDialog = () => {
     setOpenConfirmDialog(false);
   };
-
+  
   useEffect(() => {
     const getTimeshareByOwner = async () => {
       let temp = [];
       const data: any = await timeshareAPI.getTimeshareListByUserID(userID);
       if (data.length > 0) {
-        temp = data.map((item: any) => ({ ...item, isSelected: false }));
+        temp = data.map((item: any) => ({
+          ...item,
+          isSelected: false,
+          userID: item.postBy.user_id,
+        }));
         setTimeshareList(temp);
       }
     };
+
     const initUseEffect = async () => {
       await getTimeshareByOwner();
     };
@@ -292,7 +298,7 @@ const TimesharePriceInformation = (props: Props) => {
             </Button>
           </Grid>
           <Grid item xs={12}>
-            {timeshareList.length >= 0 && isEmpty(timeshareList) ? (
+            {timeshareList.length >= 0 && props.isAllowExchange === false ? (
               <Button
                 disabled
                 variant="outlined"
