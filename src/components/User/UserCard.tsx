@@ -34,6 +34,7 @@ import { ServicePackResponse } from "../../interfaces/servicepack/ServivePackRes
 import servicePackAPI from "../../services/servicepack/servicePackAPI";
 import { ToastContainer, toast } from "react-toastify";
 import transactionHistoryAPI from "../../services/transactionHistory/transactionHistoryAPI";
+import { isTransactionValid } from "../../helpers/dateHelpers";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -112,7 +113,8 @@ const UserCard = () => {
       const data: any =
         await transactionHistoryAPI.getTransactionHistoryByUserID(userID);
       if (data.length > 0) {
-        setServicePack(data[0].service_id);
+        if (isTransactionValid(data[0].expireDate))
+          setServicePack(data[0].service_id);
       }
     };
     const getAllServicePack = async () => {

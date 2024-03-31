@@ -18,6 +18,7 @@ const isEndDateValid = (startDate: dayjs.Dayjs, endDate: dayjs.Dayjs) => {
 
 const isTransactionValid = (expireDate: dayjs.Dayjs): boolean => {
   const currentDate = dayjs(); // Lấy ngày hiện tại
+  console.log(currentDate.toString());
   const expirationDate = dayjs(expireDate); // Chuyển chuỗi expireDate thành đối tượng dayjs
 
   return expirationDate.isAfter(currentDate); // Kiểm tra xem ngày hết hạn có sau ngày hiện tại không
