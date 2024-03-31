@@ -37,7 +37,6 @@ const AdminDashboard = () => {
   useEffect(() => {
     const getTotalPriceOnMonth = async () => {
       const data: any = await adminAPI.getTotalPriceOnMonth();
-      console.log("Data price: ", data)
       if (data) {
         setTotalBooking(data);
       }
@@ -45,7 +44,6 @@ const AdminDashboard = () => {
 
     const getTotalTransactionOnMonth = async () => {
       const data: any = await adminAPI.getTotalTransactionOnMonth();
-      console.log("Data total: ", data)
       if (data) {
         setTotalTransaction(data);
       }

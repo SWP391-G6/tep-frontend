@@ -12,7 +12,6 @@ import roomTypeAPI from "../../services/roomtype/roomtypeAPI";
 import { RoomTypeResponse } from "../../interfaces/roomtype/roomTypeResponse";
 import { isEmpty } from "lodash";
 import { USER_ID_KEY } from "../../constant";
-import timeshare from "../../slices/timeshare/timeshare";
 
 const TimeshareDetailDashboard = () => {
   const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
@@ -21,17 +20,19 @@ const TimeshareDetailDashboard = () => {
   const [timeshareDetail, setTimeshareDetail] =
     useState<TimeshareDetailResponse>({
       timeshareId: "",
+      timeshareCode: "",
       timeshareName: "",
       description: "",
       status: true,
       price: 0,
       nights: 0,
+      create_date: new Date(),
       postBy: {
         user_id: "",
         user_name: "",
-        password: "",
         fullname: "",
         email: "",
+        createDate: new Date(),
         phone: "",
         dob: new Date(),
         gender: true,
@@ -74,7 +75,11 @@ const TimeshareDetailDashboard = () => {
       );
       if (data && !isEmpty(data)) {
         setTimeshareDetail(data);
-        if (data.exchange === true && data.postBy.user_id !== userID) {
+        if (
+          data.exchange === true &&
+          data.postBy.user_id !== userID &&
+          data.status === true
+        ) {
           setIsValidTimeshare(true);
         }
       }

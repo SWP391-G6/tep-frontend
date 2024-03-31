@@ -10,7 +10,7 @@ export interface VnpayBookingTimeshareRequest {
     street:         string ;
     telephone:      string ;
     total:          number ;
-    fullname:       string ;
+    full_name:       string ;
     payment_method: string ;
     user_id:        string ;
     timeshare_id:   string ;

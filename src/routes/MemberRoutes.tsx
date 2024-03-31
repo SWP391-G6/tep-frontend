@@ -13,8 +13,7 @@ import BookingHistoryPage from "../pages/Member/BookingHistoryPage";
 import { ROUTE_PATH } from "../configs";
 import SuccessfulPaymentPage from "../pages/Payment/SuccessfulPaymentPage";
 import CreateTimesharePage from "../pages/Timeshare/CreateTimesharePage";
-import CreateDestinationForm from "../components/Form/CreateDestinationForm";
-import CreateRoomTypeForm from "../components/Form/CreateRoomTypeForm";
+import MyExchangeRequestSentPage from "../pages/Member/MyExchangeRequestSentPage";
 
 type Props = {
   isAllowed: boolean;
@@ -52,10 +51,12 @@ function MemberRoutes(props: Props) {
             path="my_exchange_request"
             element={<MyExchangeRequestPage />}
           />
+          <Route
+            path="my_exchange_request_sent"
+            element={<MyExchangeRequestSentPage />}
+          />
           <Route path="my_booking_history" element={<BookingHistoryPage />} />
         </Route>
-        <Route path="create_destination" element={<CreateDestinationForm />} />
-        <Route path="create_roomtype" element={<CreateRoomTypeForm />} />
         <Route path="*" element={<NotFoundAuthorizedPage />} />
       </Route>
     </Routes>

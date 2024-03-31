@@ -89,7 +89,7 @@ const validationSchema = yup.object({
     .integer("Total must be integer!")
     .min(0)
     .required("Total can't be blank!"),
-  fullname: yup.string().trim().required("Full name can't be blank!"),
+  full_name: yup.string().trim().required("Full name can't be blank!"),
 });
 
 const BookingInformationPage = () => {
@@ -141,7 +141,6 @@ const BookingInformationPage = () => {
   var d = new Date(2024, 2, 19);
 
   const onSubmit: SubmitHandler<VNPAYInputFormRequest> = async (data) => {
-    console.log("Data: ", data.fullname);
     try {
       const response: any = await vnpayAPI.checkout({
         adults: adults,
@@ -156,12 +155,11 @@ const BookingInformationPage = () => {
         street: data.street,
         telephone: data.telephone,
         total: state.timeshare.price,
-        fullname: data.fullname,
+        full_name: data.full_name,
         payment_method: "1",
         user_id: userID,
         timeshare_id: state.timeshare.timeshareId,
       });
-      console.log("response: ", response);
       if (response && response.code === "00") {
         toast.success("Checkout Successful!", {
           position: "top-center",
@@ -179,7 +177,13 @@ const BookingInformationPage = () => {
 
   return (
     <Container disableGutters maxWidth="xl" sx={{ height: "100%", zIndex: 1 }}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={handleSubmit(() => {
+          if (errors && isEmpty(errors)) {
+            handleClickOpenConfirmDialog();
+          }
+        })}
+      >
         <Grid2 container gap={2} padding="10px 50px 20px 50px">
           <Grid2 xs={12}>
             <BackButton />
@@ -306,10 +310,10 @@ const BookingInformationPage = () => {
                         label="Full Name"
                         variant="outlined"
                         sx={{ width: "100%" }}
-                        {...register("fullname")}
+                        {...register("full_name")}
                       />
-                      {errors["fullname"]?.message ? (
-                        <ErrorMessage message={errors["fullname"].message} />
+                      {errors["full_name"]?.message ? (
+                        <ErrorMessage message={errors["full_name"].message} />
                       ) : null}
                       <Typography
                         sx={{ marginTop: "10px" }}
@@ -443,10 +447,10 @@ const BookingInformationPage = () => {
                         label="Full Name"
                         variant="outlined"
                         sx={{ width: "100%" }}
-                        {...register("fullname")}
+                        {...register("full_name")}
                       />
-                      {errors["fullname"]?.message ? (
-                        <ErrorMessage message={errors["fullname"].message} />
+                      {errors["full_name"]?.message ? (
+                        <ErrorMessage message={errors["full_name"].message} />
                       ) : null}
                       <Typography
                         sx={{ marginTop: "10px" }}
@@ -695,9 +699,6 @@ const BookingInformationPage = () => {
                           "&:hover": {
                             backgroundColor: "#08b7bd",
                           },
-                        }}
-                        onClick={() => {
-                          handleClickOpenConfirmDialog();
                         }}
                       >
                         Check Out

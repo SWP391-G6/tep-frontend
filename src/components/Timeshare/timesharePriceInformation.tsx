@@ -114,7 +114,7 @@ const TimesharePriceInformation = (props: Props) => {
   const handleClickCloseConfirmDialog = () => {
     setOpenConfirmDialog(false);
   };
-  
+
   useEffect(() => {
     const getTimeshareByOwner = async () => {
       let temp = [];
@@ -269,33 +269,64 @@ const TimesharePriceInformation = (props: Props) => {
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                {
-                  token
-                    ? navigate("booking_information", {
-                        state: {
-                          timeshare: props.timeshare,
-                          roomType: props.roomType,
-                        },
-                      })
-                    : navigate("/login");
-                }
-              }}
-              sx={{
-                width: "100%",
-                height: "50px",
-                marginTop: "20px",
-                background: "#00acb3",
-                border: "#00acb3",
-                "&:hover": {
-                  backgroundColor: "#08b7bd",
-                },
-              }}
-            >
-              Request to book
-            </Button>
+            {props.isAllowExchange === false ? (
+              <Button
+                variant="contained"
+                disabled
+                onClick={() => {
+                  {
+                    token
+                      ? navigate("booking_information", {
+                          state: {
+                            timeshare: props.timeshare,
+                            roomType: props.roomType,
+                          },
+                        })
+                      : navigate("/login");
+                  }
+                }}
+                sx={{
+                  width: "100%",
+                  height: "50px",
+                  marginTop: "20px",
+                  background: "#00acb3",
+                  border: "#00acb3",
+                  "&:hover": {
+                    backgroundColor: "#08b7bd",
+                  },
+                }}
+              >
+                Request to book
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                onClick={() => {
+                  {
+                    token
+                      ? navigate("booking_information", {
+                          state: {
+                            timeshare: props.timeshare,
+                            roomType: props.roomType,
+                          },
+                        })
+                      : navigate("/login");
+                  }
+                }}
+                sx={{
+                  width: "100%",
+                  height: "50px",
+                  marginTop: "20px",
+                  background: "#00acb3",
+                  border: "#00acb3",
+                  "&:hover": {
+                    backgroundColor: "#08b7bd",
+                  },
+                }}
+              >
+                Request to book
+              </Button>
+            )}
           </Grid>
           <Grid item xs={12}>
             {timeshareList.length >= 0 && props.isAllowExchange === false ? (

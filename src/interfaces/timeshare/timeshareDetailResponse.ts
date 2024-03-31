@@ -1,5 +1,6 @@
 export interface TimeshareDetailResponse {
     timeshareId:      string;
+    timeshareCode:    string;
     timeshareName:    string;
     description:      string;
     status:           boolean;
@@ -12,6 +13,7 @@ export interface TimeshareDetailResponse {
     exchange:         boolean;
     city:             string;
     image_url:        string;
+    create_date:      Date;
 }
 
 export interface DestinationModel {
@@ -25,14 +27,14 @@ export interface DestinationModel {
 }
 
 export interface PostBy {
-    user_id:   string;
-    user_name: string;
-    password:  string;
-    fullname:  string;
-    email:     string;
-    phone:     string;
-    dob:       Date;
-    gender:    boolean;
-    status:    boolean;
-    role:      string;
+    user_id:    string;
+    user_name:  string;
+    fullname:   string;
+    email:      string;
+    createDate: Date;
+    phone:      string;
+    dob:        Date;
+    gender:     boolean;
+    status:     boolean;
+    role:       string;
 }

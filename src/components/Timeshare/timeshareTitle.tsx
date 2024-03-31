@@ -58,6 +58,17 @@ const TimeshareTitle = (props: Props) => {
             {props.timeshare.timeshareName}
           </Typography>
           <Typography
+            variant="inherit"
+            fontWeight={700}
+            fontSize={16}
+            color="#00acb3"
+            mt={1}
+            lineHeight={1}
+          >
+            #{props.timeshare.timeshareCode}
+          </Typography>
+
+          <Typography
             fontSize={20}
             fontWeight={500}
             lineHeight={2}

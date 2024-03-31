@@ -245,7 +245,7 @@ const UserCard = () => {
                 {servicePack.name}
               </Typography>
             </Paper>
-          ) : servicePack.service_code === "02" ? (
+          ) : servicePack.service_code === "00" ? (
             <Paper
               elevation={10}
               sx={{

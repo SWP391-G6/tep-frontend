@@ -6,7 +6,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import DisplaySettingsIcon from "@mui/icons-material/DisplaySettings";
 import ContactsIcon from "@mui/icons-material/Contacts";
 import ApartmentIcon from "@mui/icons-material/Apartment";
@@ -15,6 +15,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 
 const UserActivityTab = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState("");
 
   React.useEffect(() => {
@@ -39,8 +40,19 @@ const UserActivityTab = () => {
       case "/member/profile/my_booking_history":
         setSelectedTab("booking_history");
         break;
+
+      case "member/profile/my_exchange_request_sent":
+        navigate(0);
+        setSelectedTab("exchange_request_sent");
+        break;
+
+      default:
+        console.log("Default");
+        break;
     }
   }, [location]);
+
+  console.log("TAb", selectedTab);
 
   return (
     <List
@@ -128,6 +140,26 @@ const UserActivityTab = () => {
           <ListItemText
             primaryTypographyProps={{ variant: "subtitle1" }}
             primary="My Exchange Request"
+          />
+        </ListItemButton>
+      </Link>
+
+      {/* MY EXCHANGE REQUEST SENT */}
+      <Divider />
+      <Link
+        to="/member/profile/my_exchange_request_sent"
+        style={{ textDecoration: "none", color: "black" }}
+      >
+        <ListItemButton
+          selected={selectedTab === "exchange_request_sent"}
+          onClick={() => setSelectedTab("exchange_request_sent")}
+        >
+          <ListItemIcon sx={{ fontSize: 24 }}>
+            <DisplaySettingsIcon fontSize="small" sx={{ color: "black" }} />
+          </ListItemIcon>
+          <ListItemText
+            primaryTypographyProps={{ variant: "subtitle1" }}
+            primary="My Exchange Request Sent"
           />
         </ListItemButton>
       </Link>

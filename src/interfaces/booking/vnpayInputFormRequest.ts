@@ -6,5 +6,5 @@ export interface VNPAYInputFormRequest {
     street:         string;
     telephone:      string;
     total:          number;
-    fullname:       string;
+    full_name:       string;
 }

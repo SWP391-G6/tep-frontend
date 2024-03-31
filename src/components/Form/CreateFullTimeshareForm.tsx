@@ -186,7 +186,6 @@ const CreateFullTimeshareForm = () => {
 
   const onSubmit = async (data: Inputs) => {
     try {
-      console.log("Data: ", data.entertainment);
       const createDestinationResponse: any =
         await destinationAPI.createDestination({
           desName: data.desName,
@@ -256,7 +255,6 @@ const CreateFullTimeshareForm = () => {
     }
   };
 
-  console.log("Date start 1:", dateStart);
   return (
     <form
       onSubmit={handleSubmit(() => {

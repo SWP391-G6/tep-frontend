@@ -48,7 +48,7 @@ const TimeshareInformationComponent = (props: Props) => {
             </Grid2>
             <Grid2 xs={6} sx={{ textAlign: "right" }}>
               <Typography fontWeight={300} fontSize={14}>
-                #R20240201
+                #{props.timeshare.timeshareCode}
               </Typography>
             </Grid2>
             <Divider sx={{ width: "100%", margin: "10px 0" }} />
