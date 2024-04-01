@@ -154,7 +154,6 @@ const BookingInformationPage = () => {
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log("1234");
     try {
       const response: any = await vnpayAPI.checkout({
         adults: adults,

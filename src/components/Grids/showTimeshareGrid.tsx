@@ -85,7 +85,6 @@ const ShowTimeshareGrid = () => {
                 isTransactionValid(transactionResponse[0].expireDate) &&
                 transactionResponse[0].service_id.service_code === "01"
               ) {
-                console.log("in");
                 return { ...item, isNew: true };
               } else return { ...item, isNew: false };
             } else {

@@ -41,7 +41,7 @@ import requestAPI from "../../services/request/requestAPI";
 import { ToastContainer, toast } from "react-toastify";
 import { TimeshareDetailResponse } from "../../interfaces/timeshare/timeshareDetailResponse";
 import { formatNumber } from "../../helpers/numberHelpers";
-import { USER_ID_KEY, USER_TOKEN_KEY } from "../../constant";
+import { USER_ID_KEY, USER_ROLE_KEY, USER_TOKEN_KEY } from "../../constant";
 import { RoomTypeResponse } from "../../interfaces/roomtype/roomTypeResponse";
 
 var customParseFormat = require("dayjs/plugin/customParseFormat");
@@ -88,10 +88,11 @@ const validationSchema = yup.object({
 
 const TimesharePriceInformation = (props: Props) => {
   const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
+  const token = JSON.parse(localStorage.getItem(USER_TOKEN_KEY)!);
+  const userRole = JSON.parse(localStorage.getItem(USER_ROLE_KEY)!);
   const [timeshareID, setTimeshareID] = useState("");
   const navigate = useNavigate();
   const classes = useStyles();
-  const token = JSON.parse(localStorage.getItem(USER_TOKEN_KEY)!);
   const [timeshareList, setTimeshareList] = useState<
     TimeshareByOwnerResponse[]
   >([]);
@@ -269,7 +270,7 @@ const TimesharePriceInformation = (props: Props) => {
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            {props.isAllowExchange === false ? (
+            {props.isAllowExchange === false && userRole === "member" ? (
               <Button
                 variant="contained"
                 disabled
@@ -303,7 +304,7 @@ const TimesharePriceInformation = (props: Props) => {
                 variant="contained"
                 onClick={() => {
                   {
-                    token
+                    token && userRole === "member"
                       ? navigate("booking_information", {
                           state: {
                             timeshare: props.timeshare,
@@ -346,7 +347,9 @@ const TimesharePriceInformation = (props: Props) => {
               >
                 Request to exchange
               </Button>
-            ) : (
+            ) : timeshareList.length >= 0 &&
+              props.isAllowExchange === true &&
+              userRole === "member" ? (
               <Button
                 variant="outlined"
                 sx={{
@@ -363,7 +366,7 @@ const TimesharePriceInformation = (props: Props) => {
               >
                 Request to exchange
               </Button>
-            )}
+            ) : null}
           </Grid>
         </Grid>
         <form onSubmit={handleSubmit(handleClickOpenConfirmDialog)}>

@@ -13,7 +13,7 @@ import {
   Toolbar,
   Tooltip,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Logout from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router";
 import { USER_ID_KEY, USER_ROLE_KEY, USER_TOKEN_KEY } from "../../constant";
@@ -31,6 +31,14 @@ const Header = () => {
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleCreateTimeshare = () => {
+    if (token) {
+      navigate("/member/create_timeshare");
+    } else {
+      navigate("/login");
+    }
   };
 
   const handleLogout = () => {
@@ -93,13 +101,7 @@ const Header = () => {
                   display: "block",
                   marginLeft: "10px",
                 }}
-                onClick={() => {
-                  {
-                    token
-                      ? navigate("/member/create_timeshare")
-                      : navigate("/login");
-                  }
-                }}
+                onClick={handleCreateTimeshare}
               >
                 Post Your timeshare
               </Button>
@@ -114,8 +116,6 @@ const Header = () => {
                 About
               </Button>
             </Box>
-
-
 
             <Box
               sx={{
@@ -139,17 +139,17 @@ const Header = () => {
                 </Tooltip>
               ) : (
                 <Stack direction={"row"}>
-                              <Tooltip title="Làm mới trang">
-              <IconButton
-                size="large"
-                color="inherit"
-                onClick={() => {
-                  navigate(0);
-                }}
-              >
-                <RefreshIcon />
-              </IconButton>
-            </Tooltip>
+                  <Tooltip title="Làm mới trang">
+                    <IconButton
+                      size="large"
+                      color="inherit"
+                      onClick={() => {
+                        navigate(0);
+                      }}
+                    >
+                      <RefreshIcon />
+                    </IconButton>
+                  </Tooltip>
                   <Button
                     sx={{
                       my: 2,

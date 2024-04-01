@@ -119,7 +119,7 @@ const UserCard = () => {
     };
     const getAllServicePack = async () => {
       const data: any = await servicePackAPI.getAllServicePack();
-      if (data && data.length > 0) {
+      if ( data.length > 0) {
         data.map((item: ServicePackResponse) => {
           if (item.service_code === "00") {
             setBasicPack(item);
