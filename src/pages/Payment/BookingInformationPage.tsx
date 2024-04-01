@@ -21,13 +21,13 @@ import {
 import BackButton from "../../components/Button/backButton";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import TimeshareInformationComponent from "../../components/BookingInformation/timeshareInformationComponent";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import * as yup from "yup";
 import { styled } from "@mui/system";
 import { makeStyles } from "@mui/styles";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import ErrorMessage from "../../components/Error/errorMessage";
 import { USER_ID_KEY } from "../../constant";
 import { formatNumber } from "../../helpers/numberHelpers";
@@ -95,6 +95,8 @@ const validationSchema = yup.object({
 });
 
 const BookingInformationPage = () => {
+  let timeoutRef = useRef<any>();
+  const navigate = useNavigate()
   const { state } = useLocation();
   const [adults, setAdults] = useState("");
   const [children, setChildren] = useState("");
@@ -176,6 +178,9 @@ const BookingInformationPage = () => {
         toast.success("Checkout Successful!", {
           position: "top-center",
         });
+        timeoutRef.current = setTimeout(() => {
+          navigate("/member/profile//my_booking_history");
+        }, 1700);
         window.open(`${response.data}`);
       } else {
         toast.error("Checkout Failed!", {
