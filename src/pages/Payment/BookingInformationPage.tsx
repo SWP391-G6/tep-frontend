@@ -27,7 +27,7 @@ import { styled } from "@mui/system";
 import { makeStyles } from "@mui/styles";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
+import React, { useState } from "react";
 import ErrorMessage from "../../components/Error/errorMessage";
 import { USER_ID_KEY } from "../../constant";
 import { formatNumber } from "../../helpers/numberHelpers";
@@ -36,6 +36,8 @@ import { isEmpty } from "lodash";
 import dayjs from "dayjs";
 import vnpayAPI from "../../services/payment/vnpayAPI";
 import { ToastContainer, toast } from "react-toastify";
+import { cityList } from "../../utils/cities";
+import InstructMessage from "../../components/Instruct/instructMessage";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 dayjs.locale("en");
@@ -71,10 +73,16 @@ const useStyles: any = makeStyles({
   },
 });
 
+type Inputs = {
+  postal_code: string;
+  state: string;
+  street: string;
+  telephone: string;
+  full_name: string;
+};
+
 const phoneRegExp = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
 const validationSchema = yup.object({
-  city: yup.string().trim().required("City can't be blank!"),
-  country: yup.string().trim().required("Country can't be blank!"),
   postal_code: yup.string().trim().required("Postal code can't be blank!"),
   state: yup.string().trim().required("Status can't be blank!"),
   street: yup.string().trim().required("Street can't be blank!"),
@@ -83,12 +91,6 @@ const validationSchema = yup.object({
     .trim()
     .required("Phone number can't be blank!")
     .matches(phoneRegExp, "Phone number contain 10 number!"),
-  total: yup
-    .number()
-    .typeError("Total must be a number")
-    .integer("Total must be integer!")
-    .min(0)
-    .required("Total can't be blank!"),
   full_name: yup.string().trim().required("Full name can't be blank!"),
 });
 
@@ -98,6 +100,8 @@ const BookingInformationPage = () => {
   const [children, setChildren] = useState("");
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const classes = useStyles();
+  const [citySelectError, setCitySelectError] = useState(true);
+  const [city, setCity] = useState("");
   const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
   var currentDay = dayjs();
   let createDay = currentDay.toDate();
@@ -105,11 +109,13 @@ const BookingInformationPage = () => {
   const handleSelectNumberAdults = (event: SelectChangeEvent) => {
     setAdults(event.target.value as string);
     setChildren("");
+    setCity("");
     reset();
   };
 
   const handleSelectNumberChildren = (event: SelectChangeEvent) => {
     setChildren(event.target.value as string);
+    setCity("");
     reset();
   };
 
@@ -120,6 +126,12 @@ const BookingInformationPage = () => {
   const handleClickCloseConfirmDialog = () => {
     setOpenConfirmDialog(false);
   };
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setCitySelectError(false);
+    setCity(event.target.value as string);
+  };
+
   const lengthOfArray = state.roomType.sleeps;
   const sleeps = [];
 
@@ -134,18 +146,18 @@ const BookingInformationPage = () => {
     getValues,
     reset,
     formState: { errors },
-  } = useForm({
+  } = useForm<Inputs>({
     mode: "onTouched",
     resolver: yupResolver(validationSchema),
   });
-  var d = new Date(2024, 2, 19);
 
-  const onSubmit: SubmitHandler<VNPAYInputFormRequest> = async (data) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    console.log("1234");
     try {
       const response: any = await vnpayAPI.checkout({
         adults: adults,
         children: children,
-        city: data.city,
+        city: city,
         country: "Việt Nam",
         create_date: createDay,
         payment_status: true,
@@ -176,13 +188,21 @@ const BookingInformationPage = () => {
   };
 
   return (
-    <Container disableGutters maxWidth="xl" sx={{ height: "100%", zIndex: 1 }}>
-      <form
-        onSubmit={handleSubmit(() => {
-          if (errors && isEmpty(errors)) {
-            handleClickOpenConfirmDialog();
-          }
-        })}
+    <form
+      onSubmit={handleSubmit(() => {
+        if (citySelectError === true) {
+          return;
+        }
+
+        if (errors && isEmpty(errors)) {
+          handleClickOpenConfirmDialog();
+        }
+      })}
+    >
+      <Container
+        disableGutters
+        maxWidth="xl"
+        sx={{ height: "100%", zIndex: 1 }}
       >
         <Grid2 container gap={2} padding="10px 50px 20px 50px">
           <Grid2 xs={12}>
@@ -337,7 +357,7 @@ const BookingInformationPage = () => {
                                 src={
                                   "https://i.ibb.co/xGsBjkY/vietnamflag-removebg-preview.png"
                                 }
-                                alt="Việt Nam flag"
+                                alt="Việt Nam Flag"
                                 width={30}
                                 height={30}
                               />
@@ -361,26 +381,13 @@ const BookingInformationPage = () => {
                         <ErrorMessage message={errors["telephone"].message} />
                       ) : null}
                       <CustomBorderTextField
+                        disabled
                         variant="outlined"
                         label="Country"
-                        value="Viet Nam"
+                        value="Việt Nam"
                         sx={{ width: "100%", marginTop: "24px" }}
-                        {...register("country")}
                       />
-                      {errors["country"]?.message ? (
-                        <ErrorMessage message={errors["country"].message} />
-                      ) : null}
                     </Grid2>
-                    {/* <Grid2 xs={12} mt={3}>
-                  <CustomBorderTextField
-                    variant="outlined"
-                    label="Country"
-                    value="Viet Nam"
-                    sx={{
-                      width: "300px",
-                    }}
-                  />
-                </Grid2> */}
                     <Grid2 xs={12} mt={3}>
                       <CustomBorderTextField
                         variant="outlined"
@@ -392,19 +399,38 @@ const BookingInformationPage = () => {
                         <ErrorMessage message={errors["street"].message} />
                       ) : null}
                     </Grid2>
-                    <Grid2 container xs={12} gap={2}>
-                      <Grid2 xs={5} mt={3} width={288}>
-                        <CustomBorderTextField
-                          variant="outlined"
-                          label="City"
-                          fullWidth
-                          {...register("city")}
-                        />
-                        {errors["city"]?.message ? (
-                          <ErrorMessage message={errors["city"].message} />
+                    <Grid2 container xs={12} gap={2} sx={{ height: "90px" }}>
+                      <Grid2 xs={5} mt={3} width={280}>
+                        <FormControl fullWidth>
+                          <InputLabel id="cities-select-label">City</InputLabel>
+                          <Select
+                            labelId="cities-select-label"
+                            id="cities-select"
+                            value={city}
+                            label="City"
+                            onChange={handleChange}
+                            MenuProps={{
+                              PaperProps: { sx: { maxHeight: 250 } },
+                            }}
+                          >
+                            {cityList.map((city) => {
+                              return (
+                                <MenuItem key={city.code} value={city.name}>
+                                  {city.name}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                        {citySelectError === true ? (
+                          <React.Fragment>
+                            <InstructMessage
+                              message={"Please select the city!"}
+                            />
+                          </React.Fragment>
                         ) : null}
                       </Grid2>
-                      <Grid2 xs={3} mt={3} width={288}>
+                      <Grid2 xs={3} mt={3} width={280}>
                         <CustomBorderTextField
                           variant="outlined"
                           label="State/Province"
@@ -415,7 +441,7 @@ const BookingInformationPage = () => {
                           <ErrorMessage message={errors["state"].message} />
                         ) : null}
                       </Grid2>
-                      <Grid2 xs={3} mt={3} width={289}>
+                      <Grid2 xs={3} mt={3} width={305}>
                         <CustomBorderTextField
                           variant="outlined"
                           label="Zip/Postal code"
@@ -502,13 +528,9 @@ const BookingInformationPage = () => {
                         disabled
                         variant="outlined"
                         label="Country"
-                        value="Viet Nam"
+                        value="Việt Nam"
                         sx={{ width: "100%", marginTop: "24px" }}
-                        {...register("country")}
                       />
-                      {errors["country"]?.message ? (
-                        <ErrorMessage message={errors["country"].message} />
-                      ) : null}
                     </Grid2>
                     {/* <Grid2 xs={12} mt={3}>
                 <CustomBorderTextField
@@ -532,20 +554,39 @@ const BookingInformationPage = () => {
                         <ErrorMessage message={errors["street"].message} />
                       ) : null}
                     </Grid2>
-                    <Grid2 container xs={12} gap={2}>
-                      <Grid2 xs={5} mt={3} width={288}>
-                        <CustomBorderTextField
-                          disabled
-                          variant="outlined"
-                          label="City"
-                          fullWidth
-                          {...register("city")}
-                        />
-                        {errors["city"]?.message ? (
-                          <ErrorMessage message={errors["city"].message} />
+                    <Grid2 container xs={12} gap={2} sx={{ height: "90px" }}>
+                      <Grid2 xs={5} mt={3} width={280}>
+                        <FormControl fullWidth>
+                          <InputLabel id="cities-select-label">City</InputLabel>
+                          <Select
+                            disabled
+                            labelId="cities-select-label"
+                            id="cities-select"
+                            value={city}
+                            label="City"
+                            onChange={handleChange}
+                            MenuProps={{
+                              PaperProps: { sx: { maxHeight: 250 } },
+                            }}
+                          >
+                            {cityList.map((city) => {
+                              return (
+                                <MenuItem key={city.code} value={city.name}>
+                                  {city.name}
+                                </MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                        {citySelectError === true ? (
+                          <React.Fragment>
+                            <InstructMessage
+                              message={"Please select the city!"}
+                            />
+                          </React.Fragment>
                         ) : null}
                       </Grid2>
-                      <Grid2 xs={3} mt={3} width={288}>
+                      <Grid2 xs={3} mt={3} width={280}>
                         <CustomBorderTextField
                           disabled
                           variant="outlined"
@@ -557,7 +598,7 @@ const BookingInformationPage = () => {
                           <ErrorMessage message={errors["state"].message} />
                         ) : null}
                       </Grid2>
-                      <Grid2 xs={3} mt={3} width={289}>
+                      <Grid2 xs={3} mt={3} width={305}>
                         <CustomBorderTextField
                           disabled
                           variant="outlined"
@@ -690,8 +731,8 @@ const BookingInformationPage = () => {
                     </Typography>
                     {adults && children ? (
                       <Button
-                        variant="contained"
                         type="submit"
+                        variant="contained"
                         sx={{
                           marginTop: "10px",
                           width: "150px",
@@ -705,6 +746,7 @@ const BookingInformationPage = () => {
                       </Button>
                     ) : (
                       <Button
+                        type="submit"
                         variant="contained"
                         disabled
                         sx={{
@@ -786,12 +828,12 @@ const BookingInformationPage = () => {
             </Button>
           </DialogActions>
         </Dialog>
-      </form>
-      <ToastContainer
-        autoClose={2000}
-        style={{ marginTop: "50px", width: "350px" }}
-      />
-    </Container>
+        <ToastContainer
+          autoClose={2000}
+          style={{ marginTop: "50px", width: "350px" }}
+        />
+      </Container>
+    </form>
   );
 };
 

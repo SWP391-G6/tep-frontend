@@ -52,7 +52,6 @@ const UserActivityTab = () => {
     }
   }, [location]);
 
-  console.log("TAb", selectedTab);
 
   return (
     <List
