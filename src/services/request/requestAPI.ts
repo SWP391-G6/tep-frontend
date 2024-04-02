@@ -1,4 +1,5 @@
 import { GetExchangeRequestResponse } from "../../interfaces/request/getExchangeRequestResponse";
+import { GetExchangeRequestSentResponse } from "../../interfaces/request/getExchangeRequestSentResponse";
 import { NewExchangeRequest } from "../../interfaces/request/newExchangeRequest";
 import axiosClient from "../axiosClient";
 
@@ -11,6 +12,13 @@ const requestAPI = {
     return axiosClient.get<GetExchangeRequestResponse[]>(
       "request/getRequestByReceiver",
       { params: { response_by: userID } }
+    );
+  },
+
+  getRequestSentByUserID: (userID: string) => {
+    return axiosClient.get<GetExchangeRequestSentResponse[]>(
+      "request/getRequestByRequestUser",
+      { params: { resquest_by: userID } }
     );
   },
 

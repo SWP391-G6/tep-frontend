@@ -178,7 +178,7 @@ const BookingInformationPage = () => {
           position: "top-center",
         });
         timeoutRef.current = setTimeout(() => {
-          navigate("/member/profile//my_booking_history");
+          navigate("/member/profile/my_booking_history");
         }, 1700);
         window.open(`${response.data}`);
       } else {

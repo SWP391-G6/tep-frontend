@@ -19,7 +19,6 @@ import { styled } from "@mui/material/styles";
 import ViewIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router";
 import { useEffect, useRef, useState } from "react";
-import { GetExchangeRequestResponse } from "../../../interfaces/request/getExchangeRequestResponse";
 import { USER_ID_KEY } from "../../../constant";
 import requestAPI from "../../../services/request/requestAPI";
 import dayjs from "dayjs";
@@ -30,9 +29,20 @@ import { formatNumber } from "../../../helpers/numberHelpers";
 import CloseIcon from "@mui/icons-material/Close";
 import Textarea from "@mui/joy/Textarea";
 import { ToastContainer, toast } from "react-toastify";
+import { GetExchangeRequestSentResponse } from "../../../interfaces/request/getExchangeRequestSentResponse";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 dayjs.locale("en");
+
+const titleStyle = {
+  fontSize: "18px",
+  fontWeight: "bold",
+};
+
+const textBodyStyle = {
+  fontSize: "18px",
+  color: "#00acb3",
+};
 
 const StyledGridOverlay = styled("div")(({ theme }) => ({
   display: "flex",
@@ -106,25 +116,163 @@ function CustomNoRowsOverlay() {
 }
 
 const ExchangeRequestSentDataGrid = () => {
+  const userID = JSON.parse(localStorage.getItem(USER_ID_KEY)!);
   const navigate = useNavigate();
   let timeoutRef = useRef<any>();
-  const [requestList, setRequestList] = useState<GetExchangeRequestResponse[]>(
-    []
-  );
+  const [requestList, setRequestList] = useState<
+    GetExchangeRequestSentResponse[]
+  >([]);
+
+  const [openConfirmAcceptRequest, setOpenConfirmAcceptRequest] =
+    useState(false);
+  const [openViewRequestDetail, setOpenViewRequestDetail] = useState(false);
+
+  const [requestDetail, setRequestDetail] =
+    useState<GetExchangeRequestSentResponse>({
+      create_date: new Date(),
+      status: 0,
+      request_id: "",
+      response_by: {
+        user_id: "",
+        user_name: "",
+        fullname: "",
+        email: "",
+        createDate: new Date(),
+        phone: "",
+        dob: new Date(),
+        gender: false,
+        status: false,
+        role: "",
+      },
+      request_by: {
+        user_id: "",
+        user_name: "",
+        fullname: "",
+        email: "",
+        createDate: new Date(),
+        phone: "",
+        dob: new Date(),
+        gender: false,
+        status: false,
+        role: "",
+      },
+      timeshare_request_id: {
+        timeshareId: "",
+        timeshareCode: "",
+        timeshareName: "",
+        description: "",
+        status: false,
+        price: 0,
+        nights: 0,
+        postBy: {
+          user_id: "",
+          user_name: "",
+          fullname: "",
+          email: "",
+          createDate: new Date(),
+          phone: "",
+          dob: new Date(),
+          gender: false,
+          status: false,
+          role: "",
+        },
+        destinationModel: {
+          destinationId: "",
+          address: "",
+          branch: "",
+          city: "",
+          country: "",
+          description: "",
+          desName: "",
+        },
+        dateStart: new Date(),
+        dateEnd: new Date(),
+        exchange: false,
+        city: "",
+        image_url: "",
+        create_date: new Date(),
+        tempOwner: "",
+      },
+      timeshare_response_id: {
+        timeshareId: "",
+        timeshareCode: "",
+        timeshareName: "",
+        description: "",
+        status: false,
+        price: 0,
+        nights: 0,
+        postBy: {
+          user_id: "",
+          user_name: "",
+          fullname: "",
+          email: "",
+          createDate: new Date(),
+          phone: "",
+          dob: new Date(),
+          gender: false,
+          status: false,
+          role: "",
+        },
+        destinationModel: {
+          destinationId: "",
+          address: "",
+          branch: "",
+          city: "",
+          country: "",
+          description: "",
+          desName: "",
+        },
+        dateStart: new Date(),
+        dateEnd: new Date(),
+        exchange: false,
+        city: "",
+        image_url: "",
+        create_date: new Date(),
+        tempOwner: "",
+      },
+      message: "",
+      request_code: "",
+    });
+
+  const handleClickOpenViewRequestDetail = (
+    requestDetail: GetExchangeRequestSentResponse
+  ) => {
+    setRequestDetail(requestDetail);
+    setOpenViewRequestDetail(true);
+  };
+
+  const handleCloseViewRequestDetail = () => {
+    setOpenViewRequestDetail(false);
+  };
+
+  const handleClickOpenConfirmAcceptDialog = () => {
+    setOpenConfirmAcceptRequest(true);
+  };
+
+  const handleClickCloseConfirmAcceptDialog = () => {
+    setOpenConfirmAcceptRequest(false);
+  };
+
+  useEffect(() => {
+    const getRequestSentListByUserID = async (userID: string) => {
+      const data: any = await requestAPI.getRequestSentByUserID(userID);
+      if (data && data.length > 0) {
+        setRequestList(data);
+      }
+    };
+
+    const initUseEffect = async () => {
+      if (userID) await getRequestSentListByUserID(userID);
+    };
+    initUseEffect();
+  }, []);
 
   const columns: GridColDef[] = [
     { field: "no", headerName: "No", width: 90 },
     {
-      field: "timeshareName",
-      headerName: "Timeshare Name",
-      flex: 1,
-      renderCell: (param) => {
-        return (
-          <Typography noWrap>
-            {param.row.timeshare_response_id.timeshareName}
-          </Typography>
-        );
-      },
+      field: "request_code",
+      headerName: "Request Code",
+      flex: 1.75,
     },
     {
       field: "create_date",
@@ -139,12 +287,18 @@ const ExchangeRequestSentDataGrid = () => {
       },
     },
     {
-      field: "request_by",
-      headerName: "Request By",
+      field: "request_to",
+      headerName: "Receiver",
       flex: 1,
       renderCell: (param) => {
-        return <Typography noWrap>{param.row.request_by.fullname}</Typography>;
+        return <Typography noWrap>{param.row.response_by.fullname}</Typography>;
       },
+    },
+
+    {
+      field: "message",
+      headerName: "Message",
+      flex: 1,
     },
     {
       field: "status",
@@ -161,12 +315,6 @@ const ExchangeRequestSentDataGrid = () => {
       },
     },
     {
-      field: "message",
-      headerName: "Message",
-      flex: 1,
-    },
-
-    {
       field: "action",
       headerName: "Action",
       sortable: false,
@@ -175,7 +323,12 @@ const ExchangeRequestSentDataGrid = () => {
         return (
           <Stack direction="row" spacing={1}>
             <Tooltip title="View Request Detail">
-              <IconButton sx={{ color: "#00acb3" }} onClick={() => {}}>
+              <IconButton
+                sx={{ color: "#00acb3" }}
+                onClick={() => {
+                  handleClickOpenViewRequestDetail(param.row);
+                }}
+              >
                 <ViewIcon />
               </IconButton>
             </Tooltip>
@@ -184,6 +337,29 @@ const ExchangeRequestSentDataGrid = () => {
       },
     },
   ];
+
+  const handleRequest = async (requestID: string, status: number) => {
+    try {
+      const response: any = await requestAPI.handleRequest(requestID, status);
+      if (response && response === "You have rejected to exchange timeshare") {
+        setOpenConfirmAcceptRequest(false);
+        setOpenViewRequestDetail(false);
+        toast.success("Cancel Exchange Request Timeshare Successfully!", {
+          position: "top-center",
+        });
+        timeoutRef.current = setTimeout(() => {
+          navigate(0);
+        }, 1700);
+        return;
+      } else {
+        toast.error("Cancel Exchange Request Timeshare Failed!!", {
+          position: "top-center",
+        });
+      }
+    } catch (error) {
+      console.log("Error at handleRequest()", error);
+    }
+  };
   return (
     <Box
       sx={{
@@ -228,6 +404,380 @@ const ExchangeRequestSentDataGrid = () => {
           />
         )}
       </Box>
+      <Dialog
+        open={openViewRequestDetail}
+        onClose={handleCloseViewRequestDetail}
+        maxWidth="md"
+      >
+        <DialogTitle
+          sx={{ color: "#00acb3", fontSize: "22px", fontWeight: 900 }}
+          id="alert-dialog-title"
+        >
+          {"Request Detail"}
+        </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleCloseViewRequestDetail}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <Divider sx={{ width: "100%" }} />
+        <DialogContent>
+          <Grid2
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            width={800}
+          >
+            <Grid2 xs={12} flexDirection={"row"} p={2}>
+              <Grid2 style={{ display: "flex", alignItems: "center" }}>
+                <Typography
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "18px",
+                  }}
+                  variant="subtitle2"
+                >
+                  Code:
+                </Typography>
+                <Typography
+                  style={{
+                    fontWeight: "bolder",
+                    fontSize: "18px",
+                    color: "#00acb3",
+                  }}
+                  variant="subtitle2"
+                  ml={1}
+                >
+                  #{requestDetail.request_code}
+                </Typography>
+              </Grid2>
+              <Card
+                variant="outlined"
+                sx={{ marginTop: "5px", backgroundColor: "#f6f8fa" }}
+              >
+                <Grid2 container p={2}>
+                  <Typography width="100%" variant="overline" color={"#00acb3"}>
+                    Information
+                  </Typography>
+                  <Grid2 xs={6} style={{ display: "flex" }}>
+                    <Typography style={titleStyle}>Create Date: </Typography>
+                    <Typography ml={1} style={textBodyStyle}>
+                      {dayjs(requestDetail.create_date)
+                        .format("DD MMM YYYY")
+                        .toString()}
+                    </Typography>
+                  </Grid2>
+                  <Grid2 xs={6} style={{ display: "flex" }}>
+                    <Typography style={titleStyle}>Status: </Typography>
+                    {requestDetail.status === 0 ? (
+                      <Typography fontSize={18} ml={1} color={orange[500]}>
+                        Processing
+                      </Typography>
+                    ) : requestDetail.status === 1 ? (
+                      <Typography fontSize={18} ml={1} color={green[500]}>
+                        Accepted
+                      </Typography>
+                    ) : requestDetail.status === 2 ? (
+                      <Typography fontSize={18} ml={1} color={red[500]}>
+                        Rejected
+                      </Typography>
+                    ) : (
+                      requestDetail.status
+                    )}
+                  </Grid2>
+                </Grid2>
+                <Divider />
+                <Grid2 container p={2}>
+                  <Typography width="100%" variant="overline" color={"#00acb3"}>
+                    Message
+                  </Typography>
+                  <Grid2 xs={12} style={{ display: "flex" }}>
+                    <Textarea
+                      sx={{ marginBottom: "15px", width: "100%" }}
+                      color="primary"
+                      disabled={false}
+                      minRows={2}
+                      size="lg"
+                      variant="soft"
+                      value={requestDetail.message}
+                    />
+                  </Grid2>
+                </Grid2>
+              </Card>
+            </Grid2>
+            <Grid2 xs={12} p={2} height="50px">
+              <Divider sx={{ width: "100%" }} />
+              <Typography width="100%" variant="overline" color={"#00acb3"}>
+                Exchange Information
+              </Typography>
+            </Grid2>
+
+            <Grid2 xs={12} height={300} p={2}>
+              <Paper
+                elevation={10}
+                sx={{ width: "100%", height: "100%", padding: "10px" }}
+              >
+                <Typography
+                  sx={{ color: "#00acb3", fontWeight: 500 }}
+                  fontSize={16}
+                  variant="overline"
+                >
+                  My Timeshare - #
+                  {requestDetail.timeshare_request_id.timeshareCode}
+                </Typography>
+                <Grid2 container>
+                  <Grid2 xs={4}>
+                    <Card sx={{ height: "150px", width: "240px" }}>
+                      <img
+                        src={requestDetail.timeshare_request_id.image_url}
+                        style={{ width: "100%", height: "100%" }}
+                      />
+                    </Card>
+                    <Typography mt={1.5}>
+                      <strong>Owner: </strong>{" "}
+                      <span style={{ color: "#00acb3", fontWeight: 500 }}>
+                        {requestDetail.timeshare_request_id.postBy.fullname}
+                      </span>
+                    </Typography>
+                  </Grid2>
+                  <Grid2 xs={6}>
+                    <Typography variant="h5" fontWeight={900}>
+                      {requestDetail.timeshare_request_id.timeshareName}
+                    </Typography>
+                    <Typography mt={0.5} variant="subtitle2" fontWeight={300}>
+                      {requestDetail.timeshare_request_id.city}
+                    </Typography>
+                    <Typography mt={1} color="#00acb3">
+                      {dayjs(requestDetail.timeshare_request_id.dateStart)
+                        .format("DD MMM YYYY")
+                        .toString()}{" "}
+                      -{" "}
+                      {dayjs(requestDetail.timeshare_request_id.dateEnd)
+                        .format("DD MMM YYYY")
+                        .toString()}
+                    </Typography>
+                    <Typography mt={0.5} fontWeight={500}>
+                      {requestDetail.timeshare_request_id.nights} nights
+                    </Typography>
+                    <Typography mt={0.5} fontWeight={500}>
+                      {formatNumber(requestDetail.timeshare_request_id.price)}{" "}
+                      VNĐ
+                    </Typography>
+                  </Grid2>
+                </Grid2>
+                <Grid2 container justifyContent="flex-end">
+                  <Grid2>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => {
+                        navigate(
+                          `/member/view_timeshare_detail/${requestDetail.timeshare_request_id.timeshareId}`
+                        );
+                      }}
+                      sx={{
+                        background: "#00acb3",
+                        "&:hover": {
+                          backgroundColor: "#08b7bd",
+                        },
+                      }}
+                    >
+                      View Detail
+                    </Button>
+                  </Grid2>
+                </Grid2>
+              </Paper>
+            </Grid2>
+            <Grid2
+              sx={{ position: "relative", margin: "15px 0", padding: "0 18px" }}
+              xs={12}
+            >
+              <SwapVertIcon
+                sx={{
+                  position: "absolute",
+                  zIndex: 2,
+                  top: 0,
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: "50px",
+                  height: "50px",
+                  color: "#00acb3",
+                }}
+              />
+              <Divider sx={{ width: "100%", zIndex: 1 }} />
+            </Grid2>
+            <Grid2 xs={12} height={300} p={2}>
+              <Paper
+                elevation={10}
+                sx={{ width: "100%", height: "100%", padding: "10px" }}
+              >
+                <Typography
+                  sx={{ color: "#00acb3", fontWeight: 500 }}
+                  fontSize={16}
+                  variant="overline"
+                >
+                  Request Timeshare - #
+                  {requestDetail.timeshare_response_id.timeshareCode}
+                </Typography>
+                <Grid2 container>
+                  <Grid2 xs={4}>
+                    <Card sx={{ height: "150px", width: "240px" }}>
+                      <img
+                        src={requestDetail.timeshare_response_id.image_url}
+                        style={{ width: "100%", height: "100%" }}
+                      />
+                    </Card>
+                    <Typography mt={1.5}>
+                      <strong>Owner: </strong>{" "}
+                      <span style={{ color: "#00acb3", fontWeight: 500 }}>
+                        {requestDetail.timeshare_response_id.postBy.fullname}
+                      </span>
+                    </Typography>
+                  </Grid2>
+                  <Grid2 xs={6}>
+                    <Typography variant="h5" fontWeight={900}>
+                      {requestDetail.timeshare_response_id.timeshareName}
+                    </Typography>
+                    <Typography mt={0.5} variant="subtitle2" fontWeight={300}>
+                      {requestDetail.timeshare_response_id.city}
+                    </Typography>
+                    <Typography mt={1} color="#00acb3">
+                      {dayjs(requestDetail.timeshare_response_id.dateStart)
+                        .format("DD MMM YYYY")
+                        .toString()}{" "}
+                      -{" "}
+                      {dayjs(requestDetail.timeshare_response_id.dateEnd)
+                        .format("DD MMM YYYY")
+                        .toString()}
+                    </Typography>
+                    <Typography mt={0.5} fontWeight={500}>
+                      {requestDetail.timeshare_response_id.nights} nights
+                    </Typography>
+                    <Typography mt={0.5} fontWeight={500}>
+                      {formatNumber(requestDetail.timeshare_response_id.price)}{" "}
+                      VNĐ
+                    </Typography>
+                  </Grid2>
+                </Grid2>
+                <Grid2 container justifyContent="flex-end">
+                  <Grid2>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => {
+                        navigate(
+                          `/member/view_timeshare_detail/${requestDetail.timeshare_response_id.timeshareId}`
+                        );
+                      }}
+                      sx={{
+                        background: "#00acb3",
+                        "&:hover": {
+                          backgroundColor: "#08b7bd",
+                        },
+                      }}
+                    >
+                      View Detail
+                    </Button>
+                  </Grid2>
+                </Grid2>
+              </Paper>
+            </Grid2>
+          </Grid2>
+        </DialogContent>
+        <DialogActions sx={{ backgroundColor: "#ecf0f1" }}>
+          <Button
+            sx={{
+              background: "#00acb3",
+              "&:hover": {
+                backgroundColor: "#08b7bd",
+              },
+            }}
+            variant="contained"
+            onClick={handleClickOpenConfirmAcceptDialog}
+          >
+            Cancel Request
+          </Button>
+          <Button
+            sx={{
+              color: "#00acb3",
+              borderColor: "#00acb3",
+              "&:hover": {
+                borderColor: "#08b7bd",
+              },
+            }}
+            variant="outlined"
+            onClick={handleCloseViewRequestDetail}
+            autoFocus
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openConfirmAcceptRequest}
+        onClose={handleClickCloseConfirmAcceptDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Confirm To Accept Exchange Request!"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Do you want to accept exchange this timeshare?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            sx={{
+              my: 2,
+              color: "#ffffff",
+              backgroundColor: "#00acb3",
+              display: "block",
+              marginLeft: "10px",
+              "&:hover": {
+                backgroundColor: "#08b7bd",
+              },
+            }}
+            variant="contained"
+            onClick={() => {
+              handleRequest(requestDetail.request_id, 2);
+              handleClickCloseConfirmAcceptDialog();
+            }}
+            autoFocus
+          >
+            Yes
+          </Button>
+          <Button
+            sx={{
+              my: 2,
+              color: "#00acb3",
+              display: "block",
+              marginLeft: "10px",
+              "&:hover": {
+                borderColor: "#08b7bd",
+              },
+            }}
+            variant="outlined"
+            onClick={handleClickCloseConfirmAcceptDialog}
+          >
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <ToastContainer
+        autoClose={2000}
+        style={{ marginTop: "50px", width: "400px" }}
+      />
     </Box>
   );
 };

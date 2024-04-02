@@ -252,7 +252,7 @@ const ExchangeRequestDataGrid = () => {
     try {
       const response: any = await requestAPI.handleRequest(requestID, status);
       if (response && response === "Exchange timeshare successfully") {
-        setOpenConfirmRejectRequest(false);
+        setOpenConfirmAcceptRequest(false);
         setOpenViewRequestDetail(false);
         toast.success("Exchange Timeshare Successfully!", {
           position: "top-center",
@@ -840,7 +840,7 @@ const ExchangeRequestDataGrid = () => {
               },
             }}
             variant="outlined"
-            onClick={handleClickCloseConfirmRejectDialog}
+            onClick={handleClickCloseConfirmAcceptDialog}
           >
             No
           </Button>
