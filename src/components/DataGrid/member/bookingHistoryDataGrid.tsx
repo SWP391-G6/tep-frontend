@@ -180,7 +180,11 @@ const BookingHistoryDataGrid = () => {
         userID
       );
       if (data && data.length > 0) {
-        setBookingHistoryList(data);
+        setBookingHistoryList(
+          data.sort((a: any, b: any) => {
+            return a.status > b.status ? -1 : 1;
+          })
+        );
       }
     };
 

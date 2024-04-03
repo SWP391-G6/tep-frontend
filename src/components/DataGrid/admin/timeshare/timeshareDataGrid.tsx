@@ -174,7 +174,11 @@ const TimeshareDataGrid = () => {
     const getTimeshareListByUserID = async () => {
       const data: any = await timeshareAPI.getAllTimeshare();
       if (data && data.length > 0) {
-        setTimeshareList(data);
+        setTimeshareList(
+          data.sort((a: any, b: any) => {
+            return a.status > b.status ? -1 : 1;
+          })
+        );
       }
     };
 

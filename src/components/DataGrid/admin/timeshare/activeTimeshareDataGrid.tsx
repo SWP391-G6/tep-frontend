@@ -182,7 +182,11 @@ const ActiveTimeshareDataGrid = () => {
             temp.push(item);
           }
         });
-        setActiveTimeshareList(temp);
+        setActiveTimeshareList(
+          temp.sort((a: any, b: any) => {
+            return a.status > b.status ? -1 : 1;
+          })
+        );
       }
     };
 

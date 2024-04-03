@@ -365,7 +365,9 @@ const ExchangeRequestDataGrid = () => {
     const getRequestListByUserID = async (userID: string) => {
       const data: any = await requestAPI.getRequestByUserID(userID);
       if (data && data.length > 0) {
-        setRequestList(data);
+        setRequestList(   data.sort((a: any, b: any) => {
+          return a.status > b.status ? -1 : 1;
+        }));
       }
     };
 

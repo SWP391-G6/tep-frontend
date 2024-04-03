@@ -5,7 +5,6 @@ import { useNavigate } from "react-router";
 import ViewIcon from "@mui/icons-material/Visibility";
 import { styled } from "@mui/material/styles";
 import dayjs from "dayjs";
-import { formatNumber } from "../../../../helpers/numberHelpers";
 import { useEffect, useState } from "react";
 import { green, red } from "@mui/material/colors";
 import { ViewAllAccountResponse } from "../../../../interfaces/user/viewAllAccountResponse";
@@ -150,7 +149,11 @@ const AccountDataGrid = () => {
     const getAllUSer = async () => {
       const data: any = await userAPI.getAllUser();
       if (data && data.length > 0) {
-        setAccountList(data);
+        setAccountList(
+          data.sort((a: any, b: any) => {
+            return a.status > b.status ? -1 : 1;
+          })
+        );
       }
     };
 

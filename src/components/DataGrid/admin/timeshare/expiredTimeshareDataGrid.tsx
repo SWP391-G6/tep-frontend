@@ -175,7 +175,11 @@ const ExpiredTimeshareDataGrid = () => {
     const getInActiveTimeshareList = async () => {
       const data: any = await timeshareAPI.getInActiveTimeshareList();
       if (data.length > 0) {
-        setExpireTimeshareList(data);
+        setExpireTimeshareList(
+          data.sort((a: any, b: any) => {
+            return a.status > b.status ? -1 : 1;
+          })
+        );
       }
     };
 

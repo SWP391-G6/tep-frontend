@@ -158,7 +158,11 @@ const ActiveAccountDataGrid = () => {
             temp.push(item);
           }
         });
-        setActiveAccountList(temp);
+        setActiveAccountList(
+          temp.sort((a: any, b: any) => {
+            return a.status > b.status ? -1 : 1;
+          })
+        );
       }
     };
 

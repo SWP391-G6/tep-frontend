@@ -275,7 +275,11 @@ const ServicePackDataGrid = () => {
     const getAllServicePack = async () => {
       const data: any = await servicePackAPI.getAllServicePack();
       if (data && data.length > 0) {
-        setServicePackList(data);
+        setServicePackList(
+          data.sort((a: any, b: any) => {
+            return a.name > b.name ? -1 : 1;
+          })
+        );
       }
     };
 

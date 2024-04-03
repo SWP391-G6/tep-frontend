@@ -152,7 +152,11 @@ const InActiveAccountDataGrid = () => {
     const getInActiveUser = async () => {
       const data: any = await userAPI.getInActiveUser();
       if (data.length > 0) {
-        setInActiveAccountList(data);
+        setInActiveAccountList(
+          data.sort((a: any, b: any) => {
+            return a.status > b.status ? -1 : 1;
+          })
+        );
       }
     };
 

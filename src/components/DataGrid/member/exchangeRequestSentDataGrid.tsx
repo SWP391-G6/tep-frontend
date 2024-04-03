@@ -257,7 +257,11 @@ const ExchangeRequestSentDataGrid = () => {
     const getRequestSentListByUserID = async (userID: string) => {
       const data: any = await requestAPI.getRequestSentByUserID(userID);
       if (data && data.length > 0) {
-        setRequestList(data);
+        setRequestList(
+          data.sort((a: any, b: any) => {
+            return a.status > b.status ? -1 : 1;
+          })
+        );
       }
     };
 
