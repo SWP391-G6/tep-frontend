@@ -180,7 +180,11 @@ const TimeshareDataGrid = () => {
     const getTimeshareListByUserID = async (userID: string) => {
       const data: any = await timeshareAPI.getTimeshareListByUserID(userID);
       if (data && data.length > 0) {
-        setTimeshareList(data);
+        setTimeshareList(
+          data.sort((a: any, b: any) => {
+            return a.status > b.status ? -1 : 1;
+          })
+        );
       }
     };
 
@@ -201,6 +205,9 @@ const TimeshareDataGrid = () => {
       }}
     >
       <Box>
+        <Typography variant="h5" fontWeight={700}>
+          My Timeshare
+        </Typography>
         {timeshareList.length == 0 ? (
           <DataGrid
             sx={{ height: "550px", marginTop: "10px" }}

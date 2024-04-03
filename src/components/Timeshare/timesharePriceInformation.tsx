@@ -121,10 +121,10 @@ const TimesharePriceInformation = (props: Props) => {
       let temp = [];
       const data: any = await timeshareAPI.getTimeshareListByUserID(userID);
       if (data.length > 0) {
-        temp = data.map((item: any) => ({
+        const filteredData = data.filter((item: any) => item.status === true);
+        temp = filteredData.map((item: any) => ({
           ...item,
           isSelected: false,
-          userID: item.postBy.user_id,
         }));
         setTimeshareList(temp);
       }

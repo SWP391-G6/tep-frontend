@@ -138,10 +138,11 @@ const BookingHistoryDataGrid = () => {
       headerName: "Status",
       flex: 1,
       renderCell: (param) => {
-        if (param.row.payment_status === true) {
+        console.log("Param: ", param.row);
+        if (param.row.status === false) {
           return <Typography color={green[500]}>Paid</Typography>;
         } else {
-          return <Typography>{param.row.payment_status}</Typography>;
+          return <Typography>{param.row.status}</Typography>;
         }
       },
     },
