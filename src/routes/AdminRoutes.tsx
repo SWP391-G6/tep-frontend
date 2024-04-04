@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router";
+import { Route, Routes, useNavigate } from "react-router";
 import ProtectedRoute from "./ProtectedRoute";
 import AdminPage from "../pages/Admin";
 import NotFoundAuthorizedPage from "../pages/Error/notFoundAuthorizedPage";
@@ -13,6 +13,7 @@ import ManageExpireTimesharePage from "../pages/Admin/Timeshare/manageExpireTime
 import ManageServicePackPage from "../pages/Admin/ServicePack/manageServicePackPage";
 import TimeshareDetailDashboard from "../components/Dashboard/timeshareDetailDashboard";
 import BookingInformationPage from "../pages/Payment/BookingInformationPage";
+import { useState } from "react";
 
 type Props = {
   isAllowed: boolean;

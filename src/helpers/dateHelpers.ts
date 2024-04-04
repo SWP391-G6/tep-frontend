@@ -23,4 +23,16 @@ const isTransactionValid = (expireDate: dayjs.Dayjs): boolean => {
   return expirationDate.isAfter(currentDate); // Kiểm tra xem ngày hết hạn có sau ngày hiện tại không
 };
 
-export { isStartingFromTomorrow, isEndDateValid, isTransactionValid };
+const isOver18 = (dateOfBirth: dayjs.Dayjs): boolean => {
+  const dob = dayjs(dateOfBirth);
+  const currentDate = dayjs();
+  const age = currentDate.diff(dob, "year");
+  // Check if age is greater than or equal to 18
+  if (age >= 18) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export { isStartingFromTomorrow, isEndDateValid, isTransactionValid, isOver18 };

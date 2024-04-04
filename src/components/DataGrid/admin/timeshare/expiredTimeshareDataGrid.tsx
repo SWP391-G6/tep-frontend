@@ -214,7 +214,7 @@ const ExpiredTimeshareDataGrid = () => {
             rows={expireTimeshareList.map((item, index) => {
               return { no: index + 1, ...item };
             })}
-            getRowId={(row) => row.timeshare_id}
+            getRowId={(row) => row.timeshareId}
             style={{ height: "550px", marginTop: "10px" }}
             columns={columns}
             initialState={{

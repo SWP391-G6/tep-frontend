@@ -3,8 +3,8 @@ import RegisterForm from "./RegisterForm";
 import BackButton from "../../components/Button/backButton";
 
 const paperStyle = {
-  width: 550,
-  height: 800,
+  width: 700,
+  height: "100%",
   margin: "0 auto",
 };
 
@@ -25,6 +25,7 @@ const RegisterPage = () => {
       alignItems="center"
       direction="column"
       style={containerBg}
+      padding={"25px 0"}
     >
       <Paper elevation={20} style={paperStyle}>
         <Box display="flex" flexDirection="column">

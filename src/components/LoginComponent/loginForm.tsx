@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Grid,
@@ -75,13 +75,16 @@ const LoginForm = () => {
         localStorage.setItem(USER_TOKEN_KEY, JSON.stringify(response.token));
         localStorage.setItem(USER_ID_KEY, JSON.stringify(response.user.userid));
         localStorage.setItem(USER_ROLE_KEY, JSON.stringify(response.user.role));
+        const token = JSON.parse(localStorage.getItem(USER_TOKEN_KEY)!);
         switch (response.user.role) {
           case "member":
+            console.log("hello")
             navigate("/member");
             break;
 
           case "admin":
-            navigate("/admin");
+            console.log("1")
+            navigate("/");
             break;
 
           default:
