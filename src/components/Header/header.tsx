@@ -178,6 +178,9 @@ const Header = () => {
                         borderColor: "#08b7bd",
                       },
                     }}
+                    onClick={() => {
+                      navigate("register");
+                    }}
                     variant="outlined"
                   >
                     Sign Up
