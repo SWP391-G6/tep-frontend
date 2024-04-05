@@ -23,6 +23,9 @@ import { LoginRequest } from "../../interfaces/login/loginRequest";
 import loginAPI from "../../services/login/loginAPI";
 import { USER_ID_KEY, USER_ROLE_KEY, USER_TOKEN_KEY } from "../../constant";
 import { isEmpty } from "lodash";
+import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../../configStore";
+import { authActions } from "../../slices/user/auth";
 
 const boxStyle = {
   width: 450,
@@ -54,6 +57,7 @@ const CustomBorderTextField = styled(TextField)`
 `;
 
 const LoginForm = () => {
+  const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -72,19 +76,23 @@ const LoginForm = () => {
         password: data.password,
       });
       if (response && !isEmpty(response)) {
+        dispatch(
+          authActions.setState({
+            user_id: response.user.userid,
+            token: response.token,
+            role: response.user.role,
+          })
+        );
         localStorage.setItem(USER_TOKEN_KEY, JSON.stringify(response.token));
         localStorage.setItem(USER_ID_KEY, JSON.stringify(response.user.userid));
         localStorage.setItem(USER_ROLE_KEY, JSON.stringify(response.user.role));
-        const token = JSON.parse(localStorage.getItem(USER_TOKEN_KEY)!);
         switch (response.user.role) {
           case "member":
-            console.log("hello")
             navigate("/member");
             break;
 
           case "admin":
-            console.log("1")
-            navigate("/");
+            navigate("/admin");
             break;
 
           default:

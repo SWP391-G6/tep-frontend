@@ -21,6 +21,8 @@ type Props = {
 };
 
 function AdminRoutes(props: Props) {
+  console.log("AD routes");
+  console.log("Props", props);
   return (
     <Routes>
       <Route

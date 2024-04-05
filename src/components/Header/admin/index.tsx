@@ -161,15 +161,15 @@ const AdminHeader = () => {
                 transformOrigin={{ horizontal: "right", vertical: "top" }}
                 anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
               >
-                <MenuItem
+                {/* <MenuItem
                   onClick={() => {
-                    navigate("profile");
+              
                     handleClose();
                   }}
                 >
                   <Avatar /> My Profile
-                </MenuItem>
-                <Divider />
+                </MenuItem> */}
+
                 <MenuItem onClick={handleLogout}>
                   <ListItemIcon>
                     <Logout fontSize="small" />

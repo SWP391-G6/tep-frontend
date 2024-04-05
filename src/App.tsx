@@ -12,16 +12,16 @@ import LoginPage from "./pages/Login/LoginPage";
 import RegisterPage from "./pages/Register/RegisterPage";
 import "react-toastify/dist/ReactToastify.css";
 import AdminRoutes from "./routes/AdminRoutes";
-import { USER_ROLE_KEY, USER_TOKEN_KEY } from "./constant";
 import MemberRoutes from "./routes/MemberRoutes";
 import HomeDashboard from "./components/Dashboard/homeDashboard";
 import TimeshareDetailDashboard from "./components/Dashboard/timeshareDetailDashboard";
+import { useAppSelector } from "./configStore";
+import { authSelector } from "./slices/user/auth";
 
 const NotFoundPage = React.lazy(() => import("./pages/Error/notFoundPage"));
 
 function App() {
-  const token = JSON.parse(localStorage.getItem(USER_TOKEN_KEY)!);
-  const role = JSON.parse(localStorage.getItem(USER_ROLE_KEY)!);
+  const auth = useAppSelector(authSelector.getUser);
   return (
     <ErrorBoundary>
       <Suspense fallback={<h1>Đang load nè!!!!</h1>}>
@@ -43,8 +43,8 @@ function App() {
               path={ROUTE_PATH.ADMIN}
               element={
                 <AdminRoutes
-                  token={token}
-                  isAllowed={role === "admin" ? true : false}
+                  token={auth.token}
+                  isAllowed={auth.role === "admin" ? true : false}
                 />
               }
             />
@@ -52,8 +52,8 @@ function App() {
               path={ROUTE_PATH.MEMBER}
               element={
                 <MemberRoutes
-                  token={token}
-                  isAllowed={role === "member" ? true : false}
+                  token={auth.token}
+                  isAllowed={auth.role === "member" ? true : false}
                 />
               }
             />

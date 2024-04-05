@@ -1,8 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
-import timeshare from "./slices/timeshare/timeshare";
-import destination from "./slices/destination/destination";
-import roomtype from "./slices/roomtype/roomtype";
+import thunk from "redux-thunk";
 
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import {
@@ -15,13 +13,14 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
+import auth from "./slices/user/auth";
 
 const persisConfig = {
   key: "root",
   storage,
 };
 
-const combineReducer = combineReducers({ timeshare, destination, roomtype });
+const combineReducer = combineReducers({ auth });
 
 const persistedReducer = persistReducer(persisConfig, combineReducer);
 
