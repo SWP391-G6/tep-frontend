@@ -282,7 +282,7 @@ const BookingInformationPage = () => {
                         <MenuItem value={2}>2 kids</MenuItem>
                       </Select>
                       <FormHelperText sx={{ color: "#00acb3" }}>
-                        Number of children (Under 18)!
+                        Number of children (Under 16)!
                       </FormHelperText>
                     </FormControl>
                   ) : (
@@ -311,7 +311,7 @@ const BookingInformationPage = () => {
                         <MenuItem value={2}>2 kids</MenuItem>
                       </Select>
                       <FormHelperText sx={{ color: "#00acb3" }}>
-                        Number of children (Under 18)!
+                        Number of children (Under 16)!
                       </FormHelperText>
                     </FormControl>
                   )}

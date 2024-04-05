@@ -13,7 +13,7 @@ import {
   Toolbar,
   Tooltip,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Logout from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router";
 import { USER_ID_KEY, USER_ROLE_KEY, USER_TOKEN_KEY } from "../../constant";

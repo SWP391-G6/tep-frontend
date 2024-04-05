@@ -32,8 +32,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import {
   isEndDateValid,
   isStartingFromTomorrow,
+  isTransactionValid,
 } from "../../helpers/dateHelpers";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import ErrorMessage from "../Error/errorMessage";
 import { isEmpty } from "lodash";
@@ -45,6 +46,8 @@ import destinationAPI from "../../services/destination/destinationAPI";
 import timeshareAPI from "../../services/timeshare/timeshareAPI";
 import roomTypeAPI from "../../services/roomtype/roomtypeAPI";
 import InstructMessage from "../Instruct/instructMessage";
+import transactionHistoryAPI from "../../services/transactionHistory/transactionHistoryAPI";
+import { orange } from "@mui/material/colors";
 var customParseFormat = require("dayjs/plugin/customParseFormat");
 dayjs.extend(customParseFormat);
 dayjs.locale("vn");
@@ -127,6 +130,7 @@ const CreateFullTimeshareForm = () => {
   const [dateStartError, setDateStartError] = useState(true);
   const [dateEndError, setDateEndError] = useState(true);
   const [citySelectError, setCitySelectError] = useState(true);
+  const [isAllowCreate, setIsAllowCreate] = useState(false);
   const [city, setCity] = useState("");
   const [images, setImages] = useState<any[]>([]);
   const [image, setImage] = useState("");
@@ -173,6 +177,25 @@ const CreateFullTimeshareForm = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const getTranSactionHistoryByID = async (timeshareID: string) => {
+      const data: any =
+        await transactionHistoryAPI.getTransactionHistoryByUserID(timeshareID);
+      if (data.length > 0) {
+        if (isTransactionValid(data[0].expireDate)) {
+          setIsAllowCreate(true);
+        }
+      }
+    };
+
+    const initUseEffect = async () => {
+      if (userID) {
+        await getTranSactionHistoryByID(userID);
+      }
+    };
+    initUseEffect();
+  }, [userID]);
 
   const {
     register,
@@ -903,38 +926,68 @@ const CreateFullTimeshareForm = () => {
           p={2}
           bgcolor={"#b2e2e4"}
         >
-          <Button
-            variant="outlined"
-            onClick={() => {
-              navigate(-1);
-            }}
-            sx={{
-              color: "#00acb3",
-              borderColor: "#00acb3",
-              backgroundColor: "#fff",
-              marginRight: "10px",
-              "&:hover": {
-                backgroundColor: "#00acb3",
+          <Grid2 xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
+            {isAllowCreate === true ? (
+              <Button
+                variant="contained"
+                type="submit"
+                sx={{
+                  color: "#fff",
+                  backgroundColor: "#00acb3",
+                  "&:hover": {
+                    backgroundColor: "#08b7bd",
+                  },
+                }}
+              >
+                Create Timeshare
+              </Button>
+            ) : (
+              <Button
+                disabled
+                variant="contained"
+                type="submit"
+                sx={{
+                  color: "#fff",
+                  backgroundColor: "#00acb3",
+                  "&:hover": {
+                    backgroundColor: "#08b7bd",
+                  },
+                }}
+              >
+                Create Timeshare
+              </Button>
+            )}
+
+            <Button
+              variant="outlined"
+              onClick={() => {
+                navigate(-1);
+              }}
+              sx={{
+                color: "#00acb3",
                 borderColor: "#00acb3",
-                color: "#fff",
-              },
-            }}
+                backgroundColor: "#fff",
+                marginLeft: "10px",
+                "&:hover": {
+                  backgroundColor: "#00acb3",
+                  borderColor: "#00acb3",
+                  color: "#fff",
+                },
+              }}
+            >
+              Cancel
+            </Button>
+          </Grid2>
+          <Grid2
+            xs={12}
+            sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}
           >
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            type="submit"
-            sx={{
-              color: "#fff",
-              backgroundColor: "#00acb3",
-              "&:hover": {
-                backgroundColor: "#08b7bd",
-              },
-            }}
-          >
-            Create Timeshare
-          </Button>
+            {isAllowCreate === false ? (
+              <Typography variant="subtitle1" color={orange[500]} fontSize={14.5}>
+                You have to register pack before create!
+              </Typography>
+            ) : null}
+          </Grid2>
         </Grid2>
 
         <Dialog
