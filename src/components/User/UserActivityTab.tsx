@@ -17,7 +17,7 @@ const UserActivityTab = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [selectedTab, setSelectedTab] = useState("");
-
+  console.log("")
   React.useEffect(() => {
     const pathname = location.pathname;
     switch (pathname) {
