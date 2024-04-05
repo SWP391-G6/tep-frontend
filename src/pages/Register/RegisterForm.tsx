@@ -223,6 +223,7 @@ const RegisterForm = () => {
               <CustomBorderTextField
                 sx={{ width: "100%", marginTop: "20px" }}
                 label="Password"
+                type="password"
                 {...register("password")}
                 InputProps={{
                   endAdornment: (
@@ -238,6 +239,7 @@ const RegisterForm = () => {
               <CustomBorderTextField
                 sx={{ width: "100%", marginTop: "20px" }}
                 label="Confirm Password"
+                type="password"
                 {...register("confirm_password")}
                 InputProps={{
                   endAdornment: (
